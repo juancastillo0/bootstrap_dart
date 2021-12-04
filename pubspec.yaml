@@ -10,7 +10,9 @@ dependencies:
   mobx:
   incremental_dom_bindings: ^2.1.0
   deact:
-    path: ../deact
+    git:
+      url: https://github.com/juancastillo0/deact.git
+    # path: ../deact
 
 dev_dependencies:
   build_runner: ^1.10.0

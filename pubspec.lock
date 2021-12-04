@@ -172,9 +172,11 @@ packages:
   deact:
     dependency: "direct main"
     description:
-      path: "../deact"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: dae3bc1970885e18db2413bfd54a59570a86aaa8
+      url: "https://github.com/juancastillo0/deact.git"
+    source: git
     version: "1.1.0"
   file:
     dependency: transitive
