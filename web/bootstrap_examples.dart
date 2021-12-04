@@ -97,7 +97,124 @@ DeactNode bootstrapExamples() {
           ],
         ),
       ),
-    ],
+
+      /// Collapse
+      collapseExample(),
+
+      /// TODO: Split button,
+      bootstrapExample(
+        'Dropdown',
+        div(
+          className: 'd-flex justify-content-evenly',
+          children: [
+            dropdown(
+              buttonClass: btn(),
+              buttonContent: [txt('Dropdown Button')],
+              children: [
+                ...['Option A', 'Option B', null, 'More Options'].map(
+                  (e) {
+                    if (e == null) {
+                      return dropdownDivider;
+                    } else {
+                      return dropdownItem(children: [txt(e)]);
+                    }
+                  },
+                )
+              ],
+            ),
+            fc((ctx) {
+              final selected = ctx.state<String>('selected', 'Option A');
+              return dropdown(
+                buttonClass: btn(),
+                buttonContent: [txt(selected.value)],
+                menuOnEnd: true,
+                direction: Direction.end,
+                children: [
+                  ...['Option A', 'Option B', null, 'More Options'].map(
+                    (e) {
+                      if (e == null) {
+                        return dropdownDivider;
+                      } else {
+                        return dropdownItem(
+                          active: selected.value == e,
+                          onClick: (_) {
+                            selected.value = e;
+                          },
+                          children: [txt(e)],
+                        );
+                      }
+                    },
+                  )
+                ],
+              );
+            })
+          ],
+        ),
+      ),
+
+DeactNode collapseExample() {
+  return bootstrapExample(
+    'Collapse',
+    div(
+      className: 'col',
+      children: [
+        div(
+          className: 'm-3',
+          children: [
+            collapseButton(
+              collapseId: 'collapseExample',
+              buttonClass: btn(
+                size: BSize.sm,
+                color: BColor.dark,
+              ),
+              children: [txt('More Info')],
+            ),
+            div(
+              className: '${collapse()} m-2',
+              id: 'collapseExample',
+              children: [
+                div(
+                  className: 'card card-body',
+                  children: [
+                    txt('This is some placeholder content for a horizontal collapse.'
+                        " It's hidden by default and shown when triggered."),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+        div(
+          className: 'm-3',
+          children: [
+            collapseButton(
+              collapseId: 'collapseHorizontalExample',
+              buttonClass: btn(),
+              children: [txt('More Info Horizontal')],
+            ),
+            div(
+              style: 'height:100px;',
+              children: [
+                div(
+                  className: collapse(horizontal: true, show: true) + ' m-2',
+                  id: 'collapseHorizontalExample',
+                  children: [
+                    div(
+                      className: 'card card-body',
+                      style: "width: 300px;",
+                      children: [
+                        txt('This is some placeholder content for a horizontal collapse.'
+                            " It's hidden by default and shown when triggered.")
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
   );
 }
 
@@ -105,7 +222,7 @@ DeactNode bootstrapExample(String title, DeactNode content) {
   return div(
     key: title,
     id: title,
-    className: 'm-4 w-100',
+    className: 'm-4 w-100 d-flex flex-column',
     children: [
       div(
         children: [
