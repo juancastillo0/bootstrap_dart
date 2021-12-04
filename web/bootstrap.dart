@@ -418,10 +418,11 @@ DeactNode spinner({
       if (ariaHidden) 'aria-hidden': 'true',
     },
     children: [
-      span(
-        className: 'visually-hidden',
-        children: [txt('Loading...')],
-      )
+      if (!ariaHidden)
+        span(
+          className: 'visually-hidden',
+          children: [txt('Loading...')],
+        )
     ],
   );
 }
@@ -433,7 +434,7 @@ String spinnerClass({
 }) {
   final _type = grow ? 'grow' : 'border';
   return 'spinner-$_type${size != null ? ' spinner-$_type-${size.name}' : ''}'
-      ' text=${color.name}';
+      ' text-${color.name}';
 }
 
 enum Alignment { start, center, end }
