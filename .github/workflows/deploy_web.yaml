@@ -1,0 +1,35 @@
+name: Deploy Web
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build and deploy web
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - uses: dart-lang/setup-dart@v1
+
+      # Install webdev
+      - run: dart pub global activate webdev
+
+      # Install dependencies
+      - run: dart pub get
+
+      # - name: Run code generation
+      #  run: dart pub run build_runner build --delete-conflicting-outputs
+
+      # Build web
+      - run: webdev build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
