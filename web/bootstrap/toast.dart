@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:html' as html;
+
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:js/js.dart';
 
-import 'bootstrap.dart';
+import 'bootstrap_core.dart';
 
 /// Toasts https://getbootstrap.com/docs/5.1/components/toasts/
 
@@ -12,6 +14,106 @@ enum ToastEventType {
   shown,
   hide,
   hidden,
+}
+
+enum ToastsControllerEvent {
+  added,
+  deleted,
+}
+
+class ToastInfo {
+  final int id;
+  final DeactNode node;
+  final Duration duration;
+
+  ToastInfo({
+    required this.id,
+    required this.node,
+    required this.duration,
+  });
+}
+
+class ToastsController {
+  final bool allowMultiple;
+  final Alignment verticalPosition;
+  final Alignment horizontalPosition;
+
+  ToastsController({
+    this.allowMultiple = true,
+    this.verticalPosition = Alignment.end,
+    this.horizontalPosition = Alignment.end,
+  });
+
+  final _controller = StreamController<ToastsControllerEvent>.broadcast();
+  Stream<ToastsControllerEvent> get stream => _controller.stream;
+
+  final List<ToastInfo> queue = [];
+  final Map<int, Timer?> _timers = {};
+
+  int _count = 0;
+
+  void Function() add(
+    DeactNode _node, {
+    Duration duration = const Duration(seconds: 5),
+  }) {
+    _count++;
+    final node = ToastInfo(id: _count, node: _node, duration: duration);
+    final remove = _setUpRemove(node);
+
+    if (allowMultiple || queue.isEmpty) {
+      _timers[node.id] = Timer(duration, remove);
+      _controller.add(ToastsControllerEvent.added);
+    }
+    queue.add(node);
+
+    return remove;
+  }
+
+  void Function() _setUpRemove(ToastInfo node) {
+    bool removed = false;
+    void remove() {
+      if (removed) return;
+      removed = true;
+      final timer = _timers.remove(node.id);
+      timer?.cancel();
+      queue.remove(node);
+
+      if (!allowMultiple && queue.isNotEmpty) {
+        final _toAdd = queue.first;
+        _timers[node.id] = Timer(_toAdd.duration, _setUpRemove(_toAdd));
+      }
+      _controller.add(ToastsControllerEvent.deleted);
+    }
+
+    return remove;
+  }
+
+  DeactNode render() {
+    return fc(
+      (ctx) {
+        ctx.effect(
+          'stream',
+          () => stream.listen((event) => ctx.scheduleRerender()).cancel,
+          dependsOn: const [],
+        );
+        final toRender =
+            allowMultiple ? queue : [if (queue.isNotEmpty) queue.first];
+
+        return toastsContainer(
+          horizontalPosition: horizontalPosition,
+          verticalPosition: verticalPosition,
+          children: toRender.map(
+            (e) => toast(
+              key: e.id,
+              toastId: e.id.toString(),
+              autoHide: false,
+              content: e.node,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 void showToast() {
@@ -126,11 +228,12 @@ DeactNode toastContent({
   DeactNode? header,
   DeactNode? body,
   bool showCloseButton = false,
+  String headerClass = 'justify-content-between',
 }) {
   return fragment([
     if (header != null)
       div(
-        className: 'toast-header',
+        className: 'toast-header $headerClass',
         children: [
           header,
           if (showCloseButton) closeToastButton(),
@@ -149,20 +252,27 @@ class Toast {
   final html.Element element;
   Toast(this.element) : _inner = _Toast(element);
 
+  bool _isDisposed = false;
+  bool get isDisposed => _isDisposed;
+
   bool _isShowing = false;
   bool get isShowing => _isShowing;
 
   void show() {
+    if (_isDisposed) return;
     _isShowing = true;
     _inner.show();
   }
 
   void hide() {
+    if (_isDisposed) return;
     _isShowing = false;
     _inner.hide();
   }
 
   void dispose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
     _isShowing = false;
     _inner.dispose();
   }

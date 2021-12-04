@@ -4,7 +4,7 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:js/js.dart';
 
-import 'bootstrap.dart';
+import 'bootstrap_core.dart';
 
 /// Modal https://getbootstrap.com/docs/5.1/components/modal/
 
@@ -173,7 +173,7 @@ class ModalEvent {
 class Modal {
   final _Modal _inner;
   final html.Element element;
-  final _controller = StreamController<ModalEvent>();
+  final _controller = StreamController<ModalEvent>.broadcast();
   Stream<ModalEvent> get events => _controller.stream;
 
   bool _disposed = false;

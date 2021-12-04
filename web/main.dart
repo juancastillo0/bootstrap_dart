@@ -7,11 +7,11 @@ import 'package:mobx/mobx.dart';
 import 'package:mobx/src/core.dart' show ReactionImpl;
 import 'package:logging/logging.dart';
 
-import 'bootstrap.dart';
-import 'bootstrap_examples.dart';
-import 'modal.dart';
+import 'bootstrap/bootstrap_core.dart';
+import 'bootstrap/bootstrap_examples.dart';
+import 'bootstrap/modal.dart';
 import 'store.dart';
-import 'toast.dart';
+import 'bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
 

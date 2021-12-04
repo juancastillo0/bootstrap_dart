@@ -1,8 +1,11 @@
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
+import 'dart:html' as html;
 
-import 'bootstrap.dart';
-import 'bootstrap_icons.dart';
+import 'bootstrap_core.dart';
+import 'checks_radios.dart';
+import 'icons.dart';
+import 'toast.dart';
 
 DeactNode bootstrapExamples() {
   return div(
@@ -12,11 +15,12 @@ DeactNode bootstrapExamples() {
       bootstrapExample(
         'Buttons',
         div(
+          className: 'hstack gap-3 align-self-center',
           children: [
             button(className: btn(), children: [txt('primary')]),
             button(
-              className: btn(outlined: true, color: BColor.info),
-              children: [txt('info-outlined')],
+              className: btn(outlined: true, color: BColor.danger),
+              children: [txt('danger-outlined')],
             ),
             button(
               className: btn(size: BSize.lg, color: BColor.secondary),
@@ -24,7 +28,11 @@ DeactNode bootstrapExamples() {
             ),
             button(
               className: btn(size: BSize.sm, color: BColor.dark),
-              children: [txt('dark-dm')],
+              children: [txt('dark-sm')],
+            ),
+            button(
+              className: btn(active: true),
+              children: [txt('primary-active')],
             ),
           ],
         ),
@@ -212,6 +220,70 @@ DeactNode bootstrapExamples() {
           ],
         ),
       ),
+
+      /// TODO: Card
+      ///
+      bootstrapExample(
+        'Toasts',
+        div(
+          style: 'height:300px',
+          children: [
+            fc((ctx) {
+              final withHeader = ctx.ref('withHeader', true);
+              final ref = ctx.refProvided(
+                'controller',
+                () => ToastsController(),
+              );
+              final text = ctx.state('text', 'a message');
+
+              return div(
+                className: 'd-flex flex-column',
+                style: 'position:relative;height:100%;',
+                children: [
+                  div(
+                    className: 'm-2',
+                    style: 'width:400px;display:flex;align-items:center;',
+                    children: [
+                      input(
+                        className: 'px-2',
+                        value: text.value,
+                        oninput: (e) => text.value =
+                            (e.target! as html.InputElement).value!,
+                      ),
+                      el('span', attributes: {'style': 'width:10px'}),
+                      button(
+                        className: btn(),
+                        onclick: (_) => ref.value.add(
+                          toastContent(
+                            showCloseButton: true,
+                            header: withHeader.value ? txt('A Header') : null,
+                            body: txt(text.value),
+                          ),
+                        ),
+                        children: [txt('Send')],
+                      ),
+                      el('span', attributes: {'style': 'width:10px'}),
+                      div(
+                        children: [
+                          check(
+                            checked: withHeader.value,
+                            inline: true,
+                            onChange: (checked) {
+                              withHeader.value = checked;
+                            },
+                            label: txt('With Header'),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  ref.value.render(),
+                ],
+              );
+            })
+          ],
+        ),
+      ),
     ],
   );
 }
@@ -257,10 +329,10 @@ DeactNode collapseExample() {
               children: [txt('More Info Horizontal')],
             ),
             div(
-              style: 'height:100px;',
+              style: 'height:100px;padding:10px;',
               children: [
                 div(
-                  className: collapse(horizontal: true, show: true) + ' m-2',
+                  className: collapse(horizontal: true, show: true),
                   id: 'collapseHorizontalExample',
                   children: [
                     div(

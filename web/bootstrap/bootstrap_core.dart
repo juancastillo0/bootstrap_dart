@@ -52,6 +52,7 @@ String btn({
 
 /// Close Button https://getbootstrap.com/docs/5.1/components/close-button/
 DeactNode closeButton({
+  Object? key,
   void Function(html.Event)? onClick,
   bool disabled = false,
   bool white = false,
@@ -59,6 +60,7 @@ DeactNode closeButton({
 }) {
   return el(
     'button',
+    key: key,
     attributes: {
       'class': 'btn-close${white ? ' btn-close-white' : ''}',
       'aria-label': 'Close',
