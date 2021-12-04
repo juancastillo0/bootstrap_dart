@@ -60,6 +60,43 @@ DeactNode bootstrapExamples() {
           ],
         ),
       ),
+      bootstrapExample(
+        'Badge',
+        div(
+          className: 'd-flex justify-content-evenly',
+          children: [
+            div(
+              className: badge(color: BColor.info),
+              children: [txt('Info Alert')],
+            ),
+            div(
+              className: badge(color: BColor.success, rounded: true),
+              children: [txt('Success rounded')],
+            ),
+            div(
+              className: badge(color: BColor.primary, rounded: true),
+              children: [txt('49')],
+            ),
+          ],
+        ),
+      ),
+      bootstrapExample(
+        'Close Button',
+        div(
+          className: 'd-flex justify-content-evenly',
+          children: [
+            closeButton(),
+            div(
+              className: 'bg-success rounded-3 p-2 text-light d-flex',
+              children: [
+                span(className: 'pe-2', children: [txt('White close button')]),
+                closeButton(white: true)
+              ],
+            ),
+            closeButton(disabled: true),
+          ],
+        ),
+      ),
     ],
   );
 }
