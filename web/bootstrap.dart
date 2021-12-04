@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
+import 'package:js/js.dart';
 
 enum BColor {
   primary,
