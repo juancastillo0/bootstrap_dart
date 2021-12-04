@@ -59,7 +59,7 @@ DeactNode closeButton({
   return el(
     'button',
     attributes: {
-      'class': 'btn-close${white ? 'btn-close-white' : ''}',
+      'class': 'btn-close${white ? ' btn-close-white' : ''}',
       'aria-label': 'Close',
       if (disabled) 'disabled': true,
       if (attributes != null) ...attributes,
@@ -69,8 +69,34 @@ DeactNode closeButton({
 }
 
 /// Collapse https://getbootstrap.com/docs/5.1/components/collapse/
-String collapse({bool horizontal = false, bool multi = false}) =>
-    'collapse${horizontal ? ' collapse-horizontal' : ''}${multi ? ' multi-collapse' : ''}';
+String collapse({
+  bool horizontal = false,
+  bool multi = false,
+  bool show = false,
+}) =>
+    'collapse${horizontal ? ' collapse-horizontal' : ''}'
+    '${multi ? ' multi-collapse' : ''}${show ? ' show' : ''}';
+
+DeactNode collapseButton({
+  required String collapseId,
+  required String buttonClass,
+  Iterable<DeactNode>? children,
+  Object? key,
+}) {
+  return el(
+    'button',
+    key: key,
+    attributes: {
+      'type': "button",
+      'class': buttonClass,
+      'data-bs-toggle': "collapse",
+      'data-bs-target': "#$collapseId",
+      'aria-expanded': "false",
+      'aria-controls': collapseId,
+    },
+    children: children,
+  );
+}
 
 DeactNode visuallyHidden(String text) {
   return el(
