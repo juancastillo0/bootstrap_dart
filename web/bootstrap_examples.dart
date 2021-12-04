@@ -32,8 +32,13 @@ DeactNode bootstrapExamples() {
       bootstrapExample(
         'Icons',
         div(
+          className: 'd-flex justify-content-evenly',
+          style: 'width:200px;align-self:center;align-items:center;',
           children: [
-            icon(BIcon.alarm),
+            icon(BIcon.alarm, ariaLabel: 'Alarm'),
+            icon(BIcon.alarm, color: 'blue'),
+            icon(BIcon.alarm, color: 'blue', fontSize: '2rem'),
+            icon(BIcon.lightning, color: 'grey'),
           ],
         ),
       ),
@@ -151,6 +156,65 @@ DeactNode bootstrapExamples() {
           ],
         ),
       ),
+      bootstrapExample(
+        'Tooltip',
+        div(
+          className: 'd-flex justify-content-evenly',
+          children: [
+            tooltipWrapper(
+              title: 'Tooltip title',
+              children: [
+                button(
+                  className: btn(),
+                  children: [txt('Button')],
+                ),
+              ],
+            ),
+            tooltipWrapper(
+              title: '<em>Tooltip</em> <u>with</u> <b>HTML</b>'
+                  '<br>placed right<br>with "5,5" offset',
+              attributes: tooltipAttributes(
+                allowHtml: true,
+                placement: Placement.right,
+                offset: '5,5',
+              ),
+              children: [
+                button(
+                  className: btn(),
+                  children: [txt('Custom HTML Tooltip')],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bootstrapExample(
+        'Spinners',
+        div(
+          className: 'd-flex justify-content-evenly align-items-center',
+          children: [
+            spinner(),
+            spinner(grow: true, color: BColor.success),
+            spinner(color: BColor.dark, size: BSize.sm),
+            spinner(grow: true, size: BSize.sm),
+            button(
+              className: btn(),
+              children: [
+                spinner(
+                  size: BSize.sm,
+                  ariaHidden: true,
+                  color: BColor.light,
+                  className: 'me-2',
+                ),
+                txt('Loading'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
 
 DeactNode collapseExample() {
   return bootstrapExample(
