@@ -132,6 +132,7 @@ extension AutoCloseExt on AutoClose {
 DeactNode dropdown({
   required Iterable<DeactNode> children,
   required String buttonClass,
+  required Iterable<DeactNode> buttonContent,
   String? dropdownClass,
   String? menuClass,
   String? buttonId,
@@ -158,7 +159,7 @@ DeactNode dropdown({
           'data-bs-offset': offset,
           'data-bs-auto-close': autoClose.nameHtml,
         },
-        children: [],
+        children: buttonContent,
       ),
       el(
         'ul',
@@ -173,14 +174,19 @@ DeactNode dropdown({
   );
 }
 
+final DeactNode dropdownDivider = el('li', children: [
+  el('hr', attributes: {'class': 'dropdown-divider'})
+]);
+
 DeactNode dropdownItem({
   Object? key,
-  required String buttonClass,
+  String? buttonId,
+  String? buttonClass,
   bool active = false,
   bool disabled = false,
-  String? buttonId,
   bool useButton = false,
-  Iterable<DeactNode>? children,
+  required Iterable<DeactNode>? children,
+  void Function(html.Event)? onClick,
 }) {
   return el(
     'li',
@@ -189,11 +195,14 @@ DeactNode dropdownItem({
       el(
         useButton ? 'button' : 'a',
         attributes: {
-          'class':
-              '$buttonClass dropdown-item${active ? ' active' : ''}${disabled ? ' disabled' : ''}',
+          'class': '${buttonClass ?? ''}'
+              ' dropdown-item${active ? ' active' : ''}${disabled ? ' disabled' : ''}',
           'type': 'button',
           if (buttonId != null) 'id': buttonId,
           if (active) 'aria-current': 'true',
+        },
+        listeners: {
+          if (onClick != null) 'onclick': onClick,
         },
         children: children,
       ),
