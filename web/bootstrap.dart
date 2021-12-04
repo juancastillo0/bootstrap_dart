@@ -225,22 +225,48 @@ DeactNode dropdownItem({
 /// https://getbootstrap.com/docs/5.1/components/scrollspy/
 
 /// Tooltips https://getbootstrap.com/docs/5.1/components/tooltips/
+///
+/// [attributes] can be constructed using [tooltipAttributes].
 DeactNode tooltipWrapper({
   required String title,
   Iterable<DeactNode>? children,
   Map<String, Object>? attributes,
 }) {
-  return el(
-    'span',
-    attributes: {
-      if (attributes != null) ...attributes,
-      'class': 'd-inline-block',
-      'tabindex': '0',
-      'data-bs-toggle': 'tooltip',
-      'data-bs-title': title,
-    },
-    children: children,
-  );
+  return fc((ctx) {
+    final tooltip = ctx.ref<Tooltip?>('tooltip', null);
+    final ref = useSetUpElement(
+      ctx,
+      onSetUp: (elem) => tooltip.value = Tooltip(elem),
+      onDispose: () => tooltip.value?.dispose(),
+    );
+    return el(
+      'span',
+      ref: ref,
+      attributes: {
+        if (attributes != null) ...attributes,
+        'class': 'd-inline-block',
+        'tabindex': '0',
+        'data-bs-toggle': 'tooltip',
+        'data-bs-title': title,
+      },
+      children: children,
+    );
+  });
+}
+
+class Tooltip {
+  final _Tooltip _inner;
+  final html.Element element;
+  Tooltip(this.element) : _inner = _Tooltip(element);
+
+  void dispose() => _inner.dispose();
+}
+
+@JS('bootstrap.Tooltip')
+class _Tooltip {
+  external _Tooltip(html.Element element);
+
+  external void dispose();
 }
 
 enum Placement {
@@ -266,6 +292,11 @@ extension TooltipTriggerExt on TooltipTrigger {
   String get name => toString().split('.').last;
 }
 
+/// You need to enable the tooltip by instantiating a [Tooltip]
+/// similar to the usage in [tooltipWrapper].
+///
+/// This attributes can be used in the `attributes`
+/// parameter in [tooltipWrapper]
 Map<String, Object> tooltipAttributes({
   String title = '',
   bool animation = true,
