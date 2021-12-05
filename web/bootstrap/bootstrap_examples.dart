@@ -139,6 +139,23 @@ icon(BIcon.lightning, color: 'grey'),
             ),
           ],
         ),
+        example: codeSection('''
+div(
+  className: alert(color: BColor.info),
+  children: [txt('Info Alert')],
+),
+div(
+  className: alert(color: BColor.success),
+  children: [
+    el(
+      'h4',
+      attributes: {'class': 'alert-heading'},
+      children: [txt('Alert heading')],
+    ),
+    txt('Success message for Alert with heading'),
+  ],
+),
+'''),
       ),
       bootstrapExample(
         'Badge',
