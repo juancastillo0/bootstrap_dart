@@ -285,6 +285,63 @@ div(
         ),
       ),
       bootstrapExample(
+        'Popover',
+        content: div(
+          style:
+              flexStyle(main: AxisAlign.space_evenly, cross: AxisAlign.center),
+          children: [
+            popoverWrapper(
+              attributes: popoverAttributes(title: 'popover title'),
+              content: 'popover content',
+              children: [
+                button(
+                  className: btn(),
+                  children: [txt('Button')],
+                ),
+              ],
+            ),
+            popoverWrapper(
+              attributes: popoverAttributes(
+                triggers: [TooltipTrigger.focus, TooltipTrigger.hover],
+              ),
+              content: 'popover content',
+              children: [
+                a(
+                  href: '#',
+                  children: [txt('Link hover and focus trigger')],
+                ),
+              ],
+            ),
+            // el(
+            //   'a',
+            //   attributes: {
+            //     ...popoverAttributes(
+            //       content: 'popover content',
+            //       triggers: [TooltipTrigger.focus, TooltipTrigger.hover],
+            //     ),
+            //     'href': '#',
+            //   },
+            //   children: [txt('Link hover and focus trigger')],
+            // ),
+            popoverWrapper(
+              content: '<em>popover</em> <u>with</u> <b>HTML</b>'
+                  '<br>placed bottom<br>with "25,8" offset',
+              attributes: popoverAttributes(
+                allowHtml: true,
+                placement: Placement.bottom,
+                offset: '25,8',
+              ),
+              children: [
+                button(
+                  className: btn(),
+                  children: [txt('Custom HTML popover')],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bootstrapExample(
         'Spinners',
         content: div(
           className: 'd-flex justify-content-evenly align-items-center',
