@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   mobx:
+  highlight: ^0.7.0
   incremental_dom_bindings: ^2.1.0
   deact:
     git:

@@ -206,6 +206,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  highlight:
+    dependency: "direct main"
+    description:
+      name: highlight
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   http_multi_server:
     dependency: transitive
     description:

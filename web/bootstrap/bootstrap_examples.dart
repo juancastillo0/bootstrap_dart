@@ -1,11 +1,46 @@
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'dart:html' as html;
+import 'package:highlight/highlight.dart' show highlight;
 
 import 'bootstrap_core.dart';
 import 'checks_radios.dart';
 import 'icons.dart';
+import 'modal.dart';
 import 'toast.dart';
+
+DeactNode codeSection(String dartCode) {
+  final highlighted = highlight.parse(dartCode, language: 'dart');
+  return div(
+    children: [
+      div(
+        className: 'mt-3 mb-2 d-flex justify-content-center align-items-center',
+        children: [
+          // txt('Example Code'),
+          // el('span', attributes: {'style': 'width:40px;'}),
+          button(
+            className: btn(color: BColor.dark, size: BSize.sm),
+            onclick: (_) =>
+                html.window.navigator.clipboard?.writeText(dartCode),
+            children: [
+              icon(BIcon.clipboard),
+              el('span', attributes: {
+                'style': 'padding-left:10px;'
+              }, children: [
+                txt('Copy code'),
+              ]),
+            ],
+          )
+        ],
+      ),
+      ElementNode.fromHtml(
+        html.Element.tag('code')
+          ..className = 'codebox'
+          ..setInnerHtml(highlighted.toHtml()),
+      )
+    ],
+  );
+}
 
 DeactNode bootstrapExamples() {
   return div(
@@ -14,10 +49,13 @@ DeactNode bootstrapExamples() {
     children: [
       bootstrapExample(
         'Buttons',
-        div(
+        content: div(
           className: 'hstack gap-3 align-self-center',
           children: [
-            button(className: btn(), children: [txt('primary')]),
+            button(
+              className: btn(),
+              children: [txt('primary')],
+            ),
             button(
               className: btn(outlined: true, color: BColor.danger),
               children: [txt('danger-outlined')],
@@ -36,10 +74,33 @@ DeactNode bootstrapExamples() {
             ),
           ],
         ),
+        example: codeSection('''
+button(
+  className: btn(),
+  children: [txt('primary')],
+),
+button(
+  className: btn(outlined: true, color: BColor.danger),
+  children: [txt('danger-outlined')],
+),
+button(
+  className: btn(size: BSize.lg, color: BColor.secondary),
+  children: [txt('secondary-lg')],
+),
+button(
+  className: btn(size: BSize.sm, color: BColor.dark),
+  children: [txt('dark-sm')],
+),
+button(
+  className: btn(active: true),
+  children: [txt('primary-active')],
+),
+'''),
       ),
       bootstrapExample(
         'Icons',
-        div(
+        url: 'https://icons.getbootstrap.com/',
+        content: div(
           className: 'd-flex justify-content-evenly',
           style: 'width:200px;align-self:center;align-items:center;',
           children: [
@@ -49,10 +110,16 @@ DeactNode bootstrapExamples() {
             icon(BIcon.lightning, color: 'grey'),
           ],
         ),
+        example: codeSection('''
+icon(BIcon.alarm, ariaLabel: 'Alarm'),
+icon(BIcon.alarm, color: 'blue'),
+icon(BIcon.alarm, color: 'blue', fontSize: '2rem'),
+icon(BIcon.lightning, color: 'grey'),
+'''),
       ),
       bootstrapExample(
         'Alerts',
-        div(
+        content: div(
           className: 'd-flex flex-column align-items-center',
           children: [
             div(
@@ -75,7 +142,7 @@ DeactNode bootstrapExamples() {
       ),
       bootstrapExample(
         'Badge',
-        div(
+        content: div(
           className: 'd-flex justify-content-evenly',
           children: [
             div(
@@ -95,7 +162,7 @@ DeactNode bootstrapExamples() {
       ),
       bootstrapExample(
         'Close Button',
-        div(
+        content: div(
           className: 'd-flex justify-content-evenly',
           children: [
             closeButton(),
@@ -117,7 +184,7 @@ DeactNode bootstrapExamples() {
       /// TODO: Split button,
       bootstrapExample(
         'Dropdown',
-        div(
+        content: div(
           className: 'd-flex justify-content-evenly',
           children: [
             dropdown(
@@ -166,7 +233,7 @@ DeactNode bootstrapExamples() {
       ),
       bootstrapExample(
         'Tooltip',
-        div(
+        content: div(
           className: 'd-flex justify-content-evenly',
           children: [
             tooltipWrapper(
@@ -198,7 +265,7 @@ DeactNode bootstrapExamples() {
       ),
       bootstrapExample(
         'Spinners',
-        div(
+        content: div(
           className: 'd-flex justify-content-evenly align-items-center',
           children: [
             spinner(),
@@ -225,7 +292,7 @@ DeactNode bootstrapExamples() {
       ///
       bootstrapExample(
         'Toasts',
-        div(
+        content: div(
           style: 'height:300px',
           children: [
             fc((ctx) {
@@ -256,8 +323,8 @@ DeactNode bootstrapExamples() {
                         onclick: (_) => ref.value.add(
                           toastContent(
                             showCloseButton: true,
-                            header: withHeader.value ? txt('A Header') : null,
-                            body: txt(text.value),
+                            header: withHeader.value ? [txt('A Header')] : null,
+                            body: [txt(text.value)],
                           ),
                         ),
                         children: [txt('Send')],
@@ -291,7 +358,7 @@ DeactNode bootstrapExamples() {
 DeactNode collapseExample() {
   return bootstrapExample(
     'Collapse',
-    div(
+    content: div(
       className: 'col',
       children: [
         div(
@@ -354,7 +421,12 @@ DeactNode collapseExample() {
   );
 }
 
-DeactNode bootstrapExample(String title, DeactNode content) {
+DeactNode bootstrapExample(
+  String title, {
+  required DeactNode content,
+  String? url,
+  DeactNode? example,
+}) {
   return div(
     key: title,
     id: title,
@@ -364,8 +436,9 @@ DeactNode bootstrapExample(String title, DeactNode content) {
         children: [
           el('h3', children: [txt(title)]),
           a(
-            href: 'https://getbootstrap.com/docs/5.1/components/'
-                '${title.toLowerCase().replaceAll(' ', '-')}',
+            href: url ??
+                'https://getbootstrap.com/docs/5.1/components/'
+                    '${title.toLowerCase().replaceAll(' ', '-')}',
             target: '_blank',
             children: [
               txt('Documentation'),
@@ -375,6 +448,7 @@ DeactNode bootstrapExample(String title, DeactNode content) {
       ),
       hr(),
       content,
+      if (example != null) example,
     ],
   );
 }
