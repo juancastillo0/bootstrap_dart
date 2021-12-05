@@ -562,7 +562,76 @@ div(
           ],
         ),
       ),
-    ],
+
+      bootstrapExample(
+        'Offcanvas',
+        content: div(
+          children: [
+            fc((ctx) {
+              final backdrop = ctx.state('backdrop', true);
+              final keyboard = ctx.state('keyboard', true);
+              final scroll = ctx.state('scroll', false);
+              final offcanvasRef = ctx.ref<Offcanvas?>('offcanvasRef', null);
+
+              final placement = ctx.state<OffcanvasPlacement>(
+                  'placement', OffcanvasPlacement.end);
+              const labelId = 'offcanvas-example-label';
+
+              return fragment([
+                el(
+                  'button',
+                  attributes: {
+                    'class': btn() + 'm-2',
+                    ...toggleButtonAttributes(
+                      component: TogglableComponent.offcanvas,
+                      targetId: 'offcanvas-example',
+                    ),
+                  },
+                  children: [txt('Toggle by attributes')],
+                ),
+                button(
+                  className: btn() + 'm-2',
+                  onclick: (_) => offcanvasRef.value!.toggle(),
+                  children: [txt('Toggle by ref')],
+                ),
+                _simpleCheck('backdrop', backdrop),
+                _simpleCheck('keyboard', keyboard),
+                _simpleCheck('scroll', scroll),
+                dropdown(
+                  buttonClass: btn(outlined: true),
+                  buttonContent: [txt('Placement: ${placement.value.name}')],
+                  children: [
+                    ...OffcanvasPlacement.values.map(
+                      (e) => dropdownItem(
+                        onClick: (_) => placement.value = e,
+                        active: placement.value == e,
+                        children: [txt(e.name)],
+                      ),
+                    )
+                  ],
+                ),
+                offcanvas(
+                  attributes: offcanvasAttributes(
+                    placement: placement.value,
+                    id: 'offcanvas-example',
+                    backdrop: backdrop.value,
+                    keyboard: keyboard.value,
+                    scroll: scroll.value,
+                    labelledBy: labelId,
+                  ),
+                  offcanvasRef: offcanvasRef,
+                  labelId: labelId,
+                  title: [txt('Title')],
+                  body: [
+                    txt('Laudantium ex tempora ratione illo velit sed asperiores.'),
+                  ],
+                ),
+              ]);
+            }),
+          ],
+        ),
+      ),
+
       bootstrapExample(
         'ScrollSpy',
         content: div(
