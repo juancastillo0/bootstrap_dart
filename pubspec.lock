@@ -173,8 +173,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: dae3bc1970885e18db2413bfd54a59570a86aaa8
+      ref: e96250be113bc8cf5169dd1aa2dbb3775d7bad04
+      resolved-ref: e96250be113bc8cf5169dd1aa2dbb3775d7bad04
       url: "https://github.com/juancastillo0/deact.git"
     source: git
     version: "1.1.0"
