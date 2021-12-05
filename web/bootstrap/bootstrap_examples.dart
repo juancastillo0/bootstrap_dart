@@ -563,6 +563,97 @@ div(
         ),
       ),
     ],
+      bootstrapExample(
+        'ScrollSpy',
+        content: div(
+          className: 'row mx-1',
+          children: [
+            div(
+              className: 'col-4',
+              children: [
+                div(
+                  className: 'nav list-group',
+                  id: 'list-example',
+                  children: [
+                    a(
+                      className:
+                          'list-group-item list-group-item-action nav-link',
+                      href: '#list-item-1',
+                      children: [txt('Item 1')],
+                    ),
+                    a(
+                      className:
+                          'list-group-item list-group-item-action nav-link',
+                      href: '#list-item-2',
+                      children: [txt('Item 2')],
+                    ),
+                    a(
+                      className:
+                          'list-group-item list-group-item-action nav-link',
+                      href: '#list-item-3',
+                      children: [txt('Item 3')],
+                    ),
+                    a(
+                      className:
+                          'list-group-item list-group-item-action nav-link',
+                      href: '#list-item-4',
+                      children: [txt('Item 4')],
+                    ),
+                  ],
+                )
+              ],
+            ),
+            div(
+              className: 'col-8',
+              children: [
+                fc((ctx) {
+                  final ref = ctx.ref<html.Element?>('element', null);
+                  final scrollSpy =
+                      useScrollSpy(ctx, ref, target: '#list-example');
+
+                  return el(
+                    'div',
+                    ref: ref,
+                    attributes: {
+                      'style':
+                          'position:relative;height:200px;overflow-y:scroll;',
+                      ...scrollSpy.attributes,
+                    },
+                    children: [
+                      h4(id: 'list-item-1', children: [txt('Item 1')]),
+                      p(children: [
+                        txt('Esse sapiente non ullam nihil qui quisquam. Molestiae nihil debitis eaque sint neque nisi. Quia a minima veritatis aut distinctio officiis ratione. Culpa explicabo tempore tenetur. Qui rem voluptatem iusto minima ad aut dolores est velit.')
+                      ]),
+                      h4(id: 'list-item-2', children: [txt('Item 2')]),
+                      p(children: [
+                        txt('Esse sapiente non ullam nihil qui quisquam. Molestiae nihil debitis eaque sint neque nisi. Quia a minima veritatis aut distinctio officiis ratione. Culpa explicabo tempore tenetur. Qui rem voluptatem iusto minima ad aut dolores est velit.')
+                      ]),
+                      h4(id: 'list-item-3', children: [txt('Item 3')]),
+                      p(children: [
+                        txt('Esse sapiente non ullam nihil qui quisquam. Molestiae nihil debitis eaque sint neque nisi. Quia a minima veritatis aut distinctio officiis ratione. Culpa explicabo tempore tenetur. Qui rem voluptatem iusto minima ad aut dolores est velit.')
+                      ]),
+                      h4(id: 'list-item-4', children: [txt('Item 4')]),
+                      p(children: [
+                        txt('Esse sapiente non ullam nihil qui quisquam. Molestiae nihil debitis eaque sint neque nisi. Quia a minima veritatis aut distinctio officiis ratione. Culpa explicabo tempore tenetur. Qui rem voluptatem iusto minima ad aut dolores est velit.')
+                      ]),
+                    ],
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
+      )
+    ],
+  );
+}
+
+DeactNode _simpleCheck(String label, State<bool> refCheck) {
+  return check(
+    checked: refCheck.value,
+    inline: true,
+    onChange: (checked) => refCheck.value = checked,
+    label: txt(label),
   );
 }
 
