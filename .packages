@@ -27,6 +27,7 @@ file:packages/file/
 fixnum:packages/fixnum/
 glob:packages/glob/
 graphs:packages/graphs/
+highlight:packages/highlight/
 http_multi_server:packages/http_multi_server/
 http_parser:packages/http_parser/
 incremental_dom_bindings:packages/incremental_dom_bindings/
