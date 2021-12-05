@@ -351,6 +351,204 @@ icon(BIcon.lightning, color: 'grey'),
           ],
         ),
       ),
+
+      bootstrapExample(
+        'Modal',
+        content: div(
+          children: [
+            fc((ctx) {
+              final fade = ctx.state('fade', true);
+              final focus = ctx.state('focus', true);
+              final closeOnClick = ctx.state('closeOnClick', true);
+              final closeOnEscKey = ctx.state('closeOnEscKey', true);
+              final backdrop = ctx.state('backdrop', true);
+              //
+              final center = ctx.state('center', true);
+              final fullscreen = ctx.state('fullscreen', false);
+              final scrollable = ctx.state('scrollable', false);
+              final size = ctx.state<DialogSize?>('size', null);
+
+              final ref = ctx.ref<Modal?>('modal', null);
+
+              DeactNode _simpleCheck(String label, Ref<bool> refCheck) {
+                return check(
+                  checked: refCheck.value,
+                  inline: true,
+                  onChange: (checked) => refCheck.value = checked,
+                  label: txt(label),
+                );
+              }
+
+              const modalId = 'example-modal-id';
+
+              return div(
+                className: 'd-flex flex-column',
+                style: 'position:relative;height:100%;',
+                children: [
+                  div(
+                    className: 'm-2',
+                    style:
+                        'display:flex;align-items:center;justify-content: center;',
+                    children: [
+                      el(
+                        'button',
+                        attributes: {
+                          'class': btn(),
+                          'type': "button",
+                          'data-bs-toggle': "modal",
+                          'data-bs-target': "#$modalId",
+                        },
+                        children: [txt('Toggle with attributes')],
+                      ),
+                      el('span', attributes: {'style': 'width:10px'}),
+                      button(
+                        className: btn(),
+                        onclick: (_) => ref.value!.toggle(),
+                        children: [txt('Toggle with ref')],
+                      ),
+                      el('span', attributes: {'style': 'width:10px'}),
+                    ],
+                  ),
+                  div(
+                    children: [
+                      check(
+                        checked: fade.value,
+                        inline: true,
+                        onChange: (checked) => fade.value = checked,
+                        label: txt('fade'),
+                      ),
+                      check(
+                        checked: focus.value,
+                        inline: true,
+                        onChange: (checked) => focus.value = checked,
+                        label: txt('focus'),
+                      ),
+                      check(
+                        checked: closeOnClick.value,
+                        inline: true,
+                        onChange: (checked) => closeOnClick.value = checked,
+                        label: txt('closeOnClick'),
+                      ),
+                      check(
+                        checked: closeOnEscKey.value,
+                        inline: true,
+                        onChange: (checked) => closeOnEscKey.value = checked,
+                        label: txt('closeOnEscKey'),
+                      ),
+                      check(
+                        checked: backdrop.value,
+                        inline: true,
+                        onChange: (checked) => backdrop.value = checked,
+                        label: txt('backdrop'),
+                      ),
+                    ],
+                  ),
+                  div(
+                    className:
+                        'd-flex justify-content-center align-items-center',
+                    children: [
+                      div(
+                        children: [
+                          check(
+                            checked: center.value,
+                            inline: true,
+                            onChange: (checked) => center.value = checked,
+                            label: txt('center'),
+                          ),
+                          check(
+                            checked: fullscreen.value,
+                            inline: true,
+                            onChange: (checked) => fullscreen.value = checked,
+                            label: txt('fullscreen'),
+                          ),
+                          check(
+                            checked: scrollable.value,
+                            inline: true,
+                            onChange: (checked) => scrollable.value = checked,
+                            label: txt('scrollable'),
+                          ),
+                        ],
+                      ),
+                      select(
+                        className: 'form-select',
+                        style: 'width:150px;',
+                        onchange: (e) {
+                          final value = (e.target! as html.SelectElement).value;
+                          if (value == '') {
+                            size.value = null;
+                          } else {
+                            size.value = DialogSize.values
+                                .firstWhere((v) => v.name == value);
+                          }
+                        },
+                        children: [
+                          option(
+                            value: '',
+                            selected: size.value == null ? '' : null,
+                            children: [txt('default size')],
+                          ),
+                          ...DialogSize.values.map(
+                            (e) => option(
+                              value: e.name,
+                              selected: size.value == e ? '' : null,
+                              children: [txt(e.name)],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  modal(
+                    id: modalId,
+                    closeOnClick: closeOnClick.value,
+                    closeOnEscKey: closeOnEscKey.value,
+                    fade: fade.value,
+                    focus: focus.value,
+                    modalRef: ref,
+                    backdrop: backdrop.value,
+                    dialog: modalDialog(
+                      dialogClass: modalDialogClass(
+                        center: center.value,
+                        fullScreen: fullscreen.value
+                            ? ModalFullScreenBellow.always
+                            : null,
+                        scrollable: scrollable.value,
+                        size: size.value,
+                      ),
+                      body: [
+                        scrollable.value
+                            ? el('div', attributes: {
+                                'style': 'height: 2000px;'
+                                    'background-image:linear-gradient(white, #8fb6ff);'
+                              })
+                            : txt('Body'),
+                      ],
+                      header: [txt('Header')],
+                      footer: [
+                        span(className: 'me-5', children: [txt('Footer')]),
+                        el(
+                          'button',
+                          attributes: {
+                            'class': btn(),
+                            'type': "button",
+                            'data-bs-dismiss': "modal",
+                          },
+                          children: [txt('Dismiss with attributes')],
+                        ),
+                        button(
+                          className: btn(),
+                          onclick: (_) => ref.value!.hide(),
+                          children: [txt('Hide with ref')],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            })
+          ],
+        ),
+      ),
     ],
   );
 }
