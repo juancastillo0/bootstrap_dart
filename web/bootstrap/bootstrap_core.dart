@@ -47,7 +47,46 @@ String btn({
   bool active = false,
 }) {
   return 'btn btn-${outlined ? 'outline-' : ''}${color.name}'
-      '${size != null ? ' btn-${size.name}' : ''}${active ? ' active' : ''}';
+      '${size != null ? ' btn-${size.name}' : ''}${active ? ' active' : ''} ';
+}
+
+enum AxisAlign {
+  start,
+  end,
+  center,
+  stretch,
+  space_around,
+  space_between,
+  space_evenly,
+  baseline,
+}
+
+extension MainAxisAlignExt on AxisAlign {
+  String get nameHtml => toString().split('.').last.replaceAll('_', '-');
+}
+
+String flexCenter({bool column = false}) {
+  return flexStyle(
+    main: AxisAlign.center,
+    cross: AxisAlign.center,
+    column: column,
+  );
+}
+
+String flexStyle({
+  bool column = false,
+  AxisAlign main = AxisAlign.start,
+  AxisAlign cross = AxisAlign.start,
+}) {
+  return 'display:flex;${column ? 'flex-direction:column;' : ''}'
+      'justify-content:${main.nameHtml};align-items:${cross.nameHtml};';
+}
+
+String colStyle({
+  AxisAlign main = AxisAlign.start,
+  AxisAlign cross = AxisAlign.start,
+}) {
+  return flexStyle(column: true, main: main, cross: cross);
 }
 
 /// Close Button https://getbootstrap.com/docs/5.1/components/close-button/
