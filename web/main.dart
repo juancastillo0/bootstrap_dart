@@ -97,8 +97,8 @@ void main() {
           toast(
             key: 'd',
             content: toastContent(
-              header: txt('header'),
-              body: txt('body'),
+              header: [txt('header')],
+              body: [txt('body')],
             ),
           )
         ],
@@ -248,15 +248,12 @@ DeactNode incrementor() {
         if (showModal.value)
           modal(
             id: 'modal-id',
-            onSetUp: (modal) {
-              print(modal);
-            },
-            body: txt('Body'),
-            header: txt('Header'),
-            footer: txt('Footer'),
-            onEvent: (type, event) {
-              print('$type, $event');
-            },
+            dialog: modalDialog(
+              dialogClass: modalDialogClass(),
+              body: [txt('Body')],
+              header: [txt('Header')],
+              footer: [txt('Footer')],
+            ),
           )
       ],
     );

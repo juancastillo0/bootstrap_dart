@@ -225,8 +225,8 @@ DeactNode closeToastButton({
 }
 
 DeactNode toastContent({
-  DeactNode? header,
-  DeactNode? body,
+  Iterable<DeactNode>? header,
+  Iterable<DeactNode>? body,
   bool showCloseButton = false,
   String headerClass = 'justify-content-between',
 }) {
@@ -235,14 +235,14 @@ DeactNode toastContent({
       div(
         className: 'toast-header $headerClass',
         children: [
-          header,
+          ...header,
           if (showCloseButton) closeToastButton(),
         ],
       ),
     if (body != null)
       div(
         className: 'toast-body',
-        children: [body],
+        children: body,
       ),
   ]);
 }

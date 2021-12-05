@@ -39,7 +39,6 @@ DeactNode check({
               if (id != null) 'id': id,
               if (disabled) 'disabled': '',
               if (checked == true) 'checked': '',
-              if (checked == false) 'checked': 'false',
             },
             listeners: {
               'onchange': (e) {

@@ -64,6 +64,7 @@ DeactNode closeButton({
     attributes: {
       'class': 'btn-close${white ? ' btn-close-white' : ''}',
       'aria-label': 'Close',
+      'type': 'button',
       if (disabled) 'disabled': true,
       if (attributes != null) ...attributes,
     },
