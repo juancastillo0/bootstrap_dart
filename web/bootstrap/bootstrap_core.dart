@@ -130,12 +130,12 @@ DeactNode collapseButton({
     'button',
     key: key,
     attributes: {
-      'type': "button",
       'class': buttonClass,
-      'data-bs-toggle': "collapse",
-      'data-bs-target': "#$collapseId",
+      ...toggleButtonAttributes(
+        component: TogglableComponent.collapse,
+        targetId: collapseId,
+      ),
       'aria-expanded': "false",
-      'aria-controls': collapseId,
     },
     children: children,
   );
@@ -194,8 +194,8 @@ DeactNode dropdown({
         'button',
         attributes: {
           'class': '$buttonClass dropdown-toggle',
-          'data-bs-toggle': "dropdown",
-          'aria-expanded': "false",
+          'data-bs-toggle': 'dropdown',
+          'aria-expanded': 'false',
           'type': 'button',
           if (buttonId != null) 'id': buttonId,
           'data-bs-reference': reference,
@@ -229,7 +229,7 @@ DeactNode dropdownItem({
   bool disabled = false,
   bool useButton = false,
   required Iterable<DeactNode>? children,
-  void Function(html.Event)? onClick,
+  required void Function(html.Event)? onClick,
 }) {
   return el(
     'li',
@@ -253,19 +253,17 @@ DeactNode dropdownItem({
   );
 }
 
-/// TODO: Accordion https://getbootstrap.com/docs/5.1/components/accordion/
-/// TODO: Breadcrumb (navigation hierarchy) https://getbootstrap.com/docs/5.1/components/breadcrumb/
-/// TODO: ButtonGroup https://getbootstrap.com/docs/5.1/components/button-group/
-/// TODO: Carousel https://getbootstrap.com/docs/5.1/components/carousel/
-/// TODO: ListGroup https://getbootstrap.com/docs/5.1/components/list-group/
-/// TODO: Navs and tabs https://getbootstrap.com/docs/5.1/components/navs-tabs/
-/// TODO: Navbar https://getbootstrap.com/docs/5.1/components/navbar/
-/// TODO: Offcanvas https://getbootstrap.com/docs/5.1/components/offcanvas/
-/// https://getbootstrap.com/docs/5.1/components/pagination/
-/// https://getbootstrap.com/docs/5.1/components/placeholders/
-/// https://getbootstrap.com/docs/5.1/components/popovers/
-/// https://getbootstrap.com/docs/5.1/components/progress/
-/// https://getbootstrap.com/docs/5.1/components/scrollspy/
+// TODO: Accordion https://getbootstrap.com/docs/5.1/components/accordion/
+// TODO: Breadcrumb (navigation hierarchy) https://getbootstrap.com/docs/5.1/components/breadcrumb/
+// TODO: ButtonGroup https://getbootstrap.com/docs/5.1/components/button-group/
+// TODO: Carousel https://getbootstrap.com/docs/5.1/components/carousel/
+// TODO: ListGroup https://getbootstrap.com/docs/5.1/components/list-group/
+// TODO: Navs and tabs https://getbootstrap.com/docs/5.1/components/navs-tabs/
+// TODO: Navbar https://getbootstrap.com/docs/5.1/components/navbar/
+// https://getbootstrap.com/docs/5.1/components/pagination/
+// https://getbootstrap.com/docs/5.1/components/placeholders/
+// https://getbootstrap.com/docs/5.1/components/progress/
+
 
 /// Tooltips https://getbootstrap.com/docs/5.1/components/tooltips/
 ///
@@ -335,11 +333,33 @@ extension TooltipTriggerExt on TooltipTrigger {
   String get name => toString().split('.').last;
 }
 
+enum TogglableComponent {
+  modal,
+  offcanvas,
+  collapse,
+}
+
+extension TogglableComponentExt on TogglableComponent {
+  String get name => toString().split('.').last;
+}
+
+Map<String, Object> toggleButtonAttributes({
+  required TogglableComponent component,
+  required String targetId,
+}) {
+  return {
+    'type': 'button',
+    'data-bs-toggle': component.name,
+    'data-bs-target': '#$targetId',
+    'aria-controls': targetId,
+  };
+}
+
 /// You need to enable the tooltip by instantiating a [Tooltip]
 /// similar to the usage in [tooltipWrapper].
 ///
-/// This attributes can be used in the `attributes`
-/// parameter in [tooltipWrapper]
+/// The returned attributes can be used in the `attributes`
+/// parameter of [tooltipWrapper]
 Map<String, Object> tooltipAttributes({
   String title = '',
   bool animation = true,

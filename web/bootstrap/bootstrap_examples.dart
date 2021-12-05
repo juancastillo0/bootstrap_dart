@@ -213,7 +213,10 @@ div(
                     if (e == null) {
                       return dropdownDivider;
                     } else {
-                      return dropdownItem(children: [txt(e)]);
+                      return dropdownItem(
+                        children: [txt(e)],
+                        onClick: (_) {},
+                      );
                     }
                   },
                 )
@@ -222,7 +225,7 @@ div(
             fc((ctx) {
               final selected = ctx.state<String>('selected', 'Option A');
               return dropdown(
-                buttonClass: btn(),
+                buttonClass: btn(outlined: true),
                 buttonContent: [txt(selected.value)],
                 menuOnEnd: true,
                 direction: Direction.end,
@@ -250,6 +253,7 @@ div(
       ),
       bootstrapExample(
         'Tooltip',
+        // TODO: tooltip in text
         content: div(
           className: 'd-flex justify-content-evenly',
           children: [
@@ -387,15 +391,6 @@ div(
 
               final ref = ctx.ref<Modal?>('modal', null);
 
-              DeactNode _simpleCheck(String label, Ref<bool> refCheck) {
-                return check(
-                  checked: refCheck.value,
-                  inline: true,
-                  onChange: (checked) => refCheck.value = checked,
-                  label: txt(label),
-                );
-              }
-
               const modalId = 'example-modal-id';
 
               return div(
@@ -411,9 +406,10 @@ div(
                         'button',
                         attributes: {
                           'class': btn(),
-                          'type': "button",
-                          'data-bs-toggle': "modal",
-                          'data-bs-target': "#$modalId",
+                          ...toggleButtonAttributes(
+                            component: TogglableComponent.modal,
+                            targetId: modalId,
+                          ),
                         },
                         children: [txt('Toggle with attributes')],
                       ),
@@ -644,8 +640,9 @@ DeactNode bootstrapExample(
 }) {
   return div(
     key: title,
-    id: title,
+    id: title.replaceAll(' ', '-'),
     className: 'm-4 w-100 d-flex flex-column',
+    style: 'position:relative;',
     children: [
       div(
         children: [
