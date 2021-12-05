@@ -7,6 +7,7 @@ import 'bootstrap_core.dart';
 import 'checks_radios.dart';
 import 'icons.dart';
 import 'modal.dart';
+import 'offcanvas.dart';
 import 'toast.dart';
 
 DeactNode codeSection(String dartCode) {
@@ -43,9 +44,86 @@ DeactNode codeSection(String dartCode) {
 }
 
 DeactNode bootstrapExamples() {
-  return div(
-    style: 'display:flex;flex-direction: column;align-items: center;',
-    className: 'w-100',
+  return fc((ctx) => _allExamples(ctx));
+  // return div(
+  //   className: 'd-flex',
+  //   children: [
+  //     div(
+  //       className: 'flex-1',
+  //       children: [
+  //         examplesNavbar(),
+  //       ],
+  //     ),
+  //     div(
+  //       className: 'flex-4',
+  //       children: [_allExamples()],
+  //     ),
+  //   ],
+  // );
+}
+
+DeactNode examplesNavbar() {
+  return nav(
+    id: 'navbar-example',
+    className: 'navbar navbar-light bg-light'
+        ' flex-column align-items-stretch p-3 justify-content-start',
+    style: 'overflow:hidden;height: 100%;',
+    children: [
+      a(
+        className: 'navbar-brand m-1 d-flex flex-column',
+        href: '#',
+        children: [
+          txt('Bootstrap Dart'),
+          div(
+            style: flexCenter(),
+            children: [
+              icon(BIcon.bootstrap_fill, color: '#7a10f7'),
+              span(style: 'width:10px;'),
+              img(src: 'https://pub.dev/favicon.ico', style: 'width:1.25rem;')
+            ],
+          ),
+        ],
+      ),
+      nav(
+        className: 'nav nav-pills flex-column',
+        children: [
+          ...const [
+            'Buttons',
+            'Icons',
+            'Alerts',
+            'Badge',
+            'Close Button',
+            'Collapse',
+            'Dropdown',
+            'Tooltip',
+            'Popover',
+            'Spinners',
+            'Toasts',
+            'Modal',
+            'Offcanvas',
+            'ScrollSpy',
+          ].map(
+            (e) => a(
+              className: 'nav-link',
+              href: '#${e.replaceAll(' ', '-')}',
+              children: [
+                txt(e),
+              ],
+            ),
+          ),
+        ],
+      )
+    ],
+  );
+}
+
+DeactNode _allExamples(ComponentContext ctx) {
+  return el(
+    'div',
+    attributes: {
+      'style': 'display:flex;flex-direction: column;align-items: center;'
+          'width:100%;position:relative;',
+    },
     children: [
       bootstrapExample(
         'Buttons',
@@ -176,6 +254,20 @@ div(
             ),
           ],
         ),
+        example: codeSection('''
+div(
+  className: badge(color: BColor.info),
+  children: [txt('Info Alert')],
+),
+div(
+  className: badge(color: BColor.success, rounded: true),
+  children: [txt('Success rounded')],
+),
+div(
+  className: badge(color: BColor.primary, rounded: true),
+  children: [txt('49')],
+),
+'''),
       ),
       bootstrapExample(
         'Close Button',

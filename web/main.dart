@@ -67,24 +67,45 @@ void main() {
             name: 'counter',
             initialValue: 0,
             children: [
-              col(
+              div(
+                className: 'd-flex ',
+                style: 'overflow:hidden;height: 100%;',
                 children: [
-                  tabs(),
-                  incrementor(),
-                  display(),
-                  textInput(),
-                  bootstrapExamples(),
-                  div(children: [
-                    fc((ctx) {
-                      final tab = RootStore.fromCtx(ctx).tab.value;
-                      switch (tab) {
-                        case Tab.profile:
-                          return txt('Profile');
-                        case Tab.message:
-                          return messagesView();
-                      }
-                    }),
-                  ]),
+                  examplesNavbar(),
+                  fc((ctx) {
+                    final ref = ctx.ref<html.Element?>('element', null);
+                    final scrollSpy = useScrollSpy(
+                      ctx,
+                      ref,
+                      target: '#navbar-example',
+                      offset: 10,
+                    );
+                    return col(
+                      ref: ref,
+                      style: 'overflow:auto;flex:1;',
+                      attributes: {
+                        ...scrollSpy.attributes,
+                      },
+                      children: [
+                        tabs(),
+                        incrementor(),
+                        display(),
+                        textInput(),
+                        div(children: [
+                          fc((ctx) {
+                            final tab = RootStore.fromCtx(ctx).tab.value;
+                            switch (tab) {
+                              case Tab.profile:
+                                return txt('Profile');
+                              case Tab.message:
+                                return messagesView();
+                            }
+                          }),
+                        ]),
+                        bootstrapExamples(),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ],
@@ -187,9 +208,21 @@ DeactNode messageView(Message m) {
   );
 }
 
-DeactNode col({required Iterable<DeactNode> children}) {
-  return div(
-    style: 'display:flex;flex-direction: column;align-items: center;',
+DeactNode col({
+  Ref<html.Element?>? ref,
+  required Iterable<DeactNode> children,
+  String? style,
+  Map<String, Object> attributes = const {},
+}) {
+  return el(
+    'div',
+    ref: ref,
+    attributes: {
+      'style':
+          'display:flex;flex-direction: column;align-items: center;position:relative;'
+              '${style ?? ''}',
+      ...attributes,
+    },
     children: children,
   );
 }
