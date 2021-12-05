@@ -265,73 +265,62 @@ DeactNode dropdownItem({
 // https://getbootstrap.com/docs/5.1/components/progress/
 
 
-/// Tooltips https://getbootstrap.com/docs/5.1/components/tooltips/
-///
-/// [attributes] can be constructed using [tooltipAttributes].
-DeactNode tooltipWrapper({
-  required String title,
-  Iterable<DeactNode>? children,
-  Map<String, Object>? attributes,
+class ScrollSpyHook {
+  final Ref<ScrollSpy?> ref;
+  final Map<String, Object> attributes;
+
+  ScrollSpyHook(this.ref, this.attributes);
+}
+
+ScrollSpyHook useScrollSpy(
+  ComponentContext ctx,
+  Ref<html.Element?> ref, {
+  required String target,
+  int offset = 50,
 }) {
-  return fc((ctx) {
-    final tooltip = ctx.ref<Tooltip?>('tooltip', null);
-    final ref = useSetUpElement(
-      ctx,
-      onSetUp: (elem) => tooltip.value = Tooltip(elem),
-      onDispose: () => tooltip.value?.dispose(),
+  final scrollSpy = ctx.ref<ScrollSpy?>('scrollSpy', null);
+
+  ctx.hookEffect(() {
+    final _scrollSpy = ScrollSpy(
+      ref.value!,
+      ScrollSpyConfig(target: target),
     );
-    return el(
-      'span',
-      ref: ref,
-      attributes: {
-        if (attributes != null) ...attributes,
-        'class': 'd-inline-block',
-        'tabindex': '0',
-        'data-bs-toggle': 'tooltip',
-        'data-bs-title': title,
-      },
-      children: children,
-    );
+    scrollSpy.value = _scrollSpy;
+    return () {
+      scrollSpy.value = null;
+      _scrollSpy.dispose();
+    };
+  }, [ref, target, offset]);
+
+  ctx.hookEffect(() {
+    scrollSpy.value?.refresh();
+  });
+
+  return ScrollSpyHook(scrollSpy, {
+    'data-bs-spy': 'scroll',
+    'data-bs-target': target,
+    'data-bs-offset': offset.toString(),
+    'tabindex': '0',
   });
 }
 
-class Tooltip {
-  final _Tooltip _inner;
-  final html.Element element;
-  Tooltip(this.element) : _inner = _Tooltip(element);
-
-  void dispose() => _inner.dispose();
-}
-
-@JS('bootstrap.Tooltip')
-class _Tooltip {
-  external _Tooltip(html.Element element);
-
+@JS('bootstrap.ScrollSpy')
+class ScrollSpy {
+  external ScrollSpy(html.Element element, ScrollSpyConfig config);
   external void dispose();
+  external void refresh();
 }
 
-enum Placement {
-  auto,
-  top,
-  bottom,
-  left,
-  right,
+@JS()
+@anonymous
+class ScrollSpyConfig {
+  external factory ScrollSpyConfig({required String target});
+
+  /// #navbar-example
+  external String get target;
 }
 
-extension PlacementExt on Placement {
-  String get name => toString().split('.').last;
-}
 
-enum TooltipTrigger {
-  click,
-  hover,
-  focus,
-  manual,
-}
-
-extension TooltipTriggerExt on TooltipTrigger {
-  String get name => toString().split('.').last;
-}
 
 enum TogglableComponent {
   modal,
@@ -355,41 +344,6 @@ Map<String, Object> toggleButtonAttributes({
   };
 }
 
-/// You need to enable the tooltip by instantiating a [Tooltip]
-/// similar to the usage in [tooltipWrapper].
-///
-/// The returned attributes can be used in the `attributes`
-/// parameter of [tooltipWrapper]
-Map<String, Object> tooltipAttributes({
-  String title = '',
-  bool animation = true,
-  Duration delay = Duration.zero,
-  bool allowHtml = false,
-  Placement placement = Placement.top,
-  String? selector,
-  String? template,
-  String? customClass,
-  String offset = '0,0',
-  List<TooltipTrigger> triggers = const [
-    TooltipTrigger.focus,
-    TooltipTrigger.hover,
-  ],
-  // TODO: fallbackPlacements
-}) {
-  return {
-    'data-bs-toggle': 'tooltip',
-    if (!animation) 'data-bs-animation': 'false',
-    'data-bs-delay': delay.inMilliseconds,
-    if (allowHtml) 'data-bs-html': true,
-    'data-bs-title': title,
-    'data-bs-placement': placement.name,
-    if (selector != null) 'data-bs-selector': selector,
-    if (template != null) 'data-bs-template': template,
-    if (customClass != null) 'data-bs-custom-class': customClass,
-    'data-bs-offset': offset,
-    'data-bs-trigger': triggers.map((e) => e.name).join(' '),
-  };
-}
 
 /// Card https://getbootstrap.com/docs/5.1/components/card/
 DeactNode card({

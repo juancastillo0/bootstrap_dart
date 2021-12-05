@@ -9,6 +9,7 @@ import 'icons.dart';
 import 'modal.dart';
 import 'offcanvas.dart';
 import 'toast.dart';
+import 'tooltip_popover.dart';
 
 DeactNode codeSection(String dartCode) {
   final highlighted = highlight.parse(dartCode, language: 'dart');
