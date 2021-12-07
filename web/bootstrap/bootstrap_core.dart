@@ -6,7 +6,6 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:js/js.dart';
 
-import 'modal.dart';
 import 'user_selection.dart';
 export 'user_selection.dart';
 

@@ -7,6 +7,7 @@ import 'bootstrap_core.dart';
 import 'checks_radios.dart';
 import 'icons.dart';
 import 'modal.dart';
+import 'navbar.dart';
 import 'offcanvas.dart';
 import 'toast.dart';
 import 'tooltip_popover.dart';
@@ -503,7 +504,7 @@ div(
                 'controller',
                 () => ToastsController(),
               );
-              final text = ctx.state('text', 'a message');
+              final text = ctx.state('text', 'A message');
 
               return div(
                 className: 'd-flex flex-column',
@@ -514,7 +515,7 @@ div(
                     style: 'width:400px;display:flex;align-items:center;',
                     children: [
                       input(
-                        className: 'px-2',
+                        className: 'form-control px-2',
                         value: text.value,
                         oninput: (e) => text.value =
                             (e.target! as html.InputElement).value!,
@@ -529,27 +530,142 @@ div(
                             body: [txt(text.value)],
                           ),
                         ),
-                        children: [txt('Send')],
+                        children: [txt('Show')],
                       ),
                       el('span', attributes: {'style': 'width:10px'}),
-                      div(
-                        children: [
-                          check(
-                            checked: withHeader.value,
-                            inline: true,
-                            onChange: (checked) {
-                              withHeader.value = checked;
-                            },
-                            label: txt('With Header'),
-                          ),
-                        ],
-                      )
+                      check(
+                        checked: withHeader.value,
+                        onChange: (checked) {
+                          withHeader.value = checked;
+                        },
+                        label: span(
+                          style: 'white-space: nowrap;',
+                          children: [
+                            txt('With Header'),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   ref.value.render(),
                 ],
               );
             })
+          ],
+        ),
+      ),
+
+      bootstrapExample(
+        'Navbar',
+        content: div(
+          className: 'd-flex flex-column',
+          children: [
+            fc((ctx) {
+              final _navLinks = [
+                el(
+                  'a',
+                  attributes: {
+                    'class': 'nav-link active',
+                    'href': '#',
+                    'aria-current': 'page',
+                  },
+                  children: [txt('Home')],
+                ),
+                el(
+                  'a',
+                  attributes: {
+                    'class': 'nav-link',
+                    'href': '#',
+                  },
+                  children: [txt('Documentation')],
+                ),
+                el(
+                  'a',
+                  attributes: {
+                    'class': 'nav-link',
+                    'href': '#',
+                  },
+                  children: [txt('Demo')],
+                ),
+                el(
+                  'a',
+                  attributes: {
+                    'class': 'nav-link disabled',
+                    'href': '#',
+                    'tabindex': '-1',
+                    'aria-disabled': true,
+                  },
+                  children: [txt('Disabled')],
+                ),
+              ];
+
+              return fragment(
+                [
+                  navbar(
+                    expand: ModalFullScreenBellow.lg,
+                    background: BColor.light,
+                    collapseId: 'nav-bar-example-collapse',
+                    // position: NavbarPosition.fixed_bottom,
+                    brand: [
+                      txt('Navbar Brand'),
+                    ],
+                    itemList: [
+                      div(
+                        className: 'navbar-nav me-auto',
+                        children: _navLinks,
+                      ),
+                      form(
+                        className: 'd-flex',
+                        children: [
+                          input(
+                            className: 'form-control me-2',
+                            type: 'search',
+                            placeholder: 'Search',
+                          ),
+                          button(
+                            className: btn(),
+                            type: 'submit',
+                            children: [txt('Search')],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  navbar(
+                    expand: null,
+                    background: BColor.dark,
+                    dark: true,
+                    collapseId: 'nav-bar-example-collapse-dark',
+                    attributes: {'style': 'margin-top:20px;'},
+                    // position: NavbarPosition.fixed_bottom,
+                    brand: [
+                      txt('Collapsed Dark Brand'),
+                    ],
+                    itemList: [
+                      div(
+                        className: 'navbar-nav me-auto',
+                        children: _navLinks,
+                      ),
+                      form(
+                        className: 'd-flex',
+                        children: [
+                          input(
+                            className: 'form-control me-2',
+                            type: 'search',
+                            placeholder: 'Search',
+                          ),
+                          button(
+                            className: btn(),
+                            type: 'submit',
+                            children: [txt('Search')],
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }),
           ],
         ),
       ),
@@ -893,7 +1009,7 @@ div(
             ),
           ],
         ),
-      )
+      ),
     ],
   );
 }
