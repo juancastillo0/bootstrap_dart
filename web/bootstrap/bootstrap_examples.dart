@@ -46,21 +46,6 @@ DeactNode codeSection(String dartCode) {
 
 DeactNode bootstrapExamples() {
   return fc((ctx) => _allExamples(ctx));
-  // return div(
-  //   className: 'd-flex',
-  //   children: [
-  //     div(
-  //       className: 'flex-1',
-  //       children: [
-  //         examplesNavbar(),
-  //       ],
-  //     ),
-  //     div(
-  //       className: 'flex-4',
-  //       children: [_allExamples()],
-  //     ),
-  //   ],
-  // );
 }
 
 DeactNode examplesNavbar() {
@@ -90,6 +75,7 @@ DeactNode examplesNavbar() {
         children: [
           ...const [
             'Buttons',
+            'Button Group',
             'Icons',
             'Alerts',
             'Badge',
@@ -100,6 +86,7 @@ DeactNode examplesNavbar() {
             'Popover',
             'Spinners',
             'Toasts',
+            'Navbar',
             'Modal',
             'Offcanvas',
             'ScrollSpy',
@@ -175,6 +162,50 @@ button(
   children: [txt('primary-active')],
 ),
 '''),
+      ),
+      bootstrapExample(
+        'Button Group',
+        content: fc(
+          (ctx) {
+            final value1 = ctx.state('value1', 'Left');
+            final value2 = ctx.state('value2', {'B', 'C'});
+            final value3 = ctx.state<String?>('value3', null);
+
+            return div(
+              className: 'hstack gap-3 align-self-center',
+              children: [
+                buttonGroup<String>(
+                  buttonClass: btn(outlined: true),
+                  renderItem: (str) => [txt(str)],
+                  selection: UserSelection.single(value1.value, (selected) {
+                    value1.value = selected;
+                  }),
+                  values: const ['Left', 'Middle', 'Right'],
+                ),
+                buttonGroup<String>(
+                  size: BSize.sm,
+                  buttonClass: btn(outlined: true, color: BColor.dark),
+                  renderItem: (str) => [txt(str)],
+                  selection: UserSelection.many(value2.value, (selected) {
+                    value2.value = selected;
+                  }),
+                  values: const ['A', 'B', 'C', 'D', 'E'],
+                ),
+                buttonGroup<String>(
+                  size: BSize.lg,
+                  vertical: true,
+                  buttonClass: btn(outlined: true),
+                  renderItem: (str) => [txt(str)],
+                  selection:
+                      UserSelection.indeterminate(value3.value, (selected) {
+                    value3.value = selected;
+                  }),
+                  values: const ['Top', 'Bottom'],
+                ),
+              ],
+            );
+          },
+        ),
       ),
       bootstrapExample(
         'Icons',

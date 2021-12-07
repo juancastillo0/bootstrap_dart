@@ -1,8 +1,14 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
 import 'dart:html' as html;
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:js/js.dart';
+
+import 'modal.dart';
+import 'user_selection.dart';
+export 'user_selection.dart';
 
 enum BColor {
   primary,
@@ -48,6 +54,37 @@ String btn({
 }) {
   return 'btn btn-${outlined ? 'outline-' : ''}${color.name}'
       '${size != null ? ' btn-${size.name}' : ''}${active ? ' active' : ''} ';
+}
+
+DeactNode buttonGroup<T>({
+  required String buttonClass,
+  required List<T> values,
+  required Iterable<DeactNode> Function(T) renderItem,
+  required UserSelection<T> selection,
+  String? ariaLabel,
+  BSize? size,
+  bool vertical = false,
+}) {
+  final selectedSet = selection.selectedSet();
+  return el(
+    'div',
+    attributes: {
+      'class': 'btn-group${vertical ? '-vertical' : ''}'
+          '${size == null ? '' : ' btn-group-${size.name}'}',
+      'role': 'group',
+      if (ariaLabel != null) 'aria-label': ariaLabel,
+    },
+    children: [
+      ...values.map((e) {
+        return button(
+          className: buttonClass + (selectedSet.contains(e) ? ' active' : ''),
+          type: 'button',
+          onclick: (_) => selection.onSelect(e),
+          children: renderItem(e),
+        );
+      }),
+    ],
+  );
 }
 
 enum AxisAlign {
@@ -135,7 +172,7 @@ DeactNode collapseButton({
         component: TogglableComponent.collapse,
         targetId: collapseId,
       ),
-      'aria-expanded': "false",
+      'aria-expanded': 'false',
     },
     children: children,
   );
@@ -255,7 +292,6 @@ DeactNode dropdownItem({
 
 // TODO: Accordion https://getbootstrap.com/docs/5.1/components/accordion/
 // TODO: Breadcrumb (navigation hierarchy) https://getbootstrap.com/docs/5.1/components/breadcrumb/
-// TODO: ButtonGroup https://getbootstrap.com/docs/5.1/components/button-group/
 // TODO: Carousel https://getbootstrap.com/docs/5.1/components/carousel/
 // TODO: ListGroup https://getbootstrap.com/docs/5.1/components/list-group/
 // TODO: Navs and tabs https://getbootstrap.com/docs/5.1/components/navs-tabs/
@@ -263,7 +299,6 @@ DeactNode dropdownItem({
 // https://getbootstrap.com/docs/5.1/components/pagination/
 // https://getbootstrap.com/docs/5.1/components/placeholders/
 // https://getbootstrap.com/docs/5.1/components/progress/
-
 
 class ScrollSpyHook {
   final Ref<ScrollSpy?> ref;
@@ -320,8 +355,6 @@ class ScrollSpyConfig {
   external String get target;
 }
 
-
-
 enum TogglableComponent {
   modal,
   offcanvas,
@@ -343,7 +376,6 @@ Map<String, Object> toggleButtonAttributes({
     'aria-controls': targetId,
   };
 }
-
 
 /// Card https://getbootstrap.com/docs/5.1/components/card/
 DeactNode card({
