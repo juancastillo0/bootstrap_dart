@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'dart:html' as html;
@@ -10,6 +11,7 @@ import 'icons.dart';
 import 'modal.dart';
 import 'navbar.dart';
 import 'offcanvas.dart';
+import 'table.dart';
 import 'toast.dart';
 import 'tooltip_popover.dart';
 
@@ -86,6 +88,7 @@ DeactNode examplesNavbar() {
             'Close Button',
             'Collapse',
             'Dropdown',
+            'Table',
             'Tooltip',
             'Popover',
             'Spinners',
@@ -97,6 +100,7 @@ DeactNode examplesNavbar() {
           ].map(
             (e) => a(
               className: 'nav-link',
+              style: 'padding-top:5px;padding-bottom:5px;',
               href: '#${e.replaceAll(' ', '-')}',
               children: [
                 txt(e),
@@ -131,7 +135,7 @@ DeactNode _allExamples(ComponentContext ctx) {
               final multipleOpened = ctx.state('multipleOpened', false);
 
               return div(
-                className: 'd-flex flex-column mx-2',
+                className: 'd-flex flex-column mx-3',
                 style: '',
                 children: [
                   div(
@@ -444,6 +448,142 @@ div(
           ],
         ),
       ),
+
+      bootstrapExample(
+        'Table',
+        content: div(
+          children: [
+            fc((ctx) {
+              final hover = ctx.hookState(() => false);
+              final bordered = ctx.hookState(() => false);
+              final borderless = ctx.hookState(() => false);
+              final captionTop = ctx.hookState(() => false);
+              final showCaption = ctx.hookState(() => false);
+              final showFooter = ctx.hookState(() => false);
+              final striped = ctx.hookState(() => false);
+              final small = ctx.hookState(() => false);
+              final color = ctx.hookState<BColor?>(() => null);
+              final headerColor = ctx.hookState<BColor?>(() => null);
+              final align = ctx.hookState<VerticalAlign?>(() => null);
+              final scrollHorizontal =
+                  ctx.hookState<ResponsiveBreakPoint?>(() => null);
+
+              final items = [
+                {'first': 'Mark', 'last': 'Otto', 'handle': '@mdo'},
+                {'first': 'Jacob', 'last': 'Thornton', 'handle': '@fat'},
+                {'first': 'Larry the Bird', 'last': null, 'handle': '@twitter'},
+              ];
+
+              return div(
+                className: 'd-flex flex-column mx-3',
+                children: [
+                  div(
+                    className: 'mb-2 d-flex flex-wrap',
+                    style: flexCenter(),
+                    children: [
+                      _simpleCheck('hover', hover),
+                      _simpleCheck('bordered', bordered),
+                      _simpleCheck('borderless', borderless),
+                      _simpleCheck('striped', striped),
+                      _simpleCheck('small', small),
+                      _simpleCheck('showCaption', showCaption),
+                      _simpleCheck('captionTop', captionTop),
+                      _simpleCheck('showFooter', showFooter),
+                      _simpleSelect<BColor?>(
+                        [null, ...BColor.values],
+                        (color) => color?.name ?? 'color',
+                        color,
+                      ),
+                      _simpleSelect<VerticalAlign?>(
+                        [null, ...VerticalAlign.values],
+                        (align) => align?.nameHtml ?? 'align',
+                        align,
+                      ),
+                      _simpleSelect<BColor?>(
+                        [null, ...BColor.values],
+                        (color) => color?.name ?? 'header color',
+                        headerColor,
+                      ),
+                      _simpleSelect<ResponsiveBreakPoint?>(
+                        [null, ...ResponsiveBreakPoint.values],
+                        (color) => color?.name ?? 'scroll breakpoint',
+                        scrollHorizontal,
+                      ),
+                    ],
+                  ),
+                  table(
+                    className: tableClass(
+                      hover: hover.value,
+                      bordered: bordered.value,
+                      borderless: borderless.value,
+                      captionTop: captionTop.value,
+                      striped: striped.value,
+                      small: small.value,
+                      color: color.value,
+                      align: align.value,
+                      scrollHorizontal: scrollHorizontal.value,
+                    ),
+                    children: [
+                      if (showCaption.value)
+                        caption(children: [txt('List of users')]),
+                      thead(
+                        className: headerColor.value == null
+                            ? null
+                            : tableClass(color: headerColor.value),
+                        children: [
+                          tr(
+                            children: [
+                              th(scope: 'col', children: [txt('#')]),
+                              th(scope: 'col', children: [txt('First')]),
+                              th(scope: 'col', children: [txt('Last')]),
+                              th(scope: 'col', children: [txt('Handle')]),
+                            ],
+                          ),
+                        ],
+                      ),
+                      tbody(
+                        children: [
+                          ...items.mapIndexed(
+                            (index, item) => tr(
+                              children: [
+                                th(
+                                    scope: 'row',
+                                    children: [txt('${index + 1}')]),
+                                td(
+                                  colspan:
+                                      (item['last'] != null ? 1 : 2).toString(),
+                                  children: [txt(item['first'] as String)],
+                                ),
+                                if (item['last'] != null)
+                                  td(children: [txt(item['last'] as String)]),
+                                td(children: [txt(item['handle'] as String)]),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (showFooter.value)
+                        tfoot(
+                          children: [
+                            tr(
+                              children: Iterable.generate(
+                                4,
+                                (index) => td(
+                                  children: [txt('Footer $index')],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ],
+              );
+            })
+          ],
+        ),
+      ),
+
       bootstrapExample(
         'Tooltip',
         // TODO: tooltip in text
@@ -1088,6 +1228,30 @@ DeactNode _simpleCheck(String label, State<bool> refCheck) {
     inline: true,
     onChange: (checked) => refCheck.value = checked,
     label: txt(label),
+  );
+}
+
+DeactNode _simpleSelect<T>(
+  List<T> values,
+  String Function(T) toString,
+  State<T> state,
+) {
+  return select(
+    className: 'form-select mx-1',
+    style: 'width:170px;',
+    onchange: (e) {
+      final value = (e.target! as html.SelectElement).value;
+      state.value = values.firstWhere((v) => toString(v) == value);
+    },
+    children: [
+      ...values.map(
+        (e) => option(
+          value: toString(e),
+          selected: state.value == e ? '' : null,
+          children: [txt(toString(e))],
+        ),
+      )
+    ],
   );
 }
 
