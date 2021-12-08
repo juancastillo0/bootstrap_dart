@@ -3,6 +3,7 @@ import 'package:deact/deact_html52.dart';
 import 'dart:html' as html;
 import 'package:highlight/highlight.dart' show highlight;
 
+import 'accordion.dart';
 import 'bootstrap_core.dart';
 import 'checks_radios.dart';
 import 'icons.dart';
@@ -73,8 +74,10 @@ DeactNode examplesNavbar() {
       ),
       nav(
         className: 'nav nav-pills flex-column',
+        style: 'overflow-y:auto;flex:1;flex-wrap:nowrap;',
         children: [
           ...const [
+            'Accordion',
             'Buttons',
             'Button Group',
             'Icons',
@@ -114,6 +117,71 @@ DeactNode _allExamples(ComponentContext ctx) {
           'width:100%;position:relative;',
     },
     children: [
+      bootstrapExample(
+        'Accordion',
+        content: div(
+          children: [
+            fc((ctx) {
+              final withHeader = ctx.ref('withHeader', true);
+              final ref = ctx.refProvided(
+                'controller',
+                () => ToastsController(),
+              );
+              final flush = ctx.state('flush', false);
+              final multipleOpened = ctx.state('multipleOpened', false);
+
+              return div(
+                className: 'd-flex flex-column mx-2',
+                style: '',
+                children: [
+                  div(
+                    className: 'mb-2',
+                    style: flexCenter(),
+                    children: [
+                      check(
+                        label: txt('flush'),
+                        inline: true,
+                        name: 'flush',
+                        checked: flush.value,
+                        type: CheckType.switch_,
+                        onChange: (checked) => flush.value = checked,
+                      ),
+                      check(
+                        label: txt('multipleOpened'),
+                        inline: true,
+                        name: 'multipleOpened',
+                        checked: multipleOpened.value,
+                        type: CheckType.switch_,
+                        onChange: (checked) => multipleOpened.value = checked,
+                      ),
+                    ],
+                  ),
+                  accordion(
+                    id: 'accordion-example',
+                    flush: flush.value,
+                    multipleOpened: multipleOpened.value,
+                    items: {
+                      'item1': AccordionItem(
+                        header: [txt('Header 1')],
+                        body: [txt('Body 1')],
+                      ),
+                      'item2': AccordionItem(
+                        header: [txt('Header 2')],
+                        body: [txt('Body 2')],
+                      ),
+                      'item3': AccordionItem(
+                        header: [txt('Header 3')],
+                        body: [txt('Body 3')],
+                      ),
+                    },
+                  ),
+                ],
+              );
+            })
+          ],
+        ),
+      ),
+
       bootstrapExample(
         'Buttons',
         content: div(
@@ -602,7 +670,7 @@ div(
               return fragment(
                 [
                   navbar(
-                    expand: ModalFullScreenBellow.lg,
+                    expand: ResponsiveBreakPoint.lg,
                     background: BColor.light,
                     collapseId: 'nav-bar-example-collapse',
                     // position: NavbarPosition.fixed_bottom,
@@ -820,7 +888,7 @@ div(
                       dialogClass: modalDialogClass(
                         center: center.value,
                         fullScreen: fullscreen.value
-                            ? ModalFullScreenBellow.always
+                            ? ResponsiveBreakPoint.always
                             : null,
                         scrollable: scrollable.value,
                         size: size.value,
