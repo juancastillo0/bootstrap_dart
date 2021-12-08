@@ -13,10 +13,12 @@ dependencies:
   deact:
     git:
       url: https://github.com/juancastillo0/deact.git
-      ref: ec5d8fa0fd9aff0dc90e5823cb9efa1c3c2c6325
+      ref: e3b66dbc9d4415af0ee1f00579deff541ae7570a
     # path: ../deact
 
 dev_dependencies:
   build_runner: ^1.10.0
+  build_test: ^1.0.0
+  test: ^1.0.0
   build_web_compilers: ^2.11.0
   lints: ^1.0.0
