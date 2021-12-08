@@ -12,6 +12,7 @@ packages/$sdk/dev_compiler/web/dart_stack_trace_mapper.js
 packages/_fe_analyzer_shared/src/parser/parser.md
 packages/analyzer/src/summary/format.fbs
 packages/build_runner/src/server/README.md
+packages/build_runner/src/server/build_updates_client/hot_reload_client.dart.js
 packages/build_runner/src/server/build_updates_client/live_reload_client.js
 packages/build_runner/src/server/graph_viz.html
 packages/build_runner/src/server/graph_viz.js
@@ -21,6 +22,8 @@ packages/incremental_dom_bindings/assets/incremental-dom-min.js
 packages/incremental_dom_bindings/assets/incremental-dom.js
 packages/lints/core.yaml
 packages/lints/recommended.yaml
+packages/node_preamble/preamble.js
+packages/node_preamble/preamble.min.js
 packages/pedantic/analysis_options.1.0.0.yaml
 packages/pedantic/analysis_options.1.1.0.yaml
 packages/pedantic/analysis_options.1.11.0.yaml
@@ -33,4 +36,10 @@ packages/pedantic/analysis_options.1.7.0.yaml
 packages/pedantic/analysis_options.1.8.0.yaml
 packages/pedantic/analysis_options.1.9.0.yaml
 packages/pedantic/analysis_options.yaml
+packages/test/dart.js
+packages/test/src/runner/browser/static/default.html.tpl
+packages/test/src/runner/browser/static/favicon.ico
+packages/test/src/runner/browser/static/host.css
+packages/test/src/runner/browser/static/host.dart.js
+packages/test/src/runner/browser/static/index.html
 styles.css
