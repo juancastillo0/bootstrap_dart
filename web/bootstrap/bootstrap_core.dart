@@ -485,6 +485,33 @@ String spinnerClass({
       ' text-${color.name}';
 }
 
+enum ResponsiveBreakPoint {
+  sm,
+  md,
+  lg,
+  xl,
+  xxl,
+  always,
+}
+
+extension ModalFullScreenBellowExt on ResponsiveBreakPoint {
+  String get name => toString().split('.').last;
+}
+
+enum VerticalAlign {
+  baseline,
+  top,
+  middle,
+  bottom,
+  text_bottom,
+  text_top,
+}
+
+extension VerticalAlignExt on VerticalAlign {
+  String get nameHtml =>
+      'align-${toString().split('.').last.replaceAll('_', '-')}';
+}
+
 enum Alignment { start, center, end }
 
 extension AlignmentExt on Alignment {

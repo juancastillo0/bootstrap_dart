@@ -4,7 +4,6 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 
 import 'bootstrap_core.dart';
-import 'modal.dart';
 export 'user_selection.dart';
 
 enum NavbarPosition {
@@ -19,7 +18,7 @@ extension NavbarPositionExt on NavbarPosition {
 
 DeactNode navbar({
   String? navbarClass,
-  required ModalFullScreenBellow? expand,
+  required ResponsiveBreakPoint? expand,
   bool dark = false,
   BColor? background,
   NavbarPosition? position,
@@ -33,7 +32,7 @@ DeactNode navbar({
 }) {
   final _expand = expand == null
       ? ''
-      : expand == ModalFullScreenBellow.always
+      : expand == ResponsiveBreakPoint.always
           ? 'navbar-expand'
           : 'navbar-expand-${expand.name}';
 

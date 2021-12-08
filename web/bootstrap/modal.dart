@@ -8,19 +8,6 @@ import 'bootstrap_core.dart';
 
 /// Modal https://getbootstrap.com/docs/5.1/components/modal/
 
-enum ModalFullScreenBellow {
-  sm,
-  md,
-  lg,
-  xl,
-  xxl,
-  always,
-}
-
-extension ModalFullScreenBellowExt on ModalFullScreenBellow {
-  String get name => toString().split('.').last;
-}
-
 class ModalConfig {
   final bool fade;
   final bool center;
@@ -30,7 +17,7 @@ class ModalConfig {
   final bool focus;
   final bool scrollable;
   final BSize? size; // TODO: add more sizes
-  final ModalFullScreenBellow? fullScreen;
+  final ResponsiveBreakPoint? fullScreen;
 
   ModalConfig({
     this.fade = true,
@@ -160,10 +147,10 @@ String modalDialogClass({
   bool center = true,
   bool scrollable = false,
   DialogSize? size,
-  ModalFullScreenBellow? fullScreen,
+  ResponsiveBreakPoint? fullScreen,
 }) {
   final _fullScreen = fullScreen != null
-      ? fullScreen == ModalFullScreenBellow.always
+      ? fullScreen == ResponsiveBreakPoint.always
           ? ' modal-fullscreen'
           : ' modal-fullscreen-${fullScreen.name}-down'
       : '';
