@@ -1,11 +1,10 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:mobx/mobx.dart';
-// ignore: implementation_imports
-import 'package:mobx/src/core.dart' show ReactionImpl;
 import 'package:logging/logging.dart';
+import 'package:virtual_web/mobx_deact.dart';
 
 import 'bootstrap/bootstrap_core.dart';
 import 'bootstrap/bootstrap_examples.dart';
@@ -15,39 +14,7 @@ import 'bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
 
-DeactNode mobxWrapper(
-  ComponentContext ctx,
-  DeactNode Function(ComponentContext) next,
-) {
-  final rxtRef = ctx.refProvided<ReactionImpl>(
-    'mobxReaction',
-    () => ReactionImpl(
-      mainContext,
-      () {
-        print('${ctx.hashCode} rerender');
-        ctx.scheduleRerender();
-      },
-      name: ctx.hashCode.toString(),
-      onError: (err, stackTrace) => print('$err $stackTrace'),
-    ),
-  );
-  ctx.effect(
-    'mobx',
-    () => rxtRef.value.dispose,
-    dependsOn: const [],
-  );
-
-  late final DeactNode node;
-  rxtRef.value.track(() {
-    print('${ctx.hashCode} start-track');
-    node = next(ctx);
-    print('${ctx.hashCode} end-track');
-  });
-  return node;
-}
-
 void main() {
-  // querySelector('#output');
   mainContext.config = ReactiveConfig(
     writePolicy: ReactiveWritePolicy.never,
   );
