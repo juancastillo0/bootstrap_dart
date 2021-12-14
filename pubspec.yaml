@@ -14,7 +14,7 @@ dependencies:
   deact:
     git:
       url: https://github.com/juancastillo0/deact.git
-      ref: fdb32974dd9052ebeecf8cadb3029ce5fedadd5a
+      ref: cde0427122cd9eeaf7e4ef4f86934f2a47073013
     # path: ../deact
 
 dev_dependencies:
