@@ -71,6 +71,8 @@ test_api:packages/test_api/
 test_core:packages/test_core/
 timing:packages/timing/
 typed_data:packages/typed_data/
+universal_html:packages/universal_html/
+universal_io:packages/universal_io/
 virtual_web:packages/virtual_web/
 vm_service:packages/vm_service/
 watcher:packages/watcher/
