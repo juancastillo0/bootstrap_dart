@@ -1,10 +1,13 @@
 import 'package:universal_html/html.dart' as html;
+import 'package:universal_io/io.dart' as io;
 
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:mobx/mobx.dart';
 import 'package:logging/logging.dart';
+import 'package:universal_html/parsing.dart' show parseHtmlDocument;
 import 'package:virtual_web/mobx_deact.dart';
+import 'package:virtual_web/server_renderer.dart';
 
 import 'bootstrap/bootstrap_core.dart';
 import 'bootstrap/bootstrap_examples.dart';
@@ -14,86 +17,103 @@ import 'bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
 
-void main() {
+const bool kIsWeb = identical(0, 0.0);
+
+void main() async {
   mainContext.config = ReactiveConfig(
     writePolicy: ReactiveWritePolicy.never,
   );
 
-  Future.delayed(const Duration(seconds: 2), () {
-    showToast();
-  });
-
-  deact(
-    '#output',
-    (_) => fragment([
-      globalRef(
-        name: 'RootValue',
-        initialValue: RootStore(),
-        children: [
-          globalState<int>(
-            name: 'counter',
-            initialValue: 0,
-            children: [
-              div(
-                className: 'd-flex ',
-                style: 'overflow:hidden;height: 100%;',
-                children: [
-                  examplesNavbar(),
-                  fc((ctx) {
-                    final ref = ctx.ref<html.Element?>('element', null);
-                    final scrollSpy = useScrollSpy(
-                      ctx,
-                      ref,
-                      target: '#navbar-example',
-                      offset: 10,
-                    );
-                    return col(
-                      ref: ref,
-                      style: 'overflow:auto;flex:1;',
-                      attributes: {
-                        ...scrollSpy.attributes,
-                      },
-                      children: [
-                        tabs(),
-                        incrementor(),
-                        display(),
-                        textInput(),
-                        div(children: [
-                          fc((ctx) {
-                            final tab = RootStore.fromCtx(ctx).tab.value;
-                            switch (tab) {
-                              case Tab.profile:
-                                return txt('Profile');
-                              case Tab.message:
-                                return messagesView();
-                            }
-                          }),
-                        ]),
-                        bootstrapExamples(),
-                      ],
-                    );
-                  }),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-      toastsContainer(
-        verticalPosition: Alignment.end,
-        children: [
-          toast(
-            key: 'd',
-            content: toastContent(
-              header: [txt('header')],
-              body: [txt('body')],
-            ),
-          )
-        ],
-      ),
-    ]),
+  final node = kIsWeb ? html.querySelector('#output')! : html.Element.div();
+  final renderer = deactInNode(
+    node,
+    (_) => rootComponent(),
     wrappers: const [mobxWrapper],
+    renderer: kIsWeb ? const IncDomRenderer() : ServerRenderer(),
   );
+
+  if (!kIsWeb) {
+    await renderer.waitScheduledRender();
+    final indexFile = io.File('./build/index.html');
+
+    final doc = parseHtmlDocument(await indexFile.readAsString());
+
+    final outputDiv = doc.querySelector('#output')!;
+    outputDiv.innerHtml = node.innerHtml;
+    final htmlElem =
+        doc.getRootNode().childNodes.whereType<html.Element>().first;
+    await indexFile.writeAsString('<!DOCTYPE html>\n${htmlElem.outerHtml}');
+  }
+}
+
+DeactNode rootComponent() {
+  return fragment([
+    globalRef(
+      name: 'RootValue',
+      initialValue: RootStore(),
+      children: [
+        globalState<int>(
+          name: 'counter',
+          initialValue: 0,
+          children: [
+            div(
+              className: 'd-flex ',
+              style: 'overflow:hidden;height: 100%;',
+              children: [
+                examplesNavbar(),
+                fc((ctx) {
+                  final ref = ctx.ref<html.Element?>('element', null);
+                  final scrollSpy = useScrollSpy(
+                    ctx,
+                    ref,
+                    target: '#navbar-example',
+                    offset: 10,
+                  );
+                  return col(
+                    ref: ref,
+                    style: 'overflow:auto;flex:1;',
+                    attributes: {
+                      ...scrollSpy.attributes,
+                    },
+                    children: [
+                      tabs(),
+                      incrementor(),
+                      display(),
+                      textInput(),
+                      div(children: [
+                        fc((ctx) {
+                          final tab = RootStore.fromCtx(ctx).tab.value;
+                          switch (tab) {
+                            case Tab.profile:
+                              return txt('Profile');
+                            case Tab.message:
+                              return messagesView();
+                          }
+                        }),
+                      ]),
+                      bootstrapExamples(),
+                    ],
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+    toastsContainer(
+      verticalPosition: Alignment.end,
+      children: [
+        toast(
+          key: 'd',
+          content: toastContent(
+            header: [txt('header')],
+            body: [txt('body')],
+          ),
+        )
+      ],
+    ),
+  ]);
 }
 
 DeactNode messagesView() {
