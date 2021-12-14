@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
-import 'package:js/js.dart';
 
 import 'bootstrap_core.dart';
 
@@ -248,9 +247,9 @@ DeactNode toastContent({
 }
 
 class Toast {
-  final _Toast _inner;
+  final ToastJS _inner;
   final html.Element element;
-  Toast(this.element) : _inner = _Toast(element);
+  Toast(this.element) : _inner = ToastJS(element);
 
   bool _isDisposed = false;
   bool get isDisposed => _isDisposed;
@@ -276,13 +275,4 @@ class Toast {
     _isShowing = false;
     _inner.dispose();
   }
-}
-
-@JS('bootstrap.Toast')
-class _Toast {
-  external _Toast(html.Element element);
-
-  external void show();
-  external void hide();
-  external void dispose();
 }

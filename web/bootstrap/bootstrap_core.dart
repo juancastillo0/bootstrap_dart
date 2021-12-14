@@ -1,13 +1,15 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
-import 'package:js/js.dart';
 
 import 'user_selection.dart';
 export 'user_selection.dart';
+
+import 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
+export 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
 
 enum BColor {
   primary,
@@ -336,22 +338,6 @@ ScrollSpyHook useScrollSpy(
     'data-bs-offset': offset.toString(),
     'tabindex': '0',
   });
-}
-
-@JS('bootstrap.ScrollSpy')
-class ScrollSpy {
-  external ScrollSpy(html.Element element, ScrollSpyConfig config);
-  external void dispose();
-  external void refresh();
-}
-
-@JS()
-@anonymous
-class ScrollSpyConfig {
-  external factory ScrollSpyConfig({required String target});
-
-  /// #navbar-example
-  external String get target;
 }
 
 enum TogglableComponent {

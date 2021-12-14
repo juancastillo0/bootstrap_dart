@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight.dart' show highlight;
 
 import 'accordion.dart';

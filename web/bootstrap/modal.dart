@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
-import 'package:js/js.dart';
 
 import 'bootstrap_core.dart';
 
@@ -170,7 +169,7 @@ class ModalEvent {
 }
 
 class Modal {
-  final _Modal _inner;
+  final ModalJS _inner;
   final html.Element element;
   final _controller = StreamController<ModalEvent>.broadcast();
   Stream<ModalEvent> get events => _controller.stream;
@@ -183,7 +182,7 @@ class Modal {
 
   final List<void Function()> _onDispose = [];
 
-  Modal(this.element) : _inner = _Modal(element) {
+  Modal(this.element) : _inner = ModalJS(element) {
     ModalEventType.values.forEach((type) {
       final name = '${type.name}.bs.modal';
       void _callback(html.Event event) {
@@ -233,15 +232,4 @@ class Modal {
     _inner.dispose();
     _controller.close();
   }
-}
-
-@JS('bootstrap.Modal')
-class _Modal {
-  external _Modal(html.Element element);
-
-  external void toggle();
-  external void handleUpdate();
-  external void show();
-  external void hide();
-  external void dispose();
 }

@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:universal_html/html.dart';
 import 'package:incremental_dom_bindings/incremental_dom_bindings.dart';
 
 void runApp(String elementId, Component component) async {

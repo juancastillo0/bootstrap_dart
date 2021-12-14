@@ -1,6 +1,5 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'package:deact/deact.dart';
-import 'package:js/js.dart';
 import 'package:collection/collection.dart';
 
 import 'bootstrap_core.dart';
@@ -73,20 +72,6 @@ Map<String, Object> popoverAttributes({
   };
 }
 
-@JS('bootstrap.Popover')
-class Popover {
-  external Popover(html.Element element);
-  external void show();
-  external void hide();
-  external void toggle();
-  external void update();
-  external void dispose();
-
-  external void enable();
-  external void disable();
-  external void toggleEnable();
-}
-
 /// Tooltips https://getbootstrap.com/docs/5.1/components/tooltips/
 ///
 /// [attributes] can be constructed using [tooltipAttributes].
@@ -118,18 +103,11 @@ DeactNode tooltipWrapper({
 }
 
 class Tooltip {
-  final _Tooltip _inner;
+  final TooltipJS _inner;
   final html.Element element;
-  Tooltip(this.element) : _inner = _Tooltip(element);
+  Tooltip(this.element) : _inner = TooltipJS(element);
 
   void dispose() => _inner.dispose();
-}
-
-@JS('bootstrap.Tooltip')
-class _Tooltip {
-  external _Tooltip(html.Element element);
-
-  external void dispose();
 }
 
 enum Placement {

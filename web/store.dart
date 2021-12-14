@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 import 'package:deact/deact.dart';
 import 'package:mobx/mobx.dart';

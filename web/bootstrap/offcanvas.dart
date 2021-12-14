@@ -1,7 +1,6 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
-import 'package:js/js.dart';
 
 import 'bootstrap_core.dart';
 
@@ -78,12 +77,4 @@ DeactNode offcanvas({
       ],
     );
   });
-}
-
-@JS('bootstrap.Offcanvas')
-class Offcanvas {
-  external Offcanvas(html.Element element);
-  external void toggle();
-  external void show();
-  external void hide();
 }
