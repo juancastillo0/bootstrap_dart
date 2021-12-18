@@ -556,6 +556,126 @@ DeactNode placeholderButton(String btnClass) => el(
         'aria-hidden': 'true',
       },
     );
+
+String listGroup({
+  bool numbered = false,
+  bool flush = false,
+  bool horizontal = false,
+}) {
+  return [
+    'list-group',
+    if (numbered) 'list-group-numbered',
+    if (flush) 'list-group-flush',
+    if (horizontal) 'list-group-horizontal',
+  ].join(' ');
+}
+
+String listGroupItem({
+  BColor? color,
+  bool action = false,
+  bool active = false,
+}) {
+  return 'list-group-item${color == null ? '' : ' list-group-item-${color.name}'}'
+      '${action ? ' list-group-item-action' : ''}${active ? ' active' : ''}';
+}
+
+enum TabType {
+  tab,
+  pill,
+  list,
+}
+
+extension TabTypeExt on TabType {
+  String get name => toString().split('.').last;
+}
+
+DeactNode tabs({
+  required TabType type,
+  required Iterable<TabItem> items,
+  bool fade = true,
+  String? selectedId,
+  void Function(TabItem)? onSelected,
+  String? tabListClass,
+  String? tabContentClass,
+}) {
+  return fragment([
+    nav(children: [
+      el(
+        'div',
+        attributes: {
+          'role': 'tablist',
+          'class': const {
+                TabType.list: 'list-group',
+                TabType.pill: 'nav nav-pills',
+                TabType.tab: 'nav nav-tabs',
+              }[type]! +
+              ' ${tabListClass ?? ''}',
+        },
+        children: [
+          ...items.map(
+            (e) => el(
+              'button',
+              attributes: {
+                'class':
+                    '${type == TabType.list ? listGroupItem(action: true) : ''}'
+                        ' nav-link${selectedId == e.id ? ' active' : ''}${e.disabled ? ' disabled' : ''}',
+                'data-bs-toggle': type.name,
+                // 'href': '#${e.id}',
+                'role': 'tab',
+                'type': 'button',
+                'data-bs-target': '#${e.id}',
+                'aria-controls': e.id,
+                'id': '${e.id}-tab',
+                if (selectedId != null)
+                  'aria-selected': '${selectedId == e.id}',
+                if (e.disabled) 'disabled': '',
+              },
+              listeners: {
+                if (onSelected != null) 'onclick': (_) => onSelected(e),
+              },
+              children: [e.tab],
+            ),
+          ),
+        ],
+      ),
+    ]),
+    el(
+      'div',
+      attributes: {
+        'class': 'tab-content ${tabContentClass ?? ''}',
+      },
+      children: [
+        ...items.map(
+          (e) => el(
+            'div',
+            attributes: {
+              'id': e.id,
+              'class': 'tab-pane${selectedId == e.id ? ' active' : ''}',
+              'role': 'tabpanel',
+              'aria-labelledby': '${e.id}-tab',
+            },
+            children: [e.content],
+          ),
+        ),
+      ],
+    ),
+  ]);
+}
+
+class TabItem {
+  final String id;
+  final DeactNode tab;
+  final DeactNode content;
+  final bool disabled;
+
+  TabItem({
+    required this.id,
+    required this.tab,
+    required this.content,
+    this.disabled = false,
+  });
+}
+
 Ref<html.Element?> useSetUpElement(
   ComponentContext ctx, {
   void Function(html.Element)? onSetUp,

@@ -15,6 +15,7 @@ import 'offcanvas.dart';
 import 'table.dart';
 import 'toast.dart';
 import 'tooltip_popover.dart';
+import 'typography.dart';
 
 DeactNode codeSection(String dartCode) {
   final highlighted = highlight.parse(dartCode, language: 'dart');
@@ -95,6 +96,7 @@ DeactNode examplesNavbar() {
             'Spinners',
             'Toasts',
             'Forms',
+            'Navs Tabs',
             'Navbar',
             'Modal',
             'Offcanvas',
@@ -980,6 +982,69 @@ div(
           );
         }),
       ),
+
+      bootstrapExample(
+        'Navs Tabs',
+        content: fc((ctx) {
+          final tabType = ctx.hookState(() => TabType.tab);
+          final fade = ctx.hookState(() => true);
+          final selectedId = ctx.hookState(() => 'tab-item-home');
+
+          return div(
+            className: 'd-flex flex-column',
+            children: [
+              div(
+                style: flexCenter(),
+                children: [
+                  _simpleCheck('fade', fade),
+                  _simpleSelect<TabType>(
+                    TabType.values,
+                    (v) => v.name,
+                    tabType,
+                  ),
+                ],
+              ),
+              div(
+                className: 'm-3',
+                children: [
+                  tabs(
+                    tabContentClass: 'p-4',
+                    // tabListClass: 'col-4',
+                    type: tabType.value,
+                    fade: fade.value,
+                    selectedId: selectedId.value,
+                    onSelected: (item) => selectedId.value = item.id,
+                    items: [
+                      TabItem(
+                        id: 'tab-item-home',
+                        tab: txt('Home'),
+                        content: txt('Home content'),
+                      ),
+                      TabItem(
+                        id: 'tab-item-profile',
+                        tab: txt('Profile'),
+                        content: txt('Profile content'),
+                      ),
+                      TabItem(
+                        id: 'tab-item-contact',
+                        tab: txt('Contact'),
+                        content: txt('Contact content'),
+                      ),
+                      TabItem(
+                        id: 'tab-item-disabled',
+                        tab: txt('Disabled'),
+                        content: txt('Disabled content'),
+                        disabled: true,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
+        }),
+      ),
+
       bootstrapExample(
         'Navbar',
         content: div(
