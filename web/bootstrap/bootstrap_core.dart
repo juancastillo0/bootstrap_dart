@@ -1,15 +1,17 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
-import 'package:universal_html/html.dart' as html;
+
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
-
-import 'user_selection.dart';
-export 'user_selection.dart';
+import 'package:universal_html/html.dart' as html;
 
 import 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
+import 'offcanvas.dart';
+import 'user_selection.dart';
+
 export 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
+export 'user_selection.dart';
 
 enum BColor {
   primary,
@@ -20,6 +22,9 @@ enum BColor {
   info,
   light,
   dark,
+  // body,
+  // white,
+  // transparent,
 }
 
 extension BtnTypeExt on BColor {
@@ -291,15 +296,60 @@ DeactNode dropdownItem({
   );
 }
 
-// TODO: Accordion https://getbootstrap.com/docs/5.1/components/accordion/
 // TODO: Breadcrumb (navigation hierarchy) https://getbootstrap.com/docs/5.1/components/breadcrumb/
 // TODO: Carousel https://getbootstrap.com/docs/5.1/components/carousel/
 // TODO: ListGroup https://getbootstrap.com/docs/5.1/components/list-group/
 // TODO: Navs and tabs https://getbootstrap.com/docs/5.1/components/navs-tabs/
-// TODO: Navbar https://getbootstrap.com/docs/5.1/components/navbar/
 // https://getbootstrap.com/docs/5.1/components/pagination/
 // https://getbootstrap.com/docs/5.1/components/placeholders/
 // https://getbootstrap.com/docs/5.1/components/progress/
+//
+
+enum Space {
+  s0,
+  s1,
+  s2,
+  s3,
+  s4,
+  s5,
+}
+
+String stackClass({required Space gap, required bool vert}) =>
+    '${vert ? 'v' : 'h'}stack gap-${gap.index}';
+
+String borderClass({
+  BColor? color,
+  Space? size,
+  Set<OffcanvasPlacement> sides = const {},
+}) =>
+    [
+      if (color != null) 'border-${color.name}',
+      if (sides.isEmpty)
+        'border${size == null ? '' : '-${size.index}'}'
+      else
+        ...sides.map(
+          (b) => 'border-${b.name}${size == null ? '' : '-${size.index}'}',
+        )
+    ].join(' ');
+
+enum RoundedSize {
+  s0,
+  s1,
+  s2,
+  s3,
+}
+
+String roundedClass({
+  bool circle = false,
+  bool pill = false,
+  RoundedSize? size,
+  Set<OffcanvasPlacement> sides = const {},
+}) =>
+    sides.isEmpty
+        ? 'rounded${pill ? '-pill' : circle ? '-circle' : ''}'
+        : [if (size != null) 'rounded-${size.index}']
+            .followedBy(sides.map((e) => 'rounded-${e.name}'))
+            .join(' ');
 
 class ScrollSpyHook {
   final Ref<ScrollSpy?> ref;
@@ -326,7 +376,7 @@ ScrollSpyHook useScrollSpy(
       scrollSpy.value = null;
       _scrollSpy.dispose();
     };
-  }, [ref, target, offset]);
+  }, [ref.value, target, offset]);
 
   ctx.hookEffect(() {
     scrollSpy.value?.refresh();

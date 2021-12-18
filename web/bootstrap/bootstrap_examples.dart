@@ -3,6 +3,7 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight.dart' show highlight;
+import 'package:virtual_web/hooks.dart';
 
 import 'accordion.dart';
 import 'bootstrap_core.dart';
@@ -713,8 +714,8 @@ div(
           children: [
             fc((ctx) {
               final withHeader = ctx.ref('withHeader', true);
-              final ref = ctx.refProvided(
-                'controller',
+              final controller = useMemo(
+                ctx,
                 () => ToastsController(),
               );
               final text = ctx.state('text', 'A message');
@@ -736,7 +737,7 @@ div(
                       el('span', attributes: {'style': 'width:10px'}),
                       button(
                         className: btn(),
-                        onclick: (_) => ref.value.add(
+                        onclick: (_) => controller.add(
                           toastContent(
                             showCloseButton: true,
                             header: withHeader.value ? [txt('A Header')] : null,
@@ -760,7 +761,12 @@ div(
                       ),
                     ],
                   ),
-                  ref.value.render(),
+                  div(
+                    className: 'bg-light flex-grow-1',
+                    children: [
+                      controller.render(),
+                    ],
+                  )
                 ],
               );
             })
