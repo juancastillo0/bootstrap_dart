@@ -15,9 +15,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 2.15.0
 
       # Install webdev
-      - run: dart pub global activate webdev 2.7.6
+      - run: dart pub global activate webdev
 
       # Install dependencies
       - run: dart pub get
