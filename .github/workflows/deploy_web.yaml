@@ -17,7 +17,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1
 
       # Install webdev
-      - run: dart pub global activate webdev
+      - run: dart pub global activate webdev 2.7.6
 
       # Install dependencies
       - run: dart pub get
