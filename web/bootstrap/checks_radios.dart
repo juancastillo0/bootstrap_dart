@@ -2,6 +2,8 @@ import 'package:universal_html/html.dart' as html;
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 
+import 'form.dart';
+
 enum CheckType {
   checkbox,
   radio,
@@ -22,17 +24,22 @@ DeactNode check({
   bool disabled = false,
   CheckType type = CheckType.checkbox,
   bool inline = false,
+  bool? isValid,
+  InputFeedback? feedback,
+  String? divClass,
 }) {
   return div(
     className: 'form-check${type == CheckType.switch_ ? ' form-switch' : ''}'
-        '${inline ? ' form-check-inline' : ''}',
+        '${inline ? ' form-check-inline' : ''}${disabled ? ' disabled' : ''}'
+        ' ${divClass ?? ''} position-relative',
     children: [
       fc((ctx) {
         return fragment([
           el(
             'input',
             attributes: {
-              'class': 'form-check-input',
+              'class': 'form-check-input'
+                  '${isValid == null ? '' : isValid ? ' is-valid' : ' is-invalid'}',
               'type': type.htmlName,
               if (type == CheckType.switch_) 'role': 'switch',
               if (name != null) 'name': name,
@@ -56,8 +63,50 @@ DeactNode check({
               },
               children: [label],
             ),
+          ...feedback?.nodes() ?? const [],
         ]);
       }),
     ],
   );
+}
+
+class RadiosInput extends ComponentNode {
+  RadiosInput({
+    Object? key,
+    required this.items,
+    required this.selectedId,
+    required this.onChanged,
+    required this.name,
+    this.inline = false,
+  }) : super(key: key);
+
+  final String? selectedId;
+  final Map<String, DeactNode> items;
+  final void Function(String) onChanged;
+  final bool inline;
+  final String name;
+
+  @override
+  DeactNode render(ComponentContext context) {
+    return fragment([
+      ...items.entries.map(
+        (e) => check(
+          id: e.key,
+          label: e.value,
+          inline: inline,
+          name: name,
+          type: CheckType.radio,
+          checked: selectedId == e.key,
+          onChange: (_) => onChanged(e.key),
+        ),
+      ),
+    ]);
+  }
+}
+
+class RadioItem {
+  final String id;
+  final DeactNode node;
+
+  RadioItem(this.id, this.node);
 }

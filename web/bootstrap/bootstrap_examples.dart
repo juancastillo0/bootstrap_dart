@@ -7,6 +7,7 @@ import 'package:highlight/highlight.dart' show highlight;
 import 'accordion.dart';
 import 'bootstrap_core.dart';
 import 'checks_radios.dart';
+import 'form.dart';
 import 'icons.dart';
 import 'modal.dart';
 import 'navbar.dart';
@@ -93,6 +94,7 @@ DeactNode examplesNavbar() {
             'Popover',
             'Spinners',
             'Toasts',
+            'Forms',
             'Navbar',
             'Modal',
             'Offcanvas',
@@ -764,6 +766,220 @@ div(
       ),
 
       bootstrapExample(
+        'Forms',
+        url: 'https://getbootstrap.com/docs/5.1/forms/overview/',
+        content: fc((ctx) {
+          final size = ctx.hookState<BSize?>(() => null);
+          final floating = ctx.hookState(() => true);
+          final tooltipValidation = ctx.hookState(() => false);
+          final switchState = ctx.hookState(() => false);
+          final radioState = ctx.hookState<String?>(() => null);
+          final checkState = ctx.hookState(() => false);
+          final selectState = ctx.hookState(() => 'A');
+          const divClass = ' col-md-4 py-2';
+
+          return div(
+            className: 'd-flex flex-column',
+            children: [
+              div(
+                style: flexCenter(),
+                children: [
+                  _simpleCheck('floating', floating),
+                  _simpleCheck('tooltipValidation', tooltipValidation),
+                  _simpleSelect<BSize?>(
+                    [null, ...BSize.values],
+                    (v) => v?.name ?? 'default size',
+                    size,
+                  ),
+                ],
+              ),
+              form(
+                className: 'p-3 ${BText.start}',
+                children: [
+                  div(
+                    className: 'row',
+                    children: [
+                      if (floating.value)
+                        div(
+                          className: divClass,
+                          children: [
+                            div(
+                              className: inputGroupClass(size: size.value) +
+                                  ' flex-nowrap',
+                              children: [
+                                span(
+                                  className: inputGroupTextClass,
+                                  children: [txt('@')],
+                                ),
+                                labeledInput(
+                                  divClass: 'flex-grow-1',
+                                  label: txt('Label'),
+                                  id: 'labeled-input',
+                                  floating: floating.value,
+                                  input: input(
+                                    className:
+                                        formControlClass(size: size.value),
+                                    type: 'text',
+                                    placeholder: 'Placeholder',
+                                    id: 'labeled-input',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      else
+                        labeledInput(
+                          wrapperDivClass: divClass,
+                          label: txt('Label'),
+                          id: 'labeled-input',
+                          floating: floating.value,
+                          input: div(
+                            className: inputGroupClass(size: size.value),
+                            children: [
+                              span(
+                                className: inputGroupTextClass,
+                                children: [txt('@')],
+                              ),
+                              input(
+                                className: formControlClass(size: size.value),
+                                type: 'text',
+                                placeholder: 'Placeholder',
+                                id: 'labeled-input',
+                              ),
+                            ],
+                          ),
+                        ),
+                      labeledInput(
+                        wrapperDivClass: divClass,
+                        label: txt('Label Invalid'),
+                        id: 'labeled-input-invalid',
+                        floating: floating.value,
+                        feedback: InputFeedback(
+                          tooltip: tooltipValidation.value,
+                          invalid: 'Bad job :(',
+                        ),
+                        input: input(
+                          className: formControlClass(
+                              size: size.value, isValid: false),
+                          type: 'text',
+                          placeholder: 'Placeholder Invalid',
+                          id: 'labeled-input-invalid',
+                        ),
+                      ),
+                      labeledInput(
+                        wrapperDivClass: divClass,
+                        label: txt('Label Valid'),
+                        id: 'labeled-input-valid',
+                        floating: floating.value,
+                        feedback: InputFeedback(
+                          tooltip: tooltipValidation.value,
+                          valid: 'Good job!',
+                        ),
+                        input: input(
+                          className:
+                              formControlClass(size: size.value, isValid: true),
+                          type: 'text',
+                          placeholder: 'Placeholder Valid',
+                          id: 'labeled-input-valid',
+                        ),
+                      ),
+                    ],
+                  ),
+                  fc((ctx) {
+                    final colClasses = ColInputClasses(
+                      label: 'col-sm-4 col-lg-3'
+                          '${size.value != null ? ' col-form-label-${size.value!.name}' : ''}',
+                      input: 'col-sm-8 col-lg-9',
+                    );
+                    return div(
+                      children: [
+                        h5(
+                          className: 'mt-3',
+                          children: [txt('Horizontal labels')],
+                        ),
+                        labeledInput(
+                          wrapperDivClass: 'my-2',
+                          label: txt('Label TextArea'),
+                          id: 'labeled-textarea',
+                          divClass: 'row',
+                          colClasses: colClasses,
+                          input: textarea(
+                            className: formControlClass(size: size.value),
+                            placeholder: 'Placeholder',
+                            style: 'height:100px;',
+                            id: 'labeled-textarea',
+                          ),
+                        ),
+                        labeledInput(
+                          wrapperDivClass: 'my-2',
+                          label: txt('Label Select'),
+                          id: 'labeled-select',
+                          divClass: 'row',
+                          colClasses: colClasses,
+                          input: _simpleSelect<String>(
+                            ['A', 'B', 'C'],
+                            (d) => d,
+                            selectState,
+                            id: 'labeled-select',
+                          ),
+                        ),
+                        fieldset(
+                          id: 'labeled-switch',
+                          className: 'row my-2',
+                          children: [
+                            legend(
+                              className:
+                                  'col-form-label ${colClasses.label} pt-0',
+                              children: [txt('Checks')],
+                            ),
+                            div(
+                              className: colClasses.input,
+                              children: [
+                                // check(
+                                //   checked: switchState.value,
+                                //   onChange: (v) => switchState.value = v,
+                                //   id: 'labeled-switch',
+                                //   label: txt('Switch Label'),
+                                //   type: CheckType.switch_,
+                                // ),
+
+                                RadiosInput(
+                                  name: 'labeled-radio-name',
+                                  onChanged: (v) => radioState.value = v,
+                                  items: Map.fromIterable(
+                                    const ['A', 'B', 'C'],
+                                    value: (v) => txt(v as String),
+                                  ),
+                                  selectedId: radioState.value,
+                                ),
+                                check(
+                                  divClass: 'mt-2',
+                                  checked: checkState.value,
+                                  onChange: (v) => checkState.value = v,
+                                  id: 'labeled-check',
+                                  label: txt('Switch Label'),
+                                  type: CheckType.checkbox,
+                                  isValid: false,
+                                  feedback: InputFeedback(
+                                    tooltip: tooltipValidation.value,
+                                    invalid: 'Invalid feedback',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+                ],
+              ),
+            ],
+          );
+        }),
+      ),
+      bootstrapExample(
         'Navbar',
         content: div(
           className: 'd-flex flex-column',
@@ -1224,6 +1440,8 @@ div(
 
 DeactNode _simpleCheck(String label, State<bool> refCheck) {
   return check(
+    id: '$label${refCheck.hashCode}-input-check',
+    name: label,
     checked: refCheck.value,
     inline: true,
     onChange: (checked) => refCheck.value = checked,
@@ -1234,9 +1452,11 @@ DeactNode _simpleCheck(String label, State<bool> refCheck) {
 DeactNode _simpleSelect<T>(
   List<T> values,
   String Function(T) toString,
-  State<T> state,
-) {
+  State<T> state, {
+  String? id,
+}) {
   return select(
+    id: id,
     className: 'form-select mx-1',
     style: 'width:170px;',
     onchange: (e) {
