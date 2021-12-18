@@ -524,6 +524,38 @@ extension AlignmentExt on Alignment {
   }
 }
 
+enum PlaceholderSize {
+  xs,
+  sm,
+  lg,
+}
+
+extension PlaceholderSizeExt on PlaceholderSize {
+  String get name => toString().split('.').last;
+}
+
+String placeholder({
+  bool glow = false,
+  BColor? color,
+  PlaceholderSize? size,
+  bool wave = false,
+  String? className,
+}) {
+  assert(!glow || glow != wave);
+  return 'placeholder${glow ? '-glow' : wave ? '-wave' : ''}'
+      '${size != null ? ' placeholder-${size.name}' : ''}'
+      '${color != null ? ' bg-${color.name}' : ''} ${className ?? ''}';
+}
+
+DeactNode placeholderButton(String btnClass) => el(
+      'a',
+      attributes: {
+        'class': 'placeholder disabled $btnClass',
+        'tabindex': -1,
+        'href': '#',
+        'aria-hidden': 'true',
+      },
+    );
 Ref<html.Element?> useSetUpElement(
   ComponentContext ctx, {
   void Function(html.Element)? onSetUp,

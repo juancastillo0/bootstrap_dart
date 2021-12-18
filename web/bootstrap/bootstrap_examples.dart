@@ -98,6 +98,7 @@ DeactNode examplesNavbar() {
             'Navbar',
             'Modal',
             'Offcanvas',
+            'Placeholder',
             'ScrollSpy',
           ].map(
             (e) => a(
@@ -1347,6 +1348,60 @@ div(
                     txt('Laudantium ex tempora ratione illo velit sed asperiores.'),
                   ],
                 ),
+              ]);
+            }),
+          ],
+        ),
+      ),
+
+      bootstrapExample(
+        'Placeholder',
+        content: div(
+          children: [
+            fc((ctx) {
+              final wave = ctx.hookState(() => false);
+
+              return fragment([
+                _simpleCheck('wave', wave),
+                div(style: flexCenter(), children: [
+                  div(
+                    className: placeholder(
+                      glow: !wave.value,
+                      wave: wave.value,
+                      className: 'text-start m-4',
+                    ),
+                    style: 'width:500px;',
+                    children: [
+                      span(
+                        className: placeholder(
+                          size: PlaceholderSize.lg,
+                          color: BColor.info,
+                          className: 'col-9 mb-1',
+                        ),
+                      ),
+                      span(className: placeholder(className: 'col-7')),
+                      span(className: placeholder(className: 'col-4')),
+                      span(className: placeholder(className: 'col-4')),
+                      span(className: placeholder(className: 'col-6')),
+                      span(
+                        className: placeholder(
+                          size: PlaceholderSize.xs,
+                          className: 'col-9 mt-1',
+                        ),
+                      ),
+                      placeholderButton('col-4 ${btn()} mt-2'),
+                    ],
+                  ),
+                ])
+//                 ElementNode.fromHtml(html.DivElement()
+//                   ..innerHtml = '''
+// <p class="placeholder-glow card-text">
+//   <span class="placeholder col-7"></span>
+//   <span class="placeholder col-4"></span>
+//   <span class="placeholder col-4"></span>
+//   <span class="placeholder col-6"></span>
+//   <span class="placeholder col-8"></span>
+// </p>'''),
               ]);
             }),
           ],
