@@ -9,11 +9,11 @@ import 'package:universal_html/parsing.dart' show parseHtmlDocument;
 import 'package:virtual_web/mobx_deact.dart';
 import 'package:virtual_web/server_renderer.dart';
 
-import 'bootstrap/bootstrap_core.dart';
-import 'bootstrap/bootstrap_examples.dart';
-import 'bootstrap/modal.dart';
+import 'package:virtual_web/bootstrap/bootstrap_core.dart';
+import 'bootstrap_examples.dart';
+import 'package:virtual_web/bootstrap/modal.dart';
 import 'store.dart';
-import 'bootstrap/toast.dart';
+import 'package:virtual_web/bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
 

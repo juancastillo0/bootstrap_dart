@@ -5,18 +5,18 @@ import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight.dart' show highlight;
 import 'package:virtual_web/hooks.dart';
 
-import 'accordion.dart';
-import 'bootstrap_core.dart';
-import 'checks_radios.dart';
-import 'form.dart';
-import 'icons.dart';
-import 'modal.dart';
-import 'navbar.dart';
-import 'offcanvas.dart';
-import 'table.dart';
-import 'toast.dart';
-import 'tooltip_popover.dart';
-import 'typography.dart';
+import 'package:virtual_web/bootstrap/accordion.dart';
+import 'package:virtual_web/bootstrap/bootstrap_core.dart';
+import 'package:virtual_web/bootstrap/checks_radios.dart';
+import 'package:virtual_web/bootstrap/form.dart';
+import 'package:virtual_web/bootstrap/icons.dart';
+import 'package:virtual_web/bootstrap/modal.dart';
+import 'package:virtual_web/bootstrap/navbar.dart';
+import 'package:virtual_web/bootstrap/offcanvas.dart';
+import 'package:virtual_web/bootstrap/table.dart';
+import 'package:virtual_web/bootstrap/toast.dart';
+import 'package:virtual_web/bootstrap/tooltip_popover.dart';
+import 'package:virtual_web/bootstrap/typography.dart';
 
 DeactNode codeSection(String dartCode) {
   final highlighted = highlight.parse(dartCode, language: 'dart');
