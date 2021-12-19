@@ -221,11 +221,6 @@ DeactNode _allExamples(ComponentContext ctx) {
         content: div(
           children: [
             fc((ctx) {
-              final withHeader = ctx.ref('withHeader', true);
-              final ref = ctx.refProvided(
-                'controller',
-                () => ToastsController(),
-              );
               final flush = ctx.state('flush', false);
               final multipleOpened = ctx.state('multipleOpened', false);
 
@@ -827,7 +822,7 @@ div(
           style: 'height:300px',
           children: [
             fc((ctx) {
-              final withHeader = ctx.ref('withHeader', true);
+              final withHeader = ctx.hookRef(() => true);
               final controller = useMemo(
                 ctx,
                 () => ToastsController(),
@@ -1307,7 +1302,7 @@ div(
               final scrollable = ctx.state('scrollable', false);
               final size = ctx.state<DialogSize?>('size', null);
 
-              final ref = ctx.ref<Modal?>('modal', null);
+              final ref = ctx.hookRef<Modal?>(() => null);
 
               const modalId = 'example-modal-id';
 
@@ -1493,7 +1488,7 @@ div(
               final backdrop = ctx.state('backdrop', true);
               final keyboard = ctx.state('keyboard', true);
               final scroll = ctx.state('scroll', false);
-              final offcanvasRef = ctx.ref<Offcanvas?>('offcanvasRef', null);
+              final offcanvasRef = ctx.hookRef<Offcanvas?>(() => null);
 
               final placement = ctx.state<OffcanvasPlacement>(
                   'placement', OffcanvasPlacement.end);
@@ -1659,7 +1654,7 @@ div(
               className: 'col-8',
               children: [
                 fc((ctx) {
-                  final ref = ctx.ref<html.Element?>('element', null);
+                  final ref = ctx.hookRef<html.Element?>(() => null);
                   final scrollSpy =
                       useScrollSpy(ctx, ref, target: '#list-example');
                   return el(

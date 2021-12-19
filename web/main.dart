@@ -62,7 +62,7 @@ DeactNode rootComponent() {
               children: [
                 examplesNavbar(),
                 fc((ctx) {
-                  final ref = ctx.ref<html.Element?>('element', null);
+                  final ref = ctx.hookRef<html.Element?>(() => null);
                   final scrollSpy = useScrollSpy(
                     ctx,
                     ref,
@@ -328,10 +328,10 @@ DeactNode textInputWrap(String text, void Function(String) onChange) {
       // txt('Title'),
       // span(style: 'width:10px;'),
       fc((ctx) {
-        final inputRef = ctx.ref<html.Element?>('inputRef', null);
+        final inputRef = ctx.hookRef<html.Element?>(() => null);
         html.InputElement? elem() => inputRef.value as html.InputElement?;
 
-        ctx.effect('syncValue', () {
+        ctx.hookEffect(() {
           final _elem = elem();
           if (_elem != null && _elem.value != text) {
             _elem.value = text;

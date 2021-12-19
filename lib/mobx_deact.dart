@@ -7,8 +7,7 @@ DeactNode mobxWrapper(
   ComponentContext ctx,
   DeactNode Function(ComponentContext) next,
 ) {
-  final rxtRef = ctx.refProvided<ReactionImpl>(
-    'mobxReaction',
+  final rxtRef = ctx.hookRef<ReactionImpl>(
     () => ReactionImpl(
       mainContext,
       () {
@@ -19,10 +18,9 @@ DeactNode mobxWrapper(
       onError: (err, stackTrace) => print('$err $stackTrace'),
     ),
   );
-  ctx.effect(
-    'mobx',
+  ctx.hookEffect(
     () => rxtRef.value.dispose,
-    dependsOn: const [],
+    const [],
   );
 
   late final DeactNode node;

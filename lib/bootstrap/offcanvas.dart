@@ -25,8 +25,7 @@ Map<String, Object> offcanvasAttributes({
   bool keyboard = true,
 }) =>
     {
-      'class':
-          '${className ?? ''} offcanvas offcanvas-${placement.name}',
+      'class': '${className ?? ''} offcanvas offcanvas-${placement.name}',
       'data-bs-scroll': scroll,
       'data-bs-backdrop': '$backdrop',
       'data-bs-keyboard': keyboard,
@@ -46,7 +45,7 @@ DeactNode offcanvas({
   Ref<Offcanvas?>? offcanvasRef,
 }) {
   return fc((ctx) {
-    final ref = ctx.ref<html.Element?>('ref', null);
+    final ref = ctx.hookRef<html.Element?>(() => null);
     ctx.hookEffect(() {
       final _offcanvas = Offcanvas(ref.value!);
       if (offcanvasRef != null) offcanvasRef.value = _offcanvas;

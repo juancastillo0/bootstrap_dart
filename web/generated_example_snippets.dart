@@ -312,7 +312,7 @@ final bootstrap_toasts_example = r'''
           style: 'height:300px',
           children: [
             fc((ctx) {
-              final withHeader = ctx.ref('withHeader', true);
+              final withHeader = ctx.hookRef(() => true);
               final controller = useMemo(
                 ctx,
                 () => ToastsController(),
@@ -811,7 +811,7 @@ final bootstrap_offcanvas_example = r'''
               final backdrop = ctx.state('backdrop', true);
               final keyboard = ctx.state('keyboard', true);
               final scroll = ctx.state('scroll', false);
-              final offcanvasRef = ctx.ref<Offcanvas?>('offcanvasRef', null);
+              final offcanvasRef = ctx.hookRef<Offcanvas?>(() => null);
 
               final placement = ctx.state<OffcanvasPlacement>(
                   'placement', OffcanvasPlacement.end);
@@ -967,7 +967,7 @@ final bootstrap_scrollspy_example = r'''
               className: 'col-8',
               children: [
                 fc((ctx) {
-                  final ref = ctx.ref<html.Element?>('element', null);
+                  final ref = ctx.hookRef<html.Element?>(() => null);
                   final scrollSpy =
                       useScrollSpy(ctx, ref, target: '#list-example');
                   return el(

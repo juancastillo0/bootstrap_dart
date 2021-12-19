@@ -90,10 +90,9 @@ class ToastsController {
   DeactNode render() {
     return fc(
       (ctx) {
-        ctx.effect(
-          'stream',
+        ctx.hookEffect(
           () => stream.listen((event) => ctx.scheduleRerender()).cancel,
-          dependsOn: const [],
+          const [],
         );
         final toRender =
             allowMultiple ? queue : [if (queue.isNotEmpty) queue.first];
@@ -171,7 +170,7 @@ DeactNode toast({
   String? toastId,
 }) {
   return fc((ctx) {
-    final toast = ctx.ref<Toast?>('toast', null);
+    final toast = ctx.hookRef<Toast?>(() => null);
     final elemRef = useSetUpElement(
       ctx,
       onSetUp: (elem) {

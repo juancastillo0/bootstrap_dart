@@ -364,7 +364,7 @@ ScrollSpyHook useScrollSpy(
   required String target,
   int offset = 50,
 }) {
-  final scrollSpy = ctx.ref<ScrollSpy?>('scrollSpy', null);
+  final scrollSpy = ctx.hookRef<ScrollSpy?>(() => null);
 
   ctx.hookEffect(() {
     final _scrollSpy = ScrollSpy(
@@ -731,11 +731,10 @@ Ref<html.Element?> useSetUpElement(
   void Function(html.Element)? onSetUp,
   void Function()? onDispose,
 }) {
-  final elemRef = ctx.ref<html.Element?>('useSetUpElement.elemRef', null);
+  final elemRef = ctx.hookRef<html.Element?>(() => null);
   bool disposed = false;
 
-  ctx.effect(
-    'useSetUpElement.setUpElem',
+  ctx.hookEffect(
     () {
       Future(() {
         if (!disposed && elemRef.value != null) {
@@ -747,7 +746,7 @@ Ref<html.Element?> useSetUpElement(
         onDispose?.call();
       };
     },
-    dependsOn: const [],
+    const [],
   );
   return elemRef;
 }

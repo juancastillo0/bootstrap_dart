@@ -57,7 +57,7 @@ DeactNode modal({
   Ref<Modal?>? modalRef,
 }) {
   return fc((ctx) {
-    final elemRef = ctx.ref<html.Element?>('modalElement', null);
+    final elemRef = ctx.hookRef<html.Element?>(() => null);
 
     ctx.hookEffect(
       () {

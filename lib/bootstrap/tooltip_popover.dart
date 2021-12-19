@@ -12,7 +12,7 @@ DeactNode popoverWrapper({
   Ref<Popover?>? popoverRef,
 }) {
   return fc((ctx) {
-    final ref = ctx.ref<html.Element?>('element', null);
+    final ref = ctx.hookRef<html.Element?>(() => null);
     ctx.hookEffect(
       () {
         final _popover = Popover(ref.value!);
@@ -81,7 +81,7 @@ DeactNode tooltipWrapper({
   Map<String, Object>? attributes,
 }) {
   return fc((ctx) {
-    final tooltip = ctx.ref<Tooltip?>('tooltip', null);
+    final tooltip = ctx.hookRef<Tooltip?>(() => null);
     final ref = useSetUpElement(
       ctx,
       onSetUp: (elem) => tooltip.value = Tooltip(elem),
