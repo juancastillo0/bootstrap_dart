@@ -1,187 +1,4 @@
-import 'dart:math' as math;
-import 'package:collection/collection.dart';
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-import 'package:universal_html/html.dart' as html;
-import 'package:highlight/highlight.dart' show highlight;
-import 'package:virtual_web/hooks.dart';
-
-import 'package:virtual_web/bootstrap/accordion.dart';
-import 'package:virtual_web/bootstrap/bootstrap_core.dart';
-import 'package:virtual_web/bootstrap/checks_radios.dart';
-import 'package:virtual_web/bootstrap/form.dart';
-import 'package:virtual_web/bootstrap/icons.dart';
-import 'package:virtual_web/bootstrap/modal.dart';
-import 'package:virtual_web/bootstrap/navbar.dart';
-import 'package:virtual_web/bootstrap/offcanvas.dart';
-import 'package:virtual_web/bootstrap/table.dart';
-import 'package:virtual_web/bootstrap/toast.dart';
-import 'package:virtual_web/bootstrap/tooltip_popover.dart';
-import 'package:virtual_web/bootstrap/typography.dart';
-
-import 'generated_example_snippets.dart';
-
-DeactNode codeSection(String dartCode) {
-  final int prefixSpaces = dartCode.split('\n').fold(
-        999999999999,
-        (c, element) => math.min(
-            c, RegExp(r'^(\s+)').firstMatch(element)?.group(1)?.length ?? 0),
-      );
-  if (prefixSpaces != 999999999999) {
-    dartCode =
-        dartCode.split('\n').map((e) => e.substring(prefixSpaces)).join('\n');
-  }
-  final highlighted = highlight.parse(dartCode, language: 'dart');
-  return div(
-    children: [
-      div(
-        className: 'mt-3 mb-2 d-flex justify-content-center align-items-center',
-        children: [
-          // txt('Example Code'),
-          // el('span', attributes: {'style': 'width:40px;'}),
-          button(
-            className: btn(color: BColor.dark, size: BSize.sm),
-            onclick: (_) =>
-                html.window.navigator.clipboard?.writeText(dartCode),
-            children: [
-              icon(BIcon.clipboard),
-              el('span', attributes: {
-                'style': 'padding-left:10px;'
-              }, children: [
-                txt('Copy code'),
-              ]),
-            ],
-          )
-        ],
-      ),
-      ElementNode.fromHtml(
-        html.Element.tag('code')
-          ..className = 'codebox'
-          ..style.maxHeight = '300px'
-          ..style.maxWidth = '90%'
-          ..setInnerHtml(highlighted.toHtml()),
-      )
-    ],
-  );
-}
-
-DeactNode bootstrapExamples() {
-  return fc((ctx) => _allExamples(ctx));
-}
-
-DeactNode examplesNavbar() {
-  return nav(
-    id: 'navbar-example',
-    className: 'navbar navbar-light bg-light'
-        ' flex-column align-items-stretch p-3 justify-content-start',
-    style: 'overflow:hidden;height: 100%;',
-    children: [
-      a(
-        className: 'navbar-brand m-1 d-flex flex-column',
-        href: '#',
-        children: [
-          txt('Bootstrap Dart'),
-          div(
-            style: flexCenter(),
-            children: [
-              icon(BIcon.bootstrap_fill, color: '#7a10f7'),
-              span(style: 'width:10px;'),
-              img(src: 'https://pub.dev/favicon.ico', style: 'width:1.25rem;')
-            ],
-          ),
-        ],
-      ),
-      nav(
-        className: 'nav nav-pills flex-column',
-        style: 'overflow-y:auto;flex:1;flex-wrap:nowrap;',
-        children: [
-          ...const [
-            'Accordion',
-            'Buttons',
-            'Button Group',
-            'Icons',
-            'Alerts',
-            'Badge',
-            'Close Button',
-            'Collapse',
-            'Dropdown',
-            'Table',
-            'Tooltip',
-            'Popover',
-            'Spinners',
-            'Toasts',
-            'Forms',
-            'Navs Tabs',
-            'Navbar',
-            'Modal',
-            'Offcanvas',
-            'Placeholder',
-            'ScrollSpy',
-          ].map(
-            (e) => a(
-              className: 'nav-link',
-              style: 'padding-top:5px;padding-bottom:5px;',
-              href: '#${e.replaceAll(' ', '-')}',
-              children: [
-                txt(e),
-              ],
-            ),
-          ),
-        ],
-      )
-    ],
-  );
-}
-
-DeactNode _allExamples(ComponentContext ctx) {
-  return el(
-    'div',
-    attributes: {
-      'style': 'display:flex;flex-direction: column;align-items: center;'
-          'width:100%;position:relative;',
-    },
-    children: [
-      bootstrapExample(
-        'Accordion',
-        example: codeSection(bootstrap_accordion_example),
-        content: div(
-          children: [
-            fc((ctx) {
-              final withHeader = ctx.ref('withHeader', true);
-              final ref = ctx.refProvided(
-                'controller',
-                () => ToastsController(),
-              );
-              final flush = ctx.state('flush', false);
-              final multipleOpened = ctx.state('multipleOpened', false);
-
-              return div(
-                className: 'd-flex flex-column mx-3',
-                style: '',
-                children: [
-                  div(
-                    className: 'mb-2',
-                    style: flexCenter(),
-                    children: [
-                      check(
-                        label: txt('flush'),
-                        inline: true,
-                        name: 'flush',
-                        checked: flush.value,
-                        type: CheckType.switch_,
-                        onChange: (checked) => flush.value = checked,
-                      ),
-                      check(
-                        label: txt('multipleOpened'),
-                        inline: true,
-                        name: 'multipleOpened',
-                        checked: multipleOpened.value,
-                        type: CheckType.switch_,
-                        onChange: (checked) => multipleOpened.value = checked,
-                      ),
-                    ],
-                  ),
-// @example-start{bootstrap-accordion-example}
+final bootstrap_accordion_example = r'''
                   accordion(
                     id: 'accordion-example',
                     flush: flush.value,
@@ -200,69 +17,9 @@ DeactNode _allExamples(ComponentContext ctx) {
                         body: [txt('Body 3')],
                       ),
                     },
-                  ),
-// @example-end{bootstrap-accordion-example}
-                ],
-              );
-            })
-          ],
-        ),
-      ),
+                  ),'''; 
 
-      bootstrapExample(
-        'Buttons',
-        content: div(
-          className: 'hstack gap-3 align-self-center',
-          children: [
-            button(
-              className: btn(),
-              children: [txt('primary')],
-            ),
-            button(
-              className: btn(outlined: true, color: BColor.danger),
-              children: [txt('danger-outlined')],
-            ),
-            button(
-              className: btn(size: BSize.lg, color: BColor.secondary),
-              children: [txt('secondary-lg')],
-            ),
-            button(
-              className: btn(size: BSize.sm, color: BColor.dark),
-              children: [txt('dark-sm')],
-            ),
-            button(
-              className: btn(active: true),
-              children: [txt('primary-active')],
-            ),
-          ],
-        ),
-        example: codeSection('''
-button(
-  className: btn(),
-  children: [txt('primary')],
-),
-button(
-  className: btn(outlined: true, color: BColor.danger),
-  children: [txt('danger-outlined')],
-),
-button(
-  className: btn(size: BSize.lg, color: BColor.secondary),
-  children: [txt('secondary-lg')],
-),
-button(
-  className: btn(size: BSize.sm, color: BColor.dark),
-  children: [txt('dark-sm')],
-),
-button(
-  className: btn(active: true),
-  children: [txt('primary-active')],
-),
-'''),
-      ),
-      bootstrapExample(
-        'Button Group',
-        example: codeSection(bootstrap_button_group_example),
-// @example-start{bootstrap-button-group-example}
+final bootstrap_button_group_example = r'''
         content: fc(
           (ctx) {
             final value1 = ctx.state('value1', 'Left');
@@ -303,107 +60,9 @@ button(
               ],
             );
           },
-        ),
-// @example-end{bootstrap-button-group-example}
-      ),
-      bootstrapExample(
-        'Icons',
-        url: 'https://icons.getbootstrap.com/',
-        content: div(
-          className: 'd-flex justify-content-evenly',
-          style: 'width:200px;align-self:center;align-items:center;',
-          children: [
-            icon(BIcon.alarm, ariaLabel: 'Alarm'),
-            icon(BIcon.alarm, color: 'blue'),
-            icon(BIcon.alarm, color: 'blue', fontSize: '2rem'),
-            icon(BIcon.lightning, color: 'grey'),
-          ],
-        ),
-        example: codeSection('''
-icon(BIcon.alarm, ariaLabel: 'Alarm'),
-icon(BIcon.alarm, color: 'blue'),
-icon(BIcon.alarm, color: 'blue', fontSize: '2rem'),
-icon(BIcon.lightning, color: 'grey'),
-'''),
-      ),
-      bootstrapExample(
-        'Alerts',
-        content: div(
-          className: 'd-flex flex-column align-items-center',
-          children: [
-            div(
-              className: alert(color: BColor.info),
-              children: [txt('Info Alert')],
-            ),
-            div(
-              className: alert(color: BColor.success),
-              children: [
-                el(
-                  'h4',
-                  attributes: {'class': 'alert-heading'},
-                  children: [txt('Alert heading')],
-                ),
-                txt('Success message for Alert with heading'),
-              ],
-            ),
-          ],
-        ),
-        example: codeSection('''
-div(
-  className: alert(color: BColor.info),
-  children: [txt('Info Alert')],
-),
-div(
-  className: alert(color: BColor.success),
-  children: [
-    el(
-      'h4',
-      attributes: {'class': 'alert-heading'},
-      children: [txt('Alert heading')],
-    ),
-    txt('Success message for Alert with heading'),
-  ],
-),
-'''),
-      ),
-      bootstrapExample(
-        'Badge',
-        content: div(
-          className: 'd-flex justify-content-evenly',
-          children: [
-            div(
-              className: badge(color: BColor.info),
-              children: [txt('Info Alert')],
-            ),
-            div(
-              className: badge(color: BColor.success, rounded: true),
-              children: [txt('Success rounded')],
-            ),
-            div(
-              className: badge(color: BColor.primary, rounded: true),
-              children: [txt('49')],
-            ),
-          ],
-        ),
-        example: codeSection('''
-div(
-  className: badge(color: BColor.info),
-  children: [txt('Info Alert')],
-),
-div(
-  className: badge(color: BColor.success, rounded: true),
-  children: [txt('Success rounded')],
-),
-div(
-  className: badge(color: BColor.primary, rounded: true),
-  children: [txt('49')],
-),
-'''),
-      ),
-      bootstrapExample(
-        'Close Button',
-        example: codeSection(bootstrap_close_button_example),
-// @example-start{bootstrap-close-button-example}
+        ),'''; 
+
+final bootstrap_close_button_example = r'''
         content: div(
           className: 'd-flex justify-content-evenly',
           children: [
@@ -417,18 +76,9 @@ div(
             ),
             closeButton(disabled: true),
           ],
-        ),
-// @example-end{bootstrap-close-button-example}
-      ),
+        ),'''; 
 
-      /// Collapse
-      collapseExample(),
-
-      /// TODO: Split button,
-      bootstrapExample(
-        'Dropdown',
-        example: codeSection(bootstrap_dropdown_example),
-// @example-start{bootstrap-dropdown-example}
+final bootstrap_dropdown_example = r'''
         content: div(
           className: 'd-flex justify-content-evenly',
           children: [
@@ -477,74 +127,9 @@ div(
               );
             })
           ],
-        ),
-// @example-end{bootstrap-dropdown-example}
-      ),
+        ),'''; 
 
-      bootstrapExample(
-        'Table',
-        example: codeSection(bootstrap_table_example),
-        content: div(
-          children: [
-            fc((ctx) {
-              final hover = ctx.hookState(() => false);
-              final bordered = ctx.hookState(() => false);
-              final borderless = ctx.hookState(() => false);
-              final captionTop = ctx.hookState(() => false);
-              final showCaption = ctx.hookState(() => false);
-              final showFooter = ctx.hookState(() => false);
-              final striped = ctx.hookState(() => false);
-              final small = ctx.hookState(() => false);
-              final color = ctx.hookState<BColor?>(() => null);
-              final headerColor = ctx.hookState<BColor?>(() => null);
-              final align = ctx.hookState<VerticalAlign?>(() => null);
-              final scrollHorizontal =
-                  ctx.hookState<ResponsiveBreakPoint?>(() => null);
-
-              final items = [
-                {'first': 'Mark', 'last': 'Otto', 'handle': '@mdo'},
-                {'first': 'Jacob', 'last': 'Thornton', 'handle': '@fat'},
-                {'first': 'Larry the Bird', 'last': null, 'handle': '@twitter'},
-              ];
-
-              return div(
-                className: 'd-flex flex-column mx-3',
-                children: [
-                  div(
-                    className: 'mb-2 d-flex flex-wrap',
-                    style: flexCenter(),
-                    children: [
-                      _simpleCheck('hover', hover),
-                      _simpleCheck('bordered', bordered),
-                      _simpleCheck('borderless', borderless),
-                      _simpleCheck('striped', striped),
-                      _simpleCheck('small', small),
-                      _simpleCheck('showCaption', showCaption),
-                      _simpleCheck('captionTop', captionTop),
-                      _simpleCheck('showFooter', showFooter),
-                      _simpleSelect<BColor?>(
-                        [null, ...BColor.values],
-                        (color) => color?.name ?? 'color',
-                        color,
-                      ),
-                      _simpleSelect<VerticalAlign?>(
-                        [null, ...VerticalAlign.values],
-                        (align) => align?.nameHtml ?? 'align',
-                        align,
-                      ),
-                      _simpleSelect<BColor?>(
-                        [null, ...BColor.values],
-                        (color) => color?.name ?? 'header color',
-                        headerColor,
-                      ),
-                      _simpleSelect<ResponsiveBreakPoint?>(
-                        [null, ...ResponsiveBreakPoint.values],
-                        (color) => color?.name ?? 'scroll breakpoint',
-                        scrollHorizontal,
-                      ),
-                    ],
-                  ),
-// @example-start{bootstrap-table-example}
+final bootstrap_table_example = r'''
                   table(
                     className: tableClass(
                       hover: hover.value,
@@ -610,20 +195,9 @@ div(
                           ],
                         ),
                     ],
-                  ),
-// @example-end{bootstrap-table-example}
-                ],
-              );
-            })
-          ],
-        ),
-      ),
+                  ),'''; 
 
-      bootstrapExample(
-        'Tooltip',
-        example: codeSection(bootstrap_tooltip_example),
-        // TODO: tooltip in text
-// @example-start{bootstrap-tooltip-example}
+final bootstrap_tooltip_example = r'''
         content: div(
           className: 'd-flex justify-content-evenly',
           children: [
@@ -652,13 +226,9 @@ div(
               ],
             ),
           ],
-        ),
-// @example-end{bootstrap-tooltip-example}
-      ),
-      bootstrapExample(
-        'Popover',
-        example: codeSection(bootstrap_popover_example),
-// @example-start{bootstrap-popover-example}
+        ),'''; 
+
+final bootstrap_popover_example = r'''
         content: div(
           style:
               flexStyle(main: AxisAlign.space_evenly, cross: AxisAlign.center),
@@ -712,13 +282,9 @@ div(
               ],
             ),
           ],
-        ),
-// @example-end{bootstrap-popover-example}
-      ),
-      bootstrapExample(
-        'Spinners',
-        example: codeSection(bootstrap_spinners_example),
-// @example-start{bootstrap-spinners-example}
+        ),'''; 
+
+final bootstrap_spinners_example = r'''
         content: div(
           className: 'd-flex justify-content-evenly align-items-center',
           children: [
@@ -739,16 +305,9 @@ div(
               ],
             ),
           ],
-        ),
-// @example-end{bootstrap-spinners-example}
-      ),
+        ),'''; 
 
-      /// TODO: Card
-      ///
-      bootstrapExample(
-        'Toasts',
-        example: codeSection(bootstrap_toasts_example),
-// @example-start{bootstrap-toasts-example}
+final bootstrap_toasts_example = r'''
         content: div(
           style: 'height:300px',
           children: [
@@ -811,15 +370,9 @@ div(
               );
             })
           ],
-        ),
-// @example-end{bootstrap-toasts-example}
-      ),
+        ),'''; 
 
-      bootstrapExample(
-        'Forms',
-        example: codeSection(bootstrap_forms_example),
-        url: 'https://getbootstrap.com/docs/5.1/forms/overview/',
-// @example-start{bootstrap-forms-example}
+final bootstrap_forms_example = r'''
         content: fc((ctx) {
           final size = ctx.hookState<BSize?>(() => null);
           final floating = ctx.hookState(() => true);
@@ -1029,14 +582,9 @@ div(
               ),
             ],
           );
-        }),
-// @example-end{bootstrap-forms-example}
-      ),
+        }),'''; 
 
-      bootstrapExample(
-        'Navs Tabs',
-        example: codeSection(bootstrap_navs_tabs_example),
-// @example-start{bootstrap-navs-tabs-example}
+final bootstrap_navs_tabs_example = r'''
         content: fc((ctx) {
           final tabType = ctx.hookState(() => TabType.tab);
           final fade = ctx.hookState(() => true);
@@ -1094,14 +642,9 @@ div(
               ),
             ],
           );
-        }),
-// @example-end{bootstrap-navs-tabs-example}
-      ),
+        }),'''; 
 
-      bootstrapExample(
-        'Navbar',
-        example: codeSection(bootstrap_navbar_example),
-// @example-start{bootstrap-navbar-example}
+final bootstrap_navbar_example = r'''
         content: div(
           className: 'd-flex flex-column',
           children: [
@@ -1212,150 +755,9 @@ div(
               );
             }),
           ],
-        ),
-// @example-end{bootstrap-navbar-example}
-      ),
+        ),'''; 
 
-      bootstrapExample(
-        'Modal',
-        example: codeSection(bootstrap_modal_example),
-        content: div(
-          children: [
-            fc((ctx) {
-              final fade = ctx.state('fade', true);
-              final focus = ctx.state('focus', true);
-              final closeOnClick = ctx.state('closeOnClick', true);
-              final closeOnEscKey = ctx.state('closeOnEscKey', true);
-              final backdrop = ctx.state('backdrop', true);
-              //
-              final center = ctx.state('center', true);
-              final fullscreen = ctx.state('fullscreen', false);
-              final scrollable = ctx.state('scrollable', false);
-              final size = ctx.state<DialogSize?>('size', null);
-
-              final ref = ctx.ref<Modal?>('modal', null);
-
-              const modalId = 'example-modal-id';
-
-              return div(
-                className: 'd-flex flex-column',
-                style: 'position:relative;height:100%;',
-                children: [
-                  div(
-                    className: 'm-2',
-                    style:
-                        'display:flex;align-items:center;justify-content: center;',
-                    children: [
-                      el(
-                        'button',
-                        attributes: {
-                          'class': btn(),
-                          ...toggleButtonAttributes(
-                            component: TogglableComponent.modal,
-                            targetId: modalId,
-                          ),
-                        },
-                        children: [txt('Toggle with attributes')],
-                      ),
-                      el('span', attributes: {'style': 'width:10px'}),
-                      button(
-                        className: btn(),
-                        onclick: (_) => ref.value!.toggle(),
-                        children: [txt('Toggle with ref')],
-                      ),
-                      el('span', attributes: {'style': 'width:10px'}),
-                    ],
-                  ),
-                  div(
-                    children: [
-                      check(
-                        checked: fade.value,
-                        inline: true,
-                        onChange: (checked) => fade.value = checked,
-                        label: txt('fade'),
-                      ),
-                      check(
-                        checked: focus.value,
-                        inline: true,
-                        onChange: (checked) => focus.value = checked,
-                        label: txt('focus'),
-                      ),
-                      check(
-                        checked: closeOnClick.value,
-                        inline: true,
-                        onChange: (checked) => closeOnClick.value = checked,
-                        label: txt('closeOnClick'),
-                      ),
-                      check(
-                        checked: closeOnEscKey.value,
-                        inline: true,
-                        onChange: (checked) => closeOnEscKey.value = checked,
-                        label: txt('closeOnEscKey'),
-                      ),
-                      check(
-                        checked: backdrop.value,
-                        inline: true,
-                        onChange: (checked) => backdrop.value = checked,
-                        label: txt('backdrop'),
-                      ),
-                    ],
-                  ),
-                  div(
-                    className:
-                        'd-flex justify-content-center align-items-center',
-                    children: [
-                      div(
-                        children: [
-                          check(
-                            checked: center.value,
-                            inline: true,
-                            onChange: (checked) => center.value = checked,
-                            label: txt('center'),
-                          ),
-                          check(
-                            checked: fullscreen.value,
-                            inline: true,
-                            onChange: (checked) => fullscreen.value = checked,
-                            label: txt('fullscreen'),
-                          ),
-                          check(
-                            checked: scrollable.value,
-                            inline: true,
-                            onChange: (checked) => scrollable.value = checked,
-                            label: txt('scrollable'),
-                          ),
-                        ],
-                      ),
-                      select(
-                        className: 'form-select',
-                        style: 'width:150px;',
-                        onchange: (e) {
-                          final value = (e.target! as html.SelectElement).value;
-                          if (value == '') {
-                            size.value = null;
-                          } else {
-                            size.value = DialogSize.values
-                                .firstWhere((v) => v.name == value);
-                          }
-                        },
-                        children: [
-                          option(
-                            value: '',
-                            selected: size.value == null ? '' : null,
-                            children: [txt('default size')],
-                          ),
-                          ...DialogSize.values.map(
-                            (e) => option(
-                              value: e.name,
-                              selected: size.value == e ? '' : null,
-                              children: [txt(e.name)],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-// @example-start{bootstrap-modal-example}
+final bootstrap_modal_example = r'''
                   modal(
                     id: modalId,
                     closeOnClick: closeOnClick.value,
@@ -1400,19 +802,9 @@ div(
                         ),
                       ],
                     ),
-                  ),
-// @example-end{bootstrap-modal-example}
-                ],
-              );
-            })
-          ],
-        ),
-      ),
+                  ),'''; 
 
-      bootstrapExample(
-        'Offcanvas',
-        example: codeSection(bootstrap_offcanvas_example),
-// @example-start{bootstrap-offcanvas-example}
+final bootstrap_offcanvas_example = r'''
         content: div(
           children: [
             fc((ctx) {
@@ -1477,14 +869,9 @@ div(
               ]);
             }),
           ],
-        ),
-// @example-end{bootstrap-offcanvas-example}
-      ),
+        ),'''; 
 
-      bootstrapExample(
-        'Placeholder',
-        example: codeSection(bootstrap_placeholder_example),
-// @example-start{bootstrap-placeholder-example}
+final bootstrap_placeholder_example = r'''
         content: div(
           children: [
             fc((ctx) {
@@ -1523,25 +910,20 @@ div(
                   ),
                 ])
 //                 ElementNode.fromHtml(html.DivElement()
-//                   ..innerHtml = '''
+//                   ..innerHtml = """
 // <p class="placeholder-glow card-text">
 //   <span class="placeholder col-7"></span>
 //   <span class="placeholder col-4"></span>
 //   <span class="placeholder col-4"></span>
 //   <span class="placeholder col-6"></span>
 //   <span class="placeholder col-8"></span>
-// </p>'''),
+// </p>"""),
               ]);
             }),
           ],
-        ),
-// @example-end{bootstrap-placeholder-example}
-      ),
+        ),'''; 
 
-      bootstrapExample(
-        'ScrollSpy',
-        example: codeSection(bootstrap_scrollspy_example),
-// @example-start{bootstrap-scrollspy-example}
+final bootstrap_scrollspy_example = r'''
         content: div(
           className: 'row mx-1',
           children: [
@@ -1619,55 +1001,9 @@ div(
               ],
             ),
           ],
-        ),
-// @example-end{bootstrap-scrollspy-example}
-      ),
-    ],
-  );
-}
+        ),'''; 
 
-DeactNode _simpleCheck(String label, State<bool> refCheck) {
-  return check(
-    id: '$label${refCheck.hashCode}-input-check',
-    name: label,
-    checked: refCheck.value,
-    inline: true,
-    onChange: (checked) => refCheck.value = checked,
-    label: txt(label),
-  );
-}
-
-DeactNode _simpleSelect<T>(
-  List<T> values,
-  String Function(T) toString,
-  State<T> state, {
-  String? id,
-}) {
-  return select(
-    id: id,
-    className: 'form-select mx-1',
-    style: 'width:170px;',
-    onchange: (e) {
-      final value = (e.target! as html.SelectElement).value;
-      state.value = values.firstWhere((v) => toString(v) == value);
-    },
-    children: [
-      ...values.map(
-        (e) => option(
-          value: toString(e),
-          selected: state.value == e ? '' : null,
-          children: [txt(toString(e))],
-        ),
-      )
-    ],
-  );
-}
-
-DeactNode collapseExample() {
-  return bootstrapExample(
-    'Collapse',
-    example: codeSection(bootstrap_collapse_example),
-// @example-start{bootstrap-collapse-example}
+final bootstrap_collapse_example = r'''
     content: div(
       className: 'col',
       children: [
@@ -1727,40 +1063,4 @@ DeactNode collapseExample() {
           ],
         ),
       ],
-    ),
-// @example-end{bootstrap-collapse-example}
-  );
-}
-
-DeactNode bootstrapExample(
-  String title, {
-  required DeactNode content,
-  String? url,
-  DeactNode? example,
-}) {
-  return div(
-    key: title,
-    id: title.replaceAll(' ', '-'),
-    className: 'm-4 w-100 d-flex flex-column',
-    style: 'position:relative;',
-    children: [
-      div(
-        children: [
-          el('h3', children: [txt(title)]),
-          a(
-            href: url ??
-                'https://getbootstrap.com/docs/5.1/components/'
-                    '${title.toLowerCase().replaceAll(' ', '-')}',
-            target: '_blank',
-            children: [
-              txt('Documentation'),
-            ],
-          )
-        ],
-      ),
-      hr(),
-      content,
-      if (example != null) example,
-    ],
-  );
-}
+    ),'''; 
