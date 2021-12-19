@@ -178,7 +178,7 @@ DeactNode examplesNavbar() {
             'Badge',
             'Close Button',
             'Collapse',
-            'Dropdown',
+            'Dropdowns',
             'Table',
             'Tooltip',
             'Popover',
@@ -495,7 +495,7 @@ div(
 
       /// TODO: Split button,
       bootstrapExample(
-        'Dropdown',
+        'Dropdowns',
         example: codeSection(bootstrap_dropdown_example),
 // @example-start{bootstrap-dropdown-example}
         content: div(

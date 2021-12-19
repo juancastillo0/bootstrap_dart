@@ -2,7 +2,6 @@ import 'package:deact/deact.dart';
 import 'package:universal_html/html.dart' as html;
 
 class ServerRenderer extends Renderer {
-  
   // List<html.Node>? childrenToAdd;
   final List<MapEntry<html.Node, List<html.Node>>> elementStack = [];
 
@@ -33,7 +32,11 @@ class ServerRenderer extends Renderer {
       if (attr == null) {
         attr = prop as String;
       } else {
-        if (prop is! Function) elem.setAttribute(attr, prop.toString());
+        if (elem is html.AnchorElement && attr == 'href') {
+          elem.href = prop.toString();
+        } else if (prop is! Function) {
+          elem.setAttribute(attr, prop.toString());
+        }
         attr = null;
       }
     }
