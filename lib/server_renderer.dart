@@ -8,10 +8,11 @@ class ServerRenderer extends Renderer {
   @override
   html.Element elementClose(String tagname) {
     final lastE = elementStack.last.key as html.Element;
-    assert(
-      elementStack.isNotEmpty && lastE.tagName.toLowerCase() == tagname,
-      '$tagname ${lastE.tagName} $elementStack',
-    );
+    final isValid =
+        elementStack.isNotEmpty && lastE.tagName.toLowerCase() == tagname;
+    if (!isValid) {
+      throw Exception('$tagname ${lastE.tagName} $elementStack');
+    }
 
     _executeDiff();
     return lastE;
@@ -32,9 +33,7 @@ class ServerRenderer extends Renderer {
       if (attr == null) {
         attr = prop as String;
       } else {
-        if (elem is html.AnchorElement && attr == 'href') {
-          elem.href = prop.toString();
-        } else if (prop is! Function) {
+        if (prop is! Function) {
           elem.setAttribute(attr, prop.toString());
         }
         attr = null;

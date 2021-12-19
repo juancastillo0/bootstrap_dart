@@ -23,8 +23,10 @@ void main() async {
   mainContext.config = ReactiveConfig(
     writePolicy: ReactiveWritePolicy.never,
   );
+  const outputId = 'output';
 
-  final node = kIsWeb ? html.querySelector('#output')! : html.Element.div();
+  final node = kIsWeb ? html.querySelector('#$outputId')! : html.Element.div()
+    ..id = outputId;
   final renderer = deactInNode(
     node,
     (_) => rootComponent(),
@@ -38,8 +40,8 @@ void main() async {
 
     final doc = parseHtmlDocument(await indexFile.readAsString());
 
-    final outputDiv = doc.querySelector('#output')!;
-    outputDiv.innerHtml = node.innerHtml;
+    final outputDiv = doc.querySelector('#$outputId')!;
+    outputDiv.replaceWith(node);
     final htmlElem =
         doc.getRootNode().childNodes.whereType<html.Element>().first;
     await indexFile.writeAsString('<!DOCTYPE html>\n${htmlElem.outerHtml}');

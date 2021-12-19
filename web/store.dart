@@ -33,7 +33,7 @@ class RootStore {
       (_) => localStorage[_key] = _count.value.toString(),
       delay: 300,
     );
-    // _syncTabWithUrl();
+    _syncTabWithUrl();
     autorun((_) {
       if (_tabFromUrl() == tab.value) return;
       final _url = Uri.parse(html.window.location.href);
@@ -41,11 +41,11 @@ class RootStore {
         ..._url.queryParametersAll,
         'tab': [tab.value.name],
       });
-      // html.window.history.pushState(null, '', newUrl.toString());
+      html.window.history.pushState(null, '', newUrl.toString());
     });
 
     html.window.onPopState.listen((event) {
-      // _syncTabWithUrl();
+      _syncTabWithUrl();
     });
   }
 

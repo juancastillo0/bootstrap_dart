@@ -37,6 +37,10 @@ void main() {
                       id: 'increment-button',
                       className: 'btn',
                       children: [
+                        a(
+                          href: 'https://getbootstrap.com/docs/5.1/components/',
+                          target: '_blank',
+                        ),
                         img(src: 'http://localhost:3000/favicon.ico'),
                         txt('span text'),
                       ],
@@ -54,7 +58,7 @@ void main() {
 
     expect(
       rootElem.innerHtml,
-      '<div style="height:100px;"><span style="font-size:12px;">span text</span><ul><li>li text</li></ul><div><span>0</span><button class="btn" id="increment-button"><img src="http://localhost:3000/favicon.ico">span text</button></div></div>',
+      '<div style="height:100px;"><span style="font-size:12px;">span text</span><ul><li>li text</li></ul><div><span>0</span><button class="btn" id="increment-button"><a href="https://getbootstrap.com/docs/5.1/components/" target="_blank"></a><img src="http://localhost:3000/favicon.ico">span text</button></div></div>',
     );
 
     count.value++;
@@ -62,7 +66,7 @@ void main() {
 
     expect(
       rootElem.innerHtml,
-      '<div style="height:100px;"><span style="font-size:12px;">span text</span><ul><li>li text</li></ul><div><span>1</span><button class="btn" id="increment-button"><img src="http://localhost:3000/favicon.ico">span text</button></div></div>',
+      '<div style="height:100px;"><span style="font-size:12px;">span text</span><ul><li>li text</li></ul><div><span>1</span><button class="btn" id="increment-button"><a href="https://getbootstrap.com/docs/5.1/components/" target="_blank"></a><img src="http://localhost:3000/favicon.ico">span text</button></div></div>',
     );
   });
 }
