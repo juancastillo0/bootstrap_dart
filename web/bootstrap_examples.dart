@@ -3,7 +3,8 @@ import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
-import 'package:highlight/highlight.dart' show highlight;
+import 'package:highlight/highlight_core.dart' show highlight;
+import 'package:highlight/languages/dart.dart';
 import 'package:virtual_web/hooks.dart';
 
 import 'package:virtual_web/bootstrap/accordion.dart';
@@ -22,16 +23,35 @@ import 'package:virtual_web/bootstrap/typography.dart';
 import 'generated_example_snippets.dart';
 
 DeactNode codeSection(String dartCode) {
-  final int prefixSpaces = dartCode.split('\n').fold(
-        999999999999,
+  const _maxLength = 999999999999;
+  final int prefixSpaces = dartCode.split('\n').where((e) => e.isNotEmpty).fold(
+        _maxLength,
         (c, element) => math.min(
             c, RegExp(r'^(\s+)').firstMatch(element)?.group(1)?.length ?? 0),
       );
-  if (prefixSpaces != 999999999999) {
-    dartCode =
-        dartCode.split('\n').map((e) => e.substring(prefixSpaces)).join('\n');
+  if (prefixSpaces != _maxLength) {
+    dartCode = dartCode
+        .split('\n')
+        .map((e) => e.isEmpty ? '' : e.substring(prefixSpaces))
+        .join('\n');
   }
+  highlight.registerLanguage('dart', dart);
   final highlighted = highlight.parse(dartCode, language: 'dart');
+  DeactNode _copyCode(String className) {
+    return button(
+      className: className,
+      onclick: (_) => html.window.navigator.clipboard?.writeText(dartCode),
+      children: [
+        icon(BIcon.clipboard),
+        el('span', attributes: {
+          'style': 'padding-left:10px;'
+        }, children: [
+          txt('Copy code'),
+        ]),
+      ],
+    );
+  }
+
   return div(
     children: [
       div(
@@ -39,19 +59,73 @@ DeactNode codeSection(String dartCode) {
         children: [
           // txt('Example Code'),
           // el('span', attributes: {'style': 'width:40px;'}),
-          button(
-            className: btn(color: BColor.dark, size: BSize.sm),
-            onclick: (_) =>
-                html.window.navigator.clipboard?.writeText(dartCode),
-            children: [
-              icon(BIcon.clipboard),
-              el('span', attributes: {
-                'style': 'padding-left:10px;'
-              }, children: [
-                txt('Copy code'),
-              ]),
-            ],
-          )
+          _copyCode(btn(color: BColor.dark, size: BSize.sm) + ' me-2'),
+          fc((ctx) {
+            final showModal = ctx.hookState(() => false);
+            final modalRef = ctx.hookRef<Modal?>(() => null);
+            ctx.hookEffect(() {
+              if (showModal.value) {
+                modalRef.value!.show();
+                final subs = modalRef.value!.events.listen((event) {
+                  if (event.type == ModalEventType.hidden) {
+                    showModal.value = false;
+                  }
+                });
+                return subs.cancel;
+              }
+            }, [showModal.value]);
+            return fragment([
+              button(
+                className: btn(color: BColor.dark, size: BSize.sm),
+                onclick: (_) => showModal.value = !showModal.value,
+                children: [
+                  icon(BIcon.clipboard),
+                  el('span', attributes: {
+                    'style': 'padding-left:10px;'
+                  }, children: [
+                    txt('FullScreen code'),
+                  ]),
+                ],
+              ),
+              if (showModal.value)
+                modal(
+                  id: 'example-code-modal',
+                  modalRef: modalRef,
+                  dialog: modalDialog(
+                    dialogClass: modalDialogClass(
+                      scrollable: true,
+                      fullScreen: ResponsiveBreakPoint.always,
+                    ),
+                    // header: [
+                    //   h5(
+                    //     className: 'm-0 ${BText.userSelectNone}',
+                    //     children: [txt('Example code')],
+                    //   ),
+                    //   closeButton(attributes: {'data-bs-dismiss': 'modal'}),
+                    // ],
+                    body: [
+                      ElementNode.fromHtml(
+                        html.Element.tag('code')
+                          ..className = 'codebox'
+                          ..setInnerHtml(highlighted.toHtml()),
+                      ),
+                    ],
+                    footer: [
+                      _copyCode(btn(color: BColor.dark) + ' me-2'),
+                      el(
+                        'button',
+                        attributes: {
+                          'class': btn(),
+                          'type': "button",
+                          'data-bs-dismiss': "modal",
+                        },
+                        children: [txt('Close')],
+                      ),
+                    ],
+                  ),
+                )
+            ]);
+          }),
         ],
       ),
       ElementNode.fromHtml(
@@ -1522,15 +1596,16 @@ div(
                     ],
                   ),
                 ])
-//                 ElementNode.fromHtml(html.DivElement()
-//                   ..innerHtml = '''
-// <p class="placeholder-glow card-text">
-//   <span class="placeholder col-7"></span>
-//   <span class="placeholder col-4"></span>
-//   <span class="placeholder col-4"></span>
-//   <span class="placeholder col-6"></span>
-//   <span class="placeholder col-8"></span>
-// </p>'''),
+                // ElementNode.fromHtml(
+                //  html.DivElement()
+                //    ..innerHtml = '''
+                // <p class="placeholder-glow card-text">
+                //   <span class="placeholder col-7"></span>
+                //   <span class="placeholder col-4"></span>
+                //   <span class="placeholder col-4"></span>
+                //   <span class="placeholder col-6"></span>
+                //   <span class="placeholder col-8"></span>
+                // </p>'''),
               ]);
             }),
           ],
@@ -1587,7 +1662,6 @@ div(
                   final ref = ctx.ref<html.Element?>('element', null);
                   final scrollSpy =
                       useScrollSpy(ctx, ref, target: '#list-example');
-
                   return el(
                     'div',
                     ref: ref,

@@ -909,15 +909,16 @@ final bootstrap_placeholder_example = r'''
                     ],
                   ),
                 ])
-//                 ElementNode.fromHtml(html.DivElement()
-//                   ..innerHtml = """
-// <p class="placeholder-glow card-text">
-//   <span class="placeholder col-7"></span>
-//   <span class="placeholder col-4"></span>
-//   <span class="placeholder col-4"></span>
-//   <span class="placeholder col-6"></span>
-//   <span class="placeholder col-8"></span>
-// </p>"""),
+                // ElementNode.fromHtml(
+                //  html.DivElement()
+                //    ..innerHtml = """
+                // <p class="placeholder-glow card-text">
+                //   <span class="placeholder col-7"></span>
+                //   <span class="placeholder col-4"></span>
+                //   <span class="placeholder col-4"></span>
+                //   <span class="placeholder col-6"></span>
+                //   <span class="placeholder col-8"></span>
+                // </p>"""),
               ]);
             }),
           ],
@@ -969,7 +970,6 @@ final bootstrap_scrollspy_example = r'''
                   final ref = ctx.ref<html.Element?>('element', null);
                   final scrollSpy =
                       useScrollSpy(ctx, ref, target: '#list-example');
-
                   return el(
                     'div',
                     ref: ref,
