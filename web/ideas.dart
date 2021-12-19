@@ -110,3 +110,42 @@ class Model {
 
   Model(this.data);
 }
+
+// DeactNode Function(T input, {Object? key}) fc1<T>(
+//   DeactNode Function(ComponentContext ctx, T input) builder,
+// ) {
+//   return (T input, {Object? key}) {
+//     return Functional1._(builder: builder, input: input, key: key);
+//   };
+// }
+
+// /// Deact internally stores a functional component with one parameter as a
+// /// class of this type.
+// class Functional1<T> extends ComponentNode {
+//   final T input;
+//   final DeactNode Function(ComponentContext ctx, T input) builder;
+
+//   Functional1._({
+//     Object? key,
+//     required this.builder,
+//     required this.input,
+//   }) : super(key: key);
+
+//   @override
+//   DeactNode render(ComponentContext context) {
+//     return builder(context, input);
+//   }
+
+//   @override
+//   bool operator ==(Object other) {
+//     if (identical(this, other)) return true;
+
+//     return other is Functional1<T> &&
+//         other.key == key &&
+//         other.input == input &&
+//         other.builder == builder;
+//   }
+
+//   @override
+//   int get hashCode => input.hashCode ^ builder.hashCode ^ key.hashCode;
+// }
