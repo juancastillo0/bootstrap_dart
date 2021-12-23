@@ -11,10 +11,11 @@ dependencies:
   highlight: ^0.7.0
   incremental_dom_bindings: ^2.1.0
   universal_html: ^2.0.8
+  js:
   deact:
     git:
       url: https://github.com/juancastillo0/deact.git
-      ref: d884bdd0a44e4e3098def601fc5a5f48a7349706
+      ref: 9763e3553dd2aeda9de0f9d927a8a6a983b6a27a
     # path: ../deact
 
 dev_dependencies:

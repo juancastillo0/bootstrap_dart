@@ -201,8 +201,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d884bdd0a44e4e3098def601fc5a5f48a7349706
-      resolved-ref: d884bdd0a44e4e3098def601fc5a5f48a7349706
+      ref: "9763e3553dd2aeda9de0f9d927a8a6a983b6a27a"
+      resolved-ref: "9763e3553dd2aeda9de0f9d927a8a6a983b6a27a"
       url: "https://github.com/juancastillo0/deact.git"
     source: git
     version: "1.1.0"
@@ -277,7 +277,7 @@ packages:
     source: hosted
     version: "0.3.5"
   js:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: js
       url: "https://pub.dartlang.org"
