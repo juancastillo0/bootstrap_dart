@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'package:deact/deact.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'package:virtual_web/hooks.dart';
+import 'package:bootstrap_dart/hooks.dart';
 
 void main() {
   test('ctx.ref', () async {

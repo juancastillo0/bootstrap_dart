@@ -1,5 +1,55 @@
 import 'package:deact/deact.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:universal_html/parsing.dart' show parseHtmlDocument;
+
+const bool kIsWeb = identical(0, 0.0);
+
+Future<Rendered> renderIsomorphic(
+  String outputId,
+  DeactNode Function() rootComponent, {
+  List<RenderWrapper> wrappers = const [],
+  Renderer? htmlRenderer,
+}) async {
+  final node = kIsWeb ? html.querySelector('#$outputId')! : html.Element.div()
+    ..id = outputId;
+  final renderer = deactInNode(
+    node,
+    (_) => rootComponent(),
+    wrappers: wrappers,
+    renderer:
+        htmlRenderer ?? (kIsWeb ? const IncDomRenderer() : ServerRenderer()),
+  );
+  await renderer.waitScheduledRender();
+
+  return Rendered(
+    renderer: renderer,
+    outputId: outputId,
+    rootNode: node,
+  );
+}
+
+class Rendered {
+  final Deact renderer;
+  final String outputId;
+  final html.Element rootNode;
+
+  String renderInTemplate(String htmlTemplate) {
+    // await renderer.waitScheduledRender();
+    final doc = parseHtmlDocument(htmlTemplate);
+
+    final outputDiv = doc.querySelector('#$outputId')!;
+    outputDiv.replaceWith(rootNode);
+    final htmlElem =
+        doc.getRootNode().childNodes.whereType<html.Element>().first;
+    return '<!DOCTYPE html>\n${htmlElem.outerHtml}';
+  }
+
+  Rendered({
+    required this.renderer,
+    required this.outputId,
+    required this.rootNode,
+  });
+}
 
 class ServerRenderer extends Renderer {
   // List<html.Node>? childrenToAdd;

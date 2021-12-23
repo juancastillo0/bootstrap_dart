@@ -1,10 +1,10 @@
+import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:mobx/mobx.dart';
 import 'package:test/test.dart';
-import 'package:deact/deact.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'package:virtual_web/mobx_deact.dart';
+import 'package:bootstrap_dart/mobx_deact.dart';
 
 class Action1<T, O> {
   final Action action;

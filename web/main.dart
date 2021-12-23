@@ -5,46 +5,34 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:mobx/mobx.dart';
 import 'package:logging/logging.dart';
-import 'package:universal_html/parsing.dart' show parseHtmlDocument;
-import 'package:virtual_web/mobx_deact.dart';
-import 'package:virtual_web/server_renderer.dart';
+import 'package:bootstrap_dart/mobx_deact.dart';
+import 'package:bootstrap_dart/server_renderer.dart';
 
-import 'package:virtual_web/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'bootstrap_examples.dart';
-import 'package:virtual_web/bootstrap/modal.dart';
+import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'store.dart';
-import 'package:virtual_web/bootstrap/toast.dart';
+import 'package:bootstrap_dart/bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
-
-const bool kIsWeb = identical(0, 0.0);
 
 void main() async {
   mainContext.config = ReactiveConfig(
     writePolicy: ReactiveWritePolicy.never,
   );
-  const outputId = 'output';
 
-  final node = kIsWeb ? html.querySelector('#$outputId')! : html.Element.div()
-    ..id = outputId;
-  final renderer = deactInNode(
-    node,
-    (_) => rootComponent(),
+  final serverRendered = await renderIsomorphic(
+    'output',
+    rootComponent,
     wrappers: const [mobxWrapper],
-    renderer: kIsWeb ? const IncDomRenderer() : ServerRenderer(),
   );
 
   if (!kIsWeb) {
-    await renderer.waitScheduledRender();
     final indexFile = io.File('./build/index.html');
 
-    final doc = parseHtmlDocument(await indexFile.readAsString());
-
-    final outputDiv = doc.querySelector('#$outputId')!;
-    outputDiv.replaceWith(node);
-    final htmlElem =
-        doc.getRootNode().childNodes.whereType<html.Element>().first;
-    await indexFile.writeAsString('<!DOCTYPE html>\n${htmlElem.outerHtml}');
+    final _htmlStr =
+        serverRendered.renderInTemplate(await indexFile.readAsString());
+    await indexFile.writeAsString(_htmlStr);
   }
 }
 

@@ -5,20 +5,20 @@ import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight_core.dart' show highlight;
 import 'package:highlight/languages/dart.dart';
-import 'package:virtual_web/hooks.dart';
+import 'package:bootstrap_dart/hooks.dart';
 
-import 'package:virtual_web/bootstrap/accordion.dart';
-import 'package:virtual_web/bootstrap/bootstrap_core.dart';
-import 'package:virtual_web/bootstrap/checks_radios.dart';
-import 'package:virtual_web/bootstrap/form.dart';
-import 'package:virtual_web/bootstrap/icons.dart';
-import 'package:virtual_web/bootstrap/modal.dart';
-import 'package:virtual_web/bootstrap/navbar.dart';
-import 'package:virtual_web/bootstrap/offcanvas.dart';
-import 'package:virtual_web/bootstrap/table.dart';
-import 'package:virtual_web/bootstrap/toast.dart';
-import 'package:virtual_web/bootstrap/tooltip_popover.dart';
-import 'package:virtual_web/bootstrap/typography.dart';
+import 'package:bootstrap_dart/bootstrap/accordion.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/checks_radios.dart';
+import 'package:bootstrap_dart/bootstrap/form.dart';
+import 'package:bootstrap_dart/bootstrap/icons.dart';
+import 'package:bootstrap_dart/bootstrap/modal.dart';
+import 'package:bootstrap_dart/bootstrap/navbar.dart';
+import 'package:bootstrap_dart/bootstrap/offcanvas.dart';
+import 'package:bootstrap_dart/bootstrap/table.dart';
+import 'package:bootstrap_dart/bootstrap/toast.dart';
+import 'package:bootstrap_dart/bootstrap/tooltip_popover.dart';
+import 'package:bootstrap_dart/bootstrap/typography.dart';
 
 import 'generated_example_snippets.dart';
 
