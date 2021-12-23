@@ -5,6 +5,7 @@ args:packages/args/
 async:packages/async/
 bazel_worker:packages/bazel_worker/
 boolean_selector:packages/boolean_selector/
+bootstrap_dart:packages/bootstrap_dart/
 build:packages/build/
 build_config:packages/build_config/
 build_daemon:packages/build_daemon/
@@ -73,7 +74,6 @@ timing:packages/timing/
 typed_data:packages/typed_data/
 universal_html:packages/universal_html/
 universal_io:packages/universal_io/
-virtual_web:packages/virtual_web/
 vm_service:packages/vm_service/
 watcher:packages/watcher/
 web_socket_channel:packages/web_socket_channel/
