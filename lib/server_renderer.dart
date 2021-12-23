@@ -4,6 +4,8 @@ import 'package:universal_html/html.dart' as html;
 class ServerRenderer extends Renderer {
   // List<html.Node>? childrenToAdd;
   final List<MapEntry<html.Node, List<html.Node>>> elementStack = [];
+  bool _skip = false;
+  final _skipNode = html.Element.tag('server-renderer-skip-node');
 
   @override
   html.Element elementClose(String tagname) {
@@ -67,14 +69,30 @@ class ServerRenderer extends Renderer {
 
   void _executeDiff() {
     final entry = elementStack.removeLast();
-    for (final element in entry.key.childNodes.toList()) {
+    if (_skip) {
+      _skip = false;
+      return;
+    }
+    final items = entry.key.childNodes.toList();
+    for (final element in items) {
       element.remove();
     }
-    entry.value.forEach(entry.key.append);
+    int i = -1;
+    entry.value.map((e) {
+      i++;
+      return e == _skipNode ? items[i] : e;
+    }).forEach(entry.key.append);
   }
 
   @override
-  void skip() {}
+  void skip() {
+    _skip = true;
+  }
+
+  @override
+  void skipNode() {
+    elementStack.last.value.add(_skipNode);
+  }
 
   @override
   html.Text text(String value, {List<String Function(Object p1)>? formatters}) {
