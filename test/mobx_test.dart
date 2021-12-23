@@ -38,6 +38,8 @@ class Store {
       items.insert(0, item);
     });
   }
+
+  static final scoped = Scoped((_) => Store());
 }
 
 class Item {
@@ -62,8 +64,7 @@ void main() {
       '#output',
       (_) {
         return fc((ctx) {
-          final store =
-              ctx.refProvided('store', () => globalStore, global: true).value;
+          final store = ctx.setUpScoped(Store.scoped, globalStore);
           rootBuilds++;
 
           return div(
@@ -156,7 +157,7 @@ DeactNode itemCount() {
     id: 'item-count',
     children: [
       fc((ctx) {
-        final store = ctx.globalRef<Store>('store').value;
+        final store = Store.scoped.get(ctx);
         store.itemCountRebuilds++;
         return txt(
           store.itemCount.value.toString(),
