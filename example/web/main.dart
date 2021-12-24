@@ -1,10 +1,15 @@
+import 'package:bootstrap_dart/mobx_deact.dart';
 import 'package:bootstrap_dart/router.dart';
 import 'package:bootstrap_dart/server_renderer.dart';
 import 'package:deact/deact.dart';
+import 'package:mobx/mobx.dart';
 import 'package:universal_io/io.dart' as io;
 import 'package:bootstrap_dart_example/route_example.dart';
 
 void main() async {
+  mainContext.config = ReactiveConfig(
+    writePolicy: ReactiveWritePolicy.never,
+  );
   final router = appRouter();
 
   if (kIsWeb) {
@@ -12,6 +17,7 @@ void main() async {
       'output',
       () => router,
       htmlRenderer: IncDomRenderer(mapProps: propMapper(router)),
+      wrappers: const [mobxWrapper],
     );
   } else {
     const dir = 'build';

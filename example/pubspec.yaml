@@ -21,6 +21,7 @@ dependencies:
   shelf_router:
   shelf_hotreload:
   shelf_proxy: ^1.0.1
+  nanoid: ^1.0.0
 
 dev_dependencies:
   build_runner: ^1.10.0
