@@ -180,7 +180,7 @@ class RenderedRoute {
     required this.route,
     required this.uri,
   }) : state = kIsWeb && html.window.history.state is int
-            ? html.window.history.state
+            ? (html.window.history.state as int)
             : null;
 }
 
@@ -302,11 +302,6 @@ class DRouter extends ComponentNode {
     }, const []);
 
     return fragment([
-      fc(
-        (_) => stack.last.node,
-        // TODO: this should not be necessary
-        key: stack.last.node.hashCode.toString(),
-      ),
       div(
         className: 'd-flex flex-column',
         children: [
@@ -314,11 +309,20 @@ class DRouter extends ComponentNode {
             (e) => span(
               className: 'm-1',
               children: [
-                txt(e.uri.toString()),
+                txt(
+                  e.uri
+                      .toString()
+                      .replaceFirst('${e.uri.scheme}://${e.uri.authority}', ''),
+                ),
               ],
             ),
           )
         ],
+      ),
+      fc(
+        (_) => stack.last.node,
+        // TODO: this should not be necessary
+        key: stack.last.node.hashCode.toString(),
       ),
     ]);
   }

@@ -116,18 +116,30 @@ String flexCenter({bool column = false}) {
   );
 }
 
+enum FlexWrap {
+  wrap,
+  wrap_reverse,
+  nowrap,
+}
+
+extension FlexWrapExt on FlexWrap {
+  String get nameHtml => toString().split('.').last.replaceAll('_', '-');
+}
+
 String flexStyle({
   bool column = false,
   AxisAlign main = AxisAlign.start,
-  AxisAlign cross = AxisAlign.start,
+  AxisAlign cross = AxisAlign.center,
+  FlexWrap? wrap,
 }) {
   return 'display:flex;${column ? 'flex-direction:column;' : ''}'
-      'justify-content:${main.nameHtml};align-items:${cross.nameHtml};';
+      'justify-content:${main.nameHtml};align-items:${cross.nameHtml};'
+      '${wrap == null ? '' : 'flex-wrap:${wrap.nameHtml};'}';
 }
 
 String colStyle({
   AxisAlign main = AxisAlign.start,
-  AxisAlign cross = AxisAlign.start,
+  AxisAlign cross = AxisAlign.center,
 }) {
   return flexStyle(column: true, main: main, cross: cross);
 }
@@ -415,6 +427,7 @@ Map<String, Object> toggleButtonAttributes({
 /// Card https://getbootstrap.com/docs/5.1/components/card/
 DeactNode card({
   Object? key,
+  String? id,
   void Function(html.MouseEvent)? onClick,
   String? imageSrc,
   String? imageAlt,
@@ -429,6 +442,7 @@ DeactNode card({
 }) {
   return div(
     key: key,
+    id: id,
     className: 'card ${cardClasses ?? ''}',
     style: cardStyle,
     onclick: onClick,
