@@ -165,7 +165,7 @@ class DNavigator {
     }
 
     router.stack.add(router.setup(null)); // RouteReq(uri)
-    router.ctx?.scheduleRerender();
+    router.updateCurrent();
   }
 }
 
@@ -220,19 +220,61 @@ PropsMapper propMapper(DRouter router) {
   };
 }
 
+RenderedRoute useSelectedRoute(ComponentContext ctx) {
+  final router = ctx.scoped(DRouter.scope);
+  final route = ctx.scoped(DRouter._routeScope);
+  final result = useStream(
+    ctx,
+    router.currentRouteStream,
+    initialValue: () => route,
+  );
+  return result.asValue!.value;
+}
+
 class DRouter extends ComponentNode {
   final List<Route> routes;
   final DeactNode fallback;
   late final DNavigator navigator = DNavigator(this);
   final List<RenderedRoute> stack = [];
-  ComponentContext? ctx;
+  int _count = 0;
+
+  RenderedRoute get currentRoute => stack.last;
+  Stream<RenderedRoute> get currentRouteStream =>
+      _currentRouteController.stream;
+  final StreamController<RenderedRoute> _currentRouteController =
+      StreamController.broadcast();
 
   DRouter({
     required Iterable<Route> routes,
     required this.fallback,
     Object? key,
+    this.wrapper,
   })  : routes = [...routes]..sort((a, b) => a.path.compareTo(b.path)),
         super(key: key);
+
+  DeactNode Function(RenderedRoute)? wrapper;
+
+  RenderedRoute wrapRoute(RenderedRoute route, RouteReq? req) {
+    final node = wrapper != null ? wrapper!(route) : route.node;
+
+    return RenderedRoute(
+      node: fc(
+        (ctx) {
+          ctx.setUpScoped(scope, this);
+          ctx.setUpScoped(routeReqScope, req);
+          ctx.setUpScoped(_routeScope, route);
+          return node;
+        },
+      ),
+      route: route.route,
+      uri: route.uri,
+    );
+  }
+
+  void updateCurrent() {
+    _count++;
+    _currentRouteController.add(currentRoute);
+  }
 
   RenderedRoute setup(
     RouteReq? req, {
@@ -240,6 +282,7 @@ class DRouter extends ComponentNode {
   }) {
     final uri = req?.uri ?? Uri.parse(html.window.location.href);
 
+    RenderedRoute? rendered;
     for (final route in routes) {
       final match = route.matchRoute(uri, req);
       if (match.matches) {
@@ -249,35 +292,42 @@ class DRouter extends ComponentNode {
           onLoad: onLoad,
         );
 
-        return RenderedRoute(
+        rendered = RenderedRoute(
           node: node,
           route: route,
           uri: uri,
         );
       }
     }
-    onLoad?.call();
-    return RenderedRoute(
-      node: fallback,
-      route: null,
-      uri: uri,
-    );
+    if (rendered == null) {
+      onLoad?.call();
+      rendered = RenderedRoute(
+        node: fallback,
+        route: null,
+        uri: uri,
+      );
+    }
+
+    return wrapRoute(rendered, req);
   }
 
   static final scope = Scoped<DRouter>((_) => throw Error());
+  static final routeReqScope = Scoped<RouteReq?>((_) => null);
+  static final _routeScope = Scoped<RenderedRoute>((_) => throw Error());
 
   @override
   DeactNode render(ComponentContext ctx) {
-    this.ctx = ctx;
-    ctx.setUpScoped(scope, this);
-
     if (stack.isEmpty) {
       stack.add(setup(null));
     }
+    useStream(
+      ctx,
+      currentRouteStream,
+      initialValue: () => stack.last,
+    );
     ctx.hookEffect(() {
       if (kIsWeb) {
         final subs = html.window.onPopState.listen((event) {
-          print(event);
           final prev = stack.length > 1 ? stack[stack.length - 2] : null;
           print(
             'd:${event.state} href: ${html.window.location.href} last:${stack.last.uri.toString()}'
@@ -288,7 +338,7 @@ class DRouter extends ComponentNode {
               (event.state == null || event.state == prev.state)) {
             print('remove ${event.state} ${stack.length}');
             stack.removeLast();
-            ctx.scheduleRerender();
+            updateCurrent();
           } else {
             print('add ${event.state} ${stack.length}');
             // if (event.state != html.window.history.state ||
@@ -300,7 +350,6 @@ class DRouter extends ComponentNode {
         return () => subs.cancel();
       }
     }, const []);
-
     return fragment([
       div(
         className: 'd-flex flex-column',
@@ -320,9 +369,8 @@ class DRouter extends ComponentNode {
         ],
       ),
       fc(
-        (_) => stack.last.node,
-        // TODO: this should not be necessary
-        key: stack.last.node.hashCode.toString(),
+        (ctx) => stack.last.node,
+        key: _count.toString(),
       ),
     ]);
   }
