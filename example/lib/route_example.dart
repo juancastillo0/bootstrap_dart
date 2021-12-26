@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/navbar.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
 import 'package:bootstrap_dart_example/todo_store.dart';
 import 'package:bootstrap_dart_example/todo_view.dart';
@@ -8,14 +9,18 @@ import 'package:deact/deact.dart';
 import 'package:bootstrap_dart/router.dart';
 import 'package:deact/deact_html52.dart';
 
-DRouter appRouter() => DRouter(routes: allRoutes(), fallback: notFound());
+DRouter appRouter() => DRouter(
+      routes: allRoutes(),
+      fallback: notFound(),
+      wrapper: appBarWrapper,
+    );
 
 List<Route> allRoutes() {
   return [
-    HomeRoute(),
-    AboutRoute(),
-    TodosRoute(),
-    TodoRoute(),
+    HomeRoute.instance,
+    AboutRoute.instance,
+    TodosRoute.instance,
+    TodoRoute.instance,
   ];
 }
 
@@ -55,8 +60,89 @@ DeactNode routeList() {
   );
 }
 
+DeactNode appBarWrapper(RenderedRoute rendered) {
+  return div(
+    style: colStyle(),
+    children: [
+      navbar(
+        expand: ResponsiveBreakPoint.always,
+        background: BColor.light,
+        collapseId: 'app-nav-bar',
+        brand: [txt('Tasks')],
+        attributes: {'style': 'width:100%;'},
+        position: NavbarPosition.sticky_top,
+        itemList: [
+          fc((ctx) {
+            final route = useSelectedRoute(ctx);
+            print(
+              'ctx.hashCode ${ctx.hashCode} route ${route.hashCode}'
+              ' router ${ctx.scoped(DRouter.scope).hashCode}',
+            );
+
+            print(route.route?.path);
+
+            ctx.hookEffect(
+                () => () => print('DISPOSED ${ctx.hashCode}'), const []);
+            return div(className: 'navbar-nav me-auto', children: [
+              ...const [
+                '/',
+                '/todos',
+                '/about',
+              ].map(
+                (e) {
+                  final isActive = route.route?.path == e;
+
+                  return el(
+                    'a',
+                    attributes: {
+                      'class': 'nav-link${isActive ? ' active' : ''}',
+                      'href': e,
+                      if (isActive) 'aria-current': 'page',
+                    },
+                    children: [
+                      txt(
+                        e == '/'
+                            ? 'Home'
+                            : '${e.substring(1, 2).toUpperCase()}${e.substring(2)}',
+                      )
+                    ],
+                  );
+                },
+              ),
+            ]);
+          })
+        ],
+      ),
+      // form(
+      //   className: 'd-flex',
+      //   children: [
+      //     input(
+      //       className: 'form-control me-2',
+      //       type: 'search',
+      //       placeholder: 'Search',
+      //     ),
+      //     button(
+      //       className: btn(),
+      //       type: 'submit',
+      //       children: [txt('Search')],
+      //     )
+      //   ],
+      // ),
+      //   ],
+      // ),
+      div(
+        style: 'flex:1;width:100%;',
+        children: [
+          rendered.node,
+        ],
+      )
+    ],
+  );
+}
+
 class HomeRoute extends StaticRoute {
-  const HomeRoute() : super('/');
+  const HomeRoute._() : super('/');
+  static HomeRoute get instance => const HomeRoute._();
 
   @override
   DeactNode render(RouteParams value) {
@@ -74,7 +160,8 @@ class HomeRoute extends StaticRoute {
 }
 
 class AboutRoute extends StaticRoute {
-  const AboutRoute() : super('/about');
+  const AboutRoute._() : super('/about');
+  static AboutRoute get instance => const AboutRoute._();
 
   @override
   DeactNode render(RouteParams value) {
@@ -120,7 +207,8 @@ class TodosParamsParser implements ReqParser<TodosParams> {
 }
 
 class TodosRoute extends Route<TodosParams, TodosData> {
-  const TodosRoute();
+  const TodosRoute._();
+  static TodosRoute get instance => const TodosRoute._();
 
   @override
   String get path => '/todos';
@@ -155,7 +243,8 @@ class TodosRoute extends Route<TodosParams, TodosData> {
 }
 
 class TodoRoute extends Route<String, TodoData?> {
-  const TodoRoute();
+  const TodoRoute._();
+  static TodoRoute get instance => const TodoRoute._();
 
   @override
   String get path => '/todos/:id';
