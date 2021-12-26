@@ -131,17 +131,27 @@ String flexStyle({
   AxisAlign main = AxisAlign.start,
   AxisAlign cross = AxisAlign.center,
   FlexWrap? wrap,
+  bool expand = false,
 }) {
   return 'display:flex;${column ? 'flex-direction:column;' : ''}'
       'justify-content:${main.nameHtml};align-items:${cross.nameHtml};'
-      '${wrap == null ? '' : 'flex-wrap:${wrap.nameHtml};'}';
+      '${wrap == null ? '' : 'flex-wrap:${wrap.nameHtml};'}'
+      '${column ? 'width:100%;' : 'height:100%;'}${expand ? column ? 'height:100%;' : 'width:100%;' : ''}';
 }
 
 String colStyle({
   AxisAlign main = AxisAlign.start,
   AxisAlign cross = AxisAlign.center,
+  bool expand = false,
+  FlexWrap? wrap,
 }) {
-  return flexStyle(column: true, main: main, cross: cross);
+  return flexStyle(
+    column: true,
+    main: main,
+    cross: cross,
+    expand: expand,
+    wrap: wrap,
+  );
 }
 
 /// Close Button https://getbootstrap.com/docs/5.1/components/close-button/

@@ -18,7 +18,7 @@ class CreateTodoSection extends ComponentNode {
 
     return form(
       className:
-          '${BText.start} p-3 ${roundedClass(size: RoundedSize.s2)} ${borderClass()}',
+          '${BText.start} m-2 p-3 ${roundedClass(size: RoundedSize.s2)} ${borderClass()}',
       style: colStyle(cross: AxisAlign.stretch) + 'width:100%;',
       children: [
         div(
