@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/navbar.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
+import 'package:bootstrap_dart_example/cacho/cacho_view.dart';
+import 'package:bootstrap_dart_example/continental/continental_view.dart';
 import 'package:bootstrap_dart_example/todo_store.dart';
 import 'package:bootstrap_dart_example/todo_view.dart';
 import 'package:deact/deact.dart';
@@ -21,6 +23,8 @@ List<Route> allRoutes() {
     AboutRoute.instance,
     TodosRoute.instance,
     TodoRoute.instance,
+    CachoRoute.instance,
+    ContinentalRoute.instance,
   ];
 }
 
@@ -82,34 +86,41 @@ DeactNode appBarWrapper(RenderedRoute rendered) {
             print(route.route?.path);
 
             ctx.hookEffect(
-                () => () => print('DISPOSED ${ctx.hashCode}'), const []);
-            return div(className: 'navbar-nav me-auto', children: [
-              ...const [
-                '/',
-                '/todos',
-                '/about',
-              ].map(
-                (e) {
-                  final isActive = route.route?.path == e;
+              () => () => print('DISPOSED ${ctx.hashCode}'),
+              const [],
+            );
+            return div(
+              className: 'navbar-nav me-auto',
+              children: [
+                ...const [
+                  '/',
+                  '/todos',
+                  '/cacho',
+                  '/continental',
+                  '/about',
+                ].map(
+                  (e) {
+                    final isActive = route.route?.path == e;
 
-                  return el(
-                    'a',
-                    attributes: {
-                      'class': 'nav-link${isActive ? ' active' : ''}',
-                      'href': e,
-                      if (isActive) 'aria-current': 'page',
-                    },
-                    children: [
-                      txt(
-                        e == '/'
-                            ? 'Home'
-                            : '${e.substring(1, 2).toUpperCase()}${e.substring(2)}',
-                      )
-                    ],
-                  );
-                },
-              ),
-            ]);
+                    return el(
+                      'a',
+                      attributes: {
+                        'class': 'nav-link${isActive ? ' active' : ''}',
+                        'href': e,
+                        if (isActive) 'aria-current': 'page',
+                      },
+                      children: [
+                        txt(
+                          e == '/'
+                              ? 'Home'
+                              : '${e.substring(1, 2).toUpperCase()}${e.substring(2)}',
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ],
+            );
           })
         ],
       ),
@@ -231,12 +242,12 @@ class TodosRoute extends Route<TodosParams, TodosData> {
       className: 'container',
       style: colStyle(),
       children: [
-        CreateTodoSection(),
+        const CreateTodoSection(),
         h3(
           className: 'mb-3 mt-4',
           children: [txt('Todos')],
         ),
-        TodoList(),
+        const TodoList(),
       ],
     );
   }
