@@ -52,6 +52,10 @@ class TodoData {
   final tags = ObservableList<String>();
   final dueDate = Observable<DateTime?>(null);
   final color = Observable<String>('#ffffff');
+  final duration = Observable<Duration?>(null);
+
+  final importance = Observable<int>(1);
+  final parentTodoId = Observable<String?>(null);
 
   final DateTime createdAt;
 

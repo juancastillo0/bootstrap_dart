@@ -1,6 +1,7 @@
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/checks_radios.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
+import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'package:bootstrap_dart/bootstrap/offcanvas.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
 import 'package:bootstrap_dart_example/todo_form.dart';
@@ -10,7 +11,7 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 
 class CreateTodoSection extends ComponentNode {
-  CreateTodoSection({Object? key}) : super(key: key);
+  const CreateTodoSection({Object? key}) : super(key: key);
 
   @override
   DeactNode render(ComponentContext ctx) {
@@ -61,7 +62,7 @@ class CreateTodoSection extends ComponentNode {
               ctx.setUpScoped(TodoData.scoped, todo);
 
               return fragment([
-                CreateTodoForm(),
+                const CreateTodoForm(),
                 div(
                   className: BText.end,
                   children: [
@@ -102,24 +103,31 @@ DeactNode tagsList(
     className: 'flex-grow-1 mx-2',
     style: 'overflow-x:auto;',
     children: [
-      if (tags.isEmpty) onEmpty ?? txt('No tags selected'),
+      span(
+        style: tags.isNotEmpty ? 'display:none;' : null,
+        children: [
+          onEmpty ?? txt('No tags selected'),
+        ],
+      ),
       ...tags.map(
-        (element) => button(
-          key: element,
-          type: 'button',
-          onclick: (_) {
-            onClick(element);
-          },
-          className: badge(color: color, rounded: true) + ' m-1 border-0',
-          children: [txt(element)],
-        ),
+        (element) {
+          return button(
+            key: element,
+            type: 'button',
+            onclick: (_) {
+              onClick(element);
+            },
+            className: badge(color: color, rounded: true) + ' m-1 border-0',
+            children: [txt(element)],
+          );
+        },
       )
     ],
   );
 }
 
 class TodoList extends ComponentNode {
-  TodoList({Object? key}) : super(key: key);
+  const TodoList({Object? key}) : super(key: key);
 
   @override
   DeactNode render(ComponentContext ctx) {
@@ -172,52 +180,143 @@ class TodoList extends ComponentNode {
           ),
         ],
       ),
-      if (todos.filtered.value.isEmpty)
-        div(
-          className: 'm-3',
-          children: [txt('No todos found')],
-        ),
-      ...todos.filtered.value.map(
-        (e) => card(
-          key: e.id,
-          id: e.id,
-          cardClasses: 'm-2',
-          cardStyle: 'width:100%;',
-          title: span(
-            className: e.done.value ? BTypography.s : null,
-            children: [txt(e.title.value)],
-          ),
-          content: div(
-            children: [
-              div(children: [txt(e.id)]),
-              div(
-                className: BTypography.textMuted,
-                style: 'font-size:0.7em;',
-                children: [txt(e.createdAt.toString())],
-              ),
-              tagsList(
-                e.tags,
-                (_) {},
-              ),
-            ],
-          ),
-          footer: div(
-            style: flexStyle(main: AxisAlign.space_between),
-            children: [
-              a(
-                href: '/todos/${e.id}',
-                children: [txt('view detail')],
-              ),
-              check(
-                checked: e.done.value,
-                onChange: (v) => e.done.value = v,
-                label: txt('Done'),
-                id: '${e.id}-done',
-              ),
-            ],
-          ),
-        ),
+      div(
+        className: 'm-3',
+        style: todos.filtered.value.isNotEmpty ? 'display:none;' : '',
+        children: [txt('No todos found')],
       ),
+      div(
+        style: 'width:100%;',
+        children: [
+          ...todos.filtered.value.map(
+            (e) => fc(
+              (ctx) {
+                ctx.setUpScoped(TodoData.scoped, e);
+                return const TodoItemView();
+              },
+              key: e.id,
+            ),
+          ),
+        ],
+      )
     ]);
+  }
+}
+
+class TodoItemView extends ComponentNode {
+  const TodoItemView({Object? key}) : super(key: key);
+
+  @override
+  DeactNode render(ComponentContext ctx) {
+    final TodoData e = ctx.scoped(TodoData.scoped);
+
+    return card(
+      key: 'card-${e.id}',
+      id: 'card-${e.id}',
+      cardClasses: 'm-2',
+      title: span(
+        className: e.done.value ? BTypography.s : null,
+        children: [txt(e.title.value)],
+      ),
+      content: div(
+        children: [
+          div(children: [txt(e.id)]),
+          div(
+            className: BTypography.textMuted,
+            style: 'font-size:0.7em;',
+            children: [txt(e.createdAt.toString())],
+          ),
+          tagsList(
+            e.tags,
+            (_) {},
+          ),
+        ],
+      ),
+      footer: div(
+        style: flexStyle(main: AxisAlign.space_between),
+        children: [
+          a(
+            href: '/todos/${e.id}',
+            children: [txt('view detail')],
+          ),
+          fc((ctx) {
+            final showModal = ctx.hookState(() => false);
+            final modalRef = ctx.hookRef<Modal?>(() => null);
+            ctx.hookEffect(() {
+              if (showModal.value) {
+                modalRef.value!.show();
+                final subs = modalRef.value!.events.listen((event) {
+                  if (event.type == ModalEventType.hidden) {
+                    showModal.value = false;
+                  }
+                });
+                return subs.cancel;
+              }
+            }, [showModal.value]);
+
+            return div(children: [
+              button(
+                className: btn(outlined: true),
+                type: 'button',
+                onclick: (_) {
+                  showModal.value = !showModal.value;
+                },
+                children: [
+                  icon(BIcon.pencil_square),
+                  el(
+                    'span',
+                    attributes: {'style': 'padding-left:10px;'},
+                    children: [txt('Edit')],
+                  ),
+                ],
+              ),
+              if (!showModal.value)
+                el('div')
+              else
+                modal(
+                  id: 'edit-modal-${e.id}',
+                  modalRef: modalRef,
+                  dialog: modalDialog(
+                    dialogClass: modalDialogClass(
+                      fullScreen: ResponsiveBreakPoint.sm,
+                      size: DialogSize.xl,
+                    ),
+                    body: const [CreateTodoForm()],
+                    footer: [
+                      div(
+                        className: BText.end,
+                        children: [
+                          el(
+                            'button',
+                            attributes: {
+                              'class': btn(),
+                              'type': 'button',
+                              'data-bs-toggle': 'modal',
+                            },
+                            children: [
+                              icon(BIcon.x_lg),
+                              el(
+                                'span',
+                                attributes: {'style': 'padding-left:10px;'},
+                                children: [txt('Close')],
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+            ]);
+          }),
+          check(
+            checked: e.done.value,
+            onChange: (v) => e.done.value = v,
+            label: txt('Done'),
+            id: '${e.id}-done',
+          ),
+        ],
+      ),
+    );
   }
 }
