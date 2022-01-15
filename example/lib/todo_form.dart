@@ -1,7 +1,10 @@
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/form.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
+import 'package:bootstrap_dart/bootstrap/typography.dart';
 import 'package:bootstrap_dart/hooks.dart';
+import 'package:bootstrap_dart_example/duration_input.dart';
+import 'package:bootstrap_dart_example/int_input.dart';
 import 'package:bootstrap_dart_example/todo_store.dart';
 import 'package:bootstrap_dart_example/todo_view.dart';
 import 'package:deact/deact.dart';
@@ -9,73 +12,97 @@ import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 
 class CreateTodoForm extends ComponentNode {
-  CreateTodoForm({Object? key}) : super(key: key);
+  const CreateTodoForm({Object? key}) : super(key: key);
 
   @override
   DeactNode render(ComponentContext ctx) {
     final todo = ctx.scoped(TodoData.scoped);
 
-    return fragment([
-      div(
-        className: 'row',
-        children: [
-          labeledInput(
-            label: txt('Title'),
+    return div(
+      className: 'row ${BText.start}',
+      children: [
+        labeledInput(
+          label: txt('Title'),
+          id: 'todo-title',
+          divClass: 'col-md-4 py-2',
+          input: input(
+            value: todo.title.value,
+            className: formControlClass(),
+            type: 'text',
+            placeholder: '',
             id: 'todo-title',
-            divClass: 'col-md-4 py-2',
-            input: input(
-              value: todo.title.value,
-              className: formControlClass(),
-              type: 'text',
-              placeholder: '',
-              id: 'todo-title',
-              required: '',
-              oninput: (e) =>
-                  todo.title.value = (e.target as html.InputElement).value!,
-            ),
+            required: '',
+            oninput: (e) =>
+                todo.title.value = (e.target as html.InputElement).value!,
           ),
-          labeledInput(
-            label: txt('Due Date'),
+        ),
+        labeledInput(
+          label: txt('Due Date'),
+          id: 'todo-duedate',
+          divClass: 'col-7 col-md-4 py-2',
+          input: input(
+            value: todo.dueDate.value?.toString().split(' ').first,
+            className: formControlClass(),
+            type: 'date',
             id: 'todo-duedate',
-            divClass: 'col-7 col-md-4 py-2',
-            input: input(
-              value: todo.dueDate.value?.toString().split(' ').first,
-              className: formControlClass(),
-              type: 'date',
-              id: 'todo-duedate',
-              oninput: (e) {
-                final date = (e.target as html.InputElement).value!;
-                todo.dueDate.value = DateTime.tryParse(date);
-              },
-            ),
+            oninput: (e) {
+              final date = (e.target as html.InputElement).value!;
+              todo.dueDate.value = DateTime.tryParse(date);
+            },
           ),
-          labeledInput(
-            label: txt('Color (${todo.color.value})'),
+        ),
+        labeledInput(
+          label: txt('Color (${todo.color.value})'),
+          id: 'todo-color',
+          divClass: 'col-5 col-md-3 py-2',
+          input: input(
+            value: todo.color.value,
+            className: formControlClass(color: true),
+            type: 'color',
             id: 'todo-color',
-            divClass: 'col-5 col-md-3 py-2',
-            input: input(
-              value: todo.color.value,
-              className: formControlClass(color: true),
-              type: 'color',
-              id: 'todo-color',
-              oninput: (e) {
-                final color = (e.target as html.InputElement).value!;
-                todo.color.value = color;
-              },
-            ),
+            oninput: (e) {
+              final color = (e.target as html.InputElement).value!;
+              todo.color.value = color;
+            },
           ),
-          div(
-            className: 'col-md-7 py-2',
-            children: [TodoTagsInput()],
-          )
-        ],
-      ),
-    ]);
+        ),
+        div(
+          className: 'col-md-6 py-2',
+          children: const [TodoTagsInput()],
+        ),
+        div(
+          className: 'col-sm-6 col-md-5 py-2',
+          children: [
+            DurationInput(
+              duration: todo.duration.value ?? const Duration(),
+              onChanged: (dur) => todo.duration.value = dur,
+            ),
+          ],
+        ),
+        div(
+          className: 'col-sm-6 col-md-4 py-2',
+          children: [
+            fc(
+              (ctx) => IntInput(
+                value: todo.importance.value,
+                onChanged: (v) => todo.importance.value = v,
+                minimum: 1,
+                maximum: 10,
+                label: label(
+                  forId: 'todo-importance-${todo.id}',
+                  children: [txt('Importance')],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 
 class TodoTagsInput extends ComponentNode {
-  TodoTagsInput({Object? key}) : super(key: key);
+  const TodoTagsInput({Object? key}) : super(key: key);
 
   @override
   DeactNode render(ComponentContext ctx) {
