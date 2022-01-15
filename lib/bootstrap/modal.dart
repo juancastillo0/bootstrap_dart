@@ -43,6 +43,37 @@ extension ModalEventExt on ModalEventType {
   String get name => toString().split('.').last;
 }
 
+class ModalHook {
+  final State<bool> show;
+  final Ref<Modal?> ref;
+
+  ModalHook(this.show, this.ref);
+
+  void toggle() => show.value = !show.value;
+}
+
+ModalHook useModal(ComponentContext ctx) {
+  final showModal = ctx.hookState(() => false);
+  final modalRef = ctx.hookRef<Modal?>(() => null);
+
+  ctx.hookEffect(() {
+    if (showModal.value) {
+      modalRef.value!.show();
+      final subs = modalRef.value!.events.listen((event) {
+        if (event.type == ModalEventType.hidden) {
+          showModal.value = false;
+        }
+      });
+      return () {
+        subs.cancel();
+        modalRef.value!.hide();
+      };
+    }
+  }, [showModal.value]);
+
+  return ModalHook(showModal, modalRef);
+}
+
 DeactNode modal({
   Object? key,
   required String id,
