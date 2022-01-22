@@ -1,11 +1,20 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:bootstrap_dart/server_renderer.dart';
+import 'package:bootstrap_dart_example/continental/continental_command.dart';
+import 'package:bootstrap_dart_example/database.dart';
 import 'package:collection/collection.dart';
+import 'package:idb_shim/idb_browser.dart';
 import 'package:mobx/mobx.dart';
+import 'package:idb_shim/idb.dart' as idb;
 
 import 'package:bootstrap_dart_example/mobx_helpers.dart';
 
 class ContinentalData {
+  final String key;
+  final String playerId;
   final ContinentalStep step;
   final Card? topCard;
   final int? currentPlayerIndex;
@@ -19,6 +28,8 @@ class ContinentalData {
   final ContinentalPlayStep playerStep;
 
   ContinentalData({
+    required this.key,
+    required this.playerId,
     required this.step,
     required this.topCard,
     required this.currentPlayerIndex,
@@ -33,12 +44,74 @@ class ContinentalData {
   });
 }
 
-class ContinentalStore extends TreeStore {
-  ContinentalStore({Random? random}) : _random = random ?? Random();
-  final Random _random;
+class ContinentalStore extends TreeStore<ContinentalComm, String> {
+  ContinentalStore({required this.key, int? randomSeed})
+      : randomSeed = randomSeed ?? Random.secure().nextInt(1e9.toInt()) {
+    setUp();
+    _random = Random(randomSeed);
+    _db.complete(_createIDB());
+  }
+  int randomSeed;
+  late Random _random;
+  final String key;
+  final Completer<idb.Database?> _db = Completer();
+  bool _loading = false;
+  Future? _txFuture;
+  Future<idb.Database?> db() async {
+    if (_txFuture != null) return _txFuture!.then((value) => db());
+    return _db.future;
+  }
+
+  void setUp() {
+    on<ContinentalCommStart>((p) => _start());
+    on<ContinentalCommAddPlayer>((p) => _addPlayer(p.playerId));
+    on<ContinentalCommComer>((p) => _comer(fromDropped: p.fromDropped));
+    on<ContinentalCommCastigarse>((p) => _castigarse(p.playerId));
+    on<ContinentalCommBajar>((p) => _bajar(p.cardSet));
+  }
 
   @override
-  void onSuccess(Object? event) {}
+  void onSuccess(ContinentalComm command) async {
+    if (kIsWeb && !_loading && getIdbFactory() != null) {
+      final tx =
+          (await db())!.transaction(ClientDB.commandsTableName, 'readwrite');
+      final objStore = tx.objectStore(ClientDB.commandsTableName);
+      final _comm = jsonDecode(
+        jsonEncode(command.toJson()..['storeKey'] = key),
+      );
+      objStore.add(_comm);
+      _txFuture = tx.completed;
+      await tx.completed;
+      _txFuture = null;
+    }
+  }
+
+  Future<idb.Database?> _createIDB() async {
+    if (!kIsWeb) return null;
+    final db = await ClientDB.get();
+    final tx = db!.transaction(ClientDB.commandsTableName, 'readwrite');
+    final objStore = tx.objectStore(ClientDB.commandsTableName);
+    final values = await objStore.getAll(null);
+    print('_createIDB $values');
+
+    if (values.isNotEmpty) {
+      runInAction(() {
+        _loading = true;
+        randomSeed = (values.first as Map)['seed'] as int;
+        _random = Random(randomSeed);
+
+        for (final v in values.skip(1)) {
+          final comm = ContinentalComm.fromJson(castMap(v as Map));
+          consume(comm);
+        }
+        _loading = false;
+      });
+    } else {
+      await objStore.add({'seed': randomSeed, 'storeKey': key});
+    }
+    await tx.completed;
+    return db;
+  }
 
   late final step = obs(ContinentalStep.tt);
   late final playerStep = obs(ContinentalPlayStep.eating);
@@ -68,20 +141,20 @@ class ContinentalStore extends TreeStore {
   ContinentalPlayer? playerById(String playerId) =>
       players.firstWhereOrNull((element) => element.id == playerId);
 
-  late final addPlayer = Action1('addPlayer', (String playerId) {
+  void _addPlayer(String playerId) {
     if (playerById(playerId) == null) {
       players.add(ContinentalPlayer(id: playerId));
     } else {
       throw 'Player "$playerId" already in game.';
     }
-  });
+  }
 
-  late final start = Action(() {
+  void _start() {
     if (currentPlayerIndex.value != null) return;
     _resetCards();
-  });
+  }
 
-  late final castigarse = Action1('castigarse', (String playerId) {
+  void _castigarse(String playerId) {
     final _card = topCard.value;
     final player = playerById(playerId);
     if (_card == null ||
@@ -94,16 +167,16 @@ class ContinentalStore extends TreeStore {
     final newCard = _selectNewCard();
     player.cards.add(_card);
     player.cards.add(newCard);
-  });
+  }
 
-  late final comer = Action1('comer', (bool newCard) {
+  void _comer({required bool fromDropped}) {
     final player = currentPlayer.value;
     if (player == null || playerStep.value != ContinentalPlayStep.eating) {
       throw 'Wrong state for eating.';
     }
 
     final Card card;
-    if (newCard) {
+    if (!fromDropped) {
       card = _selectNewCard();
     } else {
       final _card = topCard.value;
@@ -113,9 +186,9 @@ class ContinentalStore extends TreeStore {
     }
     player.cards.add(card);
     playerStep.value = ContinentalPlayStep.dropping;
-  });
+  }
 
-  late final bajar = Action1('bajar', (CardSet cardSet) {
+  void _bajar(CardSet cardSet) {
     final player = currentPlayer.value;
     if (player == null) throw 'Not playing.';
     if (playerStep.value != ContinentalPlayStep.dropping) {
@@ -184,12 +257,14 @@ class ContinentalStore extends TreeStore {
       currentPlayerIndex.value =
           (currentPlayerIndex.value! + 1) % players.length;
     }
-  });
+  }
 
   ContinentalData dataForPlayer(String playerId) {
     final player = playerById(playerId)!;
 
     return ContinentalData(
+      key: key,
+      playerId: playerId,
       step: step.value,
       topCard: topCard.value,
       currentPlayerIndex: currentPlayerIndex.value,
@@ -291,88 +366,6 @@ class ContinentalStore extends TreeStore {
 enum ContinentalPlayStep {
   eating,
   dropping,
-}
-
-class CardSet {
-  final List<List<Card>> threesomes;
-  final List<List<Card>> stairs;
-  final List<ExternalCard> external;
-  final Card? toDrop;
-
-  const CardSet({
-    this.threesomes = const [],
-    this.stairs = const [],
-    this.external = const [],
-    required this.toDrop,
-  });
-
-  Iterable<Card> allCards() => threesomes
-      .expand((e) => e)
-      .followedBy(stairs.expand((e) => e))
-      .followedBy(external.map((e) => e.card))
-      .followedBy([if (toDrop != null) toDrop!]);
-
-  bool validate() {
-    return threesomes.every((cards) {
-          final nonJoker = cards.where((c) => c.n != CardN.joker).toList();
-          return cards.length == 3 &&
-              nonJoker.map((e) => e.n).toSet().length == 1 &&
-              nonJoker.map((e) => e.type).toSet().length == nonJoker.length;
-        }) &&
-        stairs.every((cards) {
-          int? p;
-          for (final c in cards) {
-            if (c.n != CardN.joker) {
-              if (p == null || p == c.n.index - 1) {
-                p = c.n.index;
-              } else {
-                return false;
-              }
-            } else if (p != null) {
-              p += 1;
-            }
-          }
-          final nonJoker = cards.where((c) => c.n != CardN.joker).toList();
-          return cards.length == 4 &&
-              nonJoker.map((e) => e.type).toSet().length == 1;
-        });
-  }
-}
-
-class ExternalCard {
-  final Card card;
-  final String playerId;
-  final int tableCardsId;
-  final int position;
-
-  const ExternalCard(
-    this.card,
-    this.playerId,
-    this.tableCardsId,
-    this.position,
-  );
-}
-
-class Card {
-  final CardN n;
-  final CardType type;
-
-  const Card(this.n, this.type);
-
-  @override
-  String toString() => 'Card(n: $n, type: $type)';
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Card &&
-        other.n == n &&
-        (n == CardN.joker || other.type == type);
-  }
-
-  @override
-  int get hashCode =>
-      n == CardN.joker ? n.hashCode : n.hashCode ^ type.hashCode;
 }
 
 class ContinentalPlayer {
