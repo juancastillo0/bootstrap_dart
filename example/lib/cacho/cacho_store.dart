@@ -1,56 +1,72 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:bootstrap_dart_example/cacho/cacho_command.dart';
 import 'package:bootstrap_dart_example/mobx_helpers.dart';
+import 'package:bootstrap_dart_example/sql_db/database.dart';
 import 'package:mobx/mobx.dart';
 
-class CachoData {
-  final int totalDices;
-  final bool canCazar;
-  final int? minAs;
-  final int? minOther;
-  final bool isPlaying;
-  final int playerNumber;
-  final List<String> players;
-  final String? currentPlayer;
-  final String? previousPlayer;
-  final Suggestion? currentSuggestion;
-  final SuggestionDices? currentDiceSuggestion;
-  final List<int> dices;
-  final List<String> salpiconedPlayers;
-
-  CachoData({
-    required this.totalDices,
-    required this.canCazar,
-    required this.minAs,
-    required this.minOther,
-    required this.isPlaying,
-    required this.playerNumber,
-    required this.players,
-    required this.currentPlayer,
-    required this.previousPlayer,
-    required this.currentSuggestion,
-    required this.currentDiceSuggestion,
-    required this.dices,
-    required this.salpiconedPlayers,
-  });
-}
-
 class CachoStore extends TreeStore<CachoCommand, String> {
-  CachoStore({Random? random}) : _random = random ?? Random() {
+  CachoStore({
+    int? randomSeed,
+    required this.db,
+    required this.key,
+  }) : _randomSeed = randomSeed ?? Random().nextInt(1e9.toInt()) {
+    _random = Random(_randomSeed);
     setUp();
   }
-  final Random _random;
+  final String key;
+  late Random _random;
+  int _randomSeed;
 
-  void setUp() {
+  final SharedDatabase db;
+  int lastCommandId = -1;
+  bool _updating = false;
+
+  void setUp() async {
     on<CachoCommandSuggest>((c) => suggest(c.suggestion));
     on<CachoCommandCazar>((c) => cazar());
     on<CachoCommandDudar>((c) => dudar());
     on<CachoCommandStart>((c) => start());
+
+    await db.transaction(() async {
+      final commands = await db.getCommands(stateId: key, lastCommandId: null);
+      if (commands.isNotEmpty) {
+        _updating = true;
+        runInAction(() {
+          final seed = jsonDecode(commands.first.payload)['seed'] as int;
+          _randomSeed = seed;
+          _random = Random(seed);
+
+          for (final comm in commands.skip(1)) {
+            consume(CachoCommand.fromJson(jsonDecode(comm.payload)));
+          }
+          lastCommandId = commands.last.id;
+        });
+        _updating = false;
+      } else {
+        lastCommandId = await db.insertCommand(
+          payload: jsonEncode({'seed': _randomSeed}),
+          stateId: key,
+          type: 'cacho',
+          userId: '',
+        );
+      }
+    });
   }
 
   @override
-  void onSuccess(CachoCommand command) {}
+  void onSuccess(CachoCommand command) async {
+    if (_updating) return;
+    if (lastCommandId == -1) throw '';
+
+    lastCommandId = await db.insertCommand(
+      payload: jsonEncode(command),
+      stateId: key,
+      type: 'cacho',
+      userId: '',
+    );
+  }
 
   ///
   /// Observables/State
@@ -105,6 +121,7 @@ class CachoStore extends TreeStore<CachoCommand, String> {
 
   CachoData data(String playerId) {
     return CachoData(
+      id: key,
       totalDices: totalDices.value,
       canCazar: canCazar.value,
       minAs: minAs.value,
@@ -257,6 +274,7 @@ enum CachoPlayState {
 class CachoPlayerStore {
   final String id;
   final dices = ObservableList<int>();
+  final isActive = Observable(true);
 
   late final isPlaying = Computed(() => dices.isNotEmpty);
 

@@ -2,12 +2,17 @@ import 'dart:math';
 
 import 'package:bootstrap_dart_example/cacho/cacho_command.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_store.dart';
+import 'package:bootstrap_dart_example/sql_db/database.dart';
+import 'package:drift/native.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('cacho store', () {
-    final random = Random(42);
-    final store = CachoStore(random: random);
+    final store = CachoStore(
+      randomSeed: 42,
+      db: SharedDatabase(NativeDatabase.memory()),
+      key: 'test-key',
+    );
     const id1 = 'id1';
     const id2 = 'id2';
     store.addPlayer(id1);
@@ -36,8 +41,8 @@ void main() {
     expect(store.currentPlayer.value, id2);
     expect(store.previousPlayerModel.value?.id, id1);
 
-    store.suggest(Suggestion.salpicon);
-    expect(store.currentSuggestion.value, Suggestion.salpicon);
+    store.suggest(const Suggestion.salpicon());
+    expect(store.currentSuggestion.value, const Suggestion.salpicon());
     expect(store.currentDiceSuggestion.value, suggestion);
     expect(store.currentPlayer.value, id1);
     expect(store.previousPlayerModel.value?.id, id2);

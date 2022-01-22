@@ -6,6 +6,7 @@ import 'package:bootstrap_dart/router.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_command.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_store.dart';
 import 'package:bootstrap_dart_example/int_input.dart';
+import 'package:bootstrap_dart_example/sql_db/database.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 
@@ -30,7 +31,7 @@ class CachoParams {
 }
 
 final _cachoStore = () {
-  final s = CachoStore();
+  final s = CachoStore(db: constructDb(), key: 'cacho-test');
   s.addPlayer('player 1');
   s.addPlayer('player 2');
   return s;
@@ -192,7 +193,9 @@ class CachoView extends ComponentNode {
                 type: 'button',
                 className: btn(color: BColor.dark),
                 onclick: (_) {
-                  _cachoStore.consume(CachoCommandSuggest(Suggestion.salpicon));
+                  _cachoStore.consume(CachoCommandSuggest(
+                    const Suggestion.salpicon(),
+                  ));
                 },
                 children: [txt('Salpicon')],
               ),
