@@ -1,0 +1,54 @@
+type Query
+
+type Mutation {
+  createCacho: CachoData!
+  sendCachoCommand(gameId: String!, command: CachoCommandInput!): String
+}
+
+type CachoData {
+  id: ID!
+  totalDices: Int!
+  canCazar: Boolean!
+  minAs: Int
+  minOther: Int
+  isPlaying: Boolean!
+  playerNumber: Int!
+  players: [String!]!
+  currentPlayer: String
+  previousPlayer: String
+  currentSuggestion: Suggestion
+  currentDiceSuggestion: SuggestionDices
+  dices: [Int!]!
+  salpiconedPlayers: [String!]!
+}
+
+union Suggestion = SuggestionDices | SuggestionSalpicon
+
+type SuggestionDices {
+  compareTo(other: SuggestionDicesInput!): Int!
+  amount: Int!
+  dice: Int!
+}
+
+input SuggestionDicesInput {
+  amount: Int!
+  dice: Int!
+}
+
+type SuggestionSalpicon
+
+input CachoCommandInput @oneOf {
+  suggest: SuggestionInput
+  start: Boolean
+  cazar: Boolean
+  dudar: Boolean
+}
+
+input SuggestionInput @oneOf {
+  dices: SuggestionDicesInput
+  salpicon: Boolean
+}
+
+type Subscription {
+  cachoState(gameId: String!): CachoData!
+}

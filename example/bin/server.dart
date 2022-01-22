@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bootstrap_dart/router.dart';
+import 'package:bootstrap_dart_example/graphql_api.schema.dart';
 import 'package:bootstrap_dart_example/route_example.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
@@ -22,6 +23,9 @@ Future<HttpServer> createServer() async {
 }
 
 Future<Handler> handler() async {
+  final schemaFile = await File('./lib/schema.graphql').create();
+  await schemaFile.writeAsString(recreateGraphQLApiSchema().schemaStr);
+
   final router = appRouter();
   final template = await File('./web/index.html').readAsString();
   final proxy = proxyHandler('http://localhost:8050/');
