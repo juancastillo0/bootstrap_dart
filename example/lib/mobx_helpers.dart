@@ -1,5 +1,5 @@
-import 'package:mobx/mobx.dart';
 import 'package:meta/meta.dart';
+import 'package:mobx/mobx.dart';
 
 class Action1<T, O> {
   final Action action;
@@ -35,7 +35,7 @@ class TreeMap<K, V> {
   TreeMap(this.store, this.map);
 }
 
-abstract class TreeStore<C, E extends Object> {
+abstract class TreeStore<C extends Object, E extends Object> {
   @protected
   TreeValue<T> obs<T>(T initialValue) => TreeValue(this, initialValue);
 
@@ -43,29 +43,53 @@ abstract class TreeStore<C, E extends Object> {
   TreeMap<K, V> obsMap<K, V>(ObservableMap<K, V> initialValue) =>
       TreeMap(this, initialValue);
 
-  final Map<Object, Action> _handlers = {};
+  final Map<_Type, Action> _handlers = {};
 
   @protected
   void on<T extends C>(void Function(T) handler) {
-    _handlers[T] = Action(handler, name: T.toString());
+    _handlers[_Type<T>()] = Action(handler, name: T.toString());
   }
 
   StoreError<C, E>? consume<T extends C>(T command) {
-    final handler = (_handlers[T] ?? _handlers[command.runtimeType])!;
+    final handler = _handlers[_Type<T>()] ??
+        _handlers.entries.firstWhere((e) => e.key.isValue(command)).value;
     try {
       handler.call([command]);
       onSuccess(command);
-    } on E catch (error) {
-      return StoreError(command, error);
+    } on E catch (error, stackTrace) {
+      return StoreError(command, error, stackTrace);
     }
   }
 
   void onSuccess(C command);
 }
 
+class _Type<T> {
+  Type get type => T;
+
+  _Type();
+  bool isValue(Object o) => o is T;
+  bool isType<V>() => V == T;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is _Type<T> && other.type == type;
+  }
+
+  @override
+  int get hashCode => type.hashCode;
+}
+
 class StoreError<C, E> {
   final C command;
   final E error;
+  final StackTrace stackTrace;
 
-  StoreError(this.command, this.error);
+  StoreError(
+    this.command,
+    this.error,
+    this.stackTrace,
+  );
 }
