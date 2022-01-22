@@ -1,17 +1,29 @@
 import 'dart:async';
 
-import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:mobx/mobx.dart';
+import 'package:universal_html/html.dart' as html;
 
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'package:bootstrap_dart/bootstrap/table.dart';
 import 'package:bootstrap_dart/hooks.dart';
 import 'package:bootstrap_dart/router.dart';
+import 'package:bootstrap_dart_example/continental/continental_command.dart';
 import 'package:bootstrap_dart_example/continental/continental_store.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:bootstrap_dart_example/database.dart';
+
+class UrlValue {
+  final bool fromQuery;
+  final String name;
+
+  UrlValue({
+    required this.fromQuery,
+    required this.name,
+  });
+}
 
 class ContinentalParamsParser implements ReqParser<ContinentalParams> {
   const ContinentalParamsParser();
@@ -34,9 +46,13 @@ class ContinentalParams {
 }
 
 final _continentalStore = () {
-  final s = ContinentalStore();
-  s.addPlayer('player 1');
-  s.addPlayer('player 2');
+  final s = ContinentalStore(key: 'test-continental-store');
+  s.db().then((value) {
+    if (s.players.isEmpty) {
+      s.consume(ContinentalComm.addPlayer(playerId: 'player 1'));
+      s.consume(ContinentalComm.addPlayer(playerId: 'player 2'));
+    }
+  });
   return s;
 }();
 
@@ -81,6 +97,9 @@ class ContinentalRoute extends Route<ContinentalParams, ContinentalData?> {
           //     );
           //   });
           // }
+          if (_continentalStore.players.isEmpty) {
+            return div();
+          }
 
           return div(
             children: [
@@ -103,20 +122,66 @@ class ContinentalRoute extends Route<ContinentalParams, ContinentalData?> {
 }
 
 class ContinentalClientStore {
-  ContinentalData? data;
+  late ContinentalData data;
   ContinentalClientStore({
     required ContinentalData data,
   }) {
     setData(data);
+    _setUp();
+  }
+  ReactionDisposer? _disposer;
+
+  void _setUp() async {
+    final json = await ClientDB.getStore(
+      storeKey: data.key,
+      playerId: data.playerId,
+    );
+    if (json != null) {
+      fromJson(json);
+    }
+
+    _disposer = autorun((_) {
+      ClientDB.saveStore(this);
+    }, delay: 2000);
+  }
+
+  void fromJson(Map<String, Object?> json) {
+    runInAction(() {
+      cards.clear();
+      cards.addAll((json['cards'] as List).map((e) => Card.fromJson(e)));
+      cardSet.clear();
+      cardSet.addAll((json['cardSet'] as Map).map(
+        (key, value) {
+          final ids = (key as String).split('-').map(int.parse).toList();
+          return MapEntry(
+            CardSetIndex(groupId: ids[0], innerId: ids[1]),
+            value,
+          );
+        },
+      ));
+
+      setData(data);
+    });
+  }
+
+  Map<String, Object?> toJson() {
+    return {
+      'cards': cards.sublist(0).map((e) => e.toJson()).toList(),
+      'cardSet': cardSet.map(
+        (key, value) => MapEntry('${key.groupId}-${key.innerId}', value),
+      ),
+    };
   }
 
   final cards = ObservableList<Card>();
   final cardSet = ObservableMap<CardSetIndex, int>();
 
   void bajar(int index) {
-    final step = data!.step;
-    if (data!.tableCards.isEmpty && step.index + 6 > cardSet.length) {
-      _continentalStore.bajar(CardSet(toDrop: cards[index]));
+    final step = data.step;
+    if (data.tableCards.isEmpty && step.index + 6 > cardSet.length) {
+      _continentalStore.consume(ContinentalComm.bajar(
+        cardSet: CardSet(toDrop: cards[index]),
+      ));
       return;
     }
 
@@ -138,8 +203,8 @@ class ContinentalClientStore {
         l[_innerGroup].add(cardIndex == null ? null : cards[cardIndex]);
       }
     }
-    _continentalStore.bajar(
-      CardSet(
+    _continentalStore.consume(ContinentalComm.bajar(
+      cardSet: CardSet(
         toDrop: cards[index],
         stairs: stairs
             .map((e) => e.whereType<Card>().toList())
@@ -150,7 +215,7 @@ class ContinentalClientStore {
             .where((e) => e.length == 3)
             .toList(),
       ),
-    );
+    ));
   }
 
   late final usedCards = Computed(
@@ -190,7 +255,7 @@ class ContinentalClientStore {
 
   void setData(ContinentalData data) {
     runInAction(() {
-      if (this.data == data) return;
+      if (_disposer != null && this.data == data) return;
       this.data = data;
       final copy = data.cards.sublist(0);
       final newCards = <Card>[];
@@ -304,7 +369,7 @@ class ContinentalView extends ComponentNode {
             type: 'button',
             className: btn(),
             onclick: (_) {
-              _continentalStore.start();
+              _continentalStore.consume(ContinentalCommStart());
             },
             children: [txt('Start')],
           ),
@@ -341,7 +406,8 @@ class ContinentalView extends ComponentNode {
                       disabled: data.canPunish ? null : '',
                       className: btn(color: BColor.warning),
                       onclick: (_) {
-                        _continentalStore.castigarse(player);
+                        _continentalStore.consume(
+                            ContinentalComm.castigarse(playerId: player));
                       },
                       children: [txt('Castigarse')],
                     )
@@ -352,7 +418,9 @@ class ContinentalView extends ComponentNode {
                       disabled: data.topCard == null ? '' : null,
                       className: btn(),
                       onclick: (_) {
-                        _continentalStore.comer(false);
+                        _continentalStore.consume(
+                          ContinentalComm.comer(fromDropped: true),
+                        );
                       },
                       children: [txt('Eat Dropped')],
                     ),
@@ -362,7 +430,9 @@ class ContinentalView extends ComponentNode {
                       type: 'button',
                       className: btn(),
                       onclick: (_) {
-                        _continentalStore.comer(true);
+                        _continentalStore.consume(
+                          ContinentalComm.comer(fromDropped: false),
+                        );
                       },
                       children: [txt('Eat Random')],
                     ),
@@ -661,10 +731,11 @@ class CardView extends ComponentNode {
         span(
           children: [txt(card.n == CardN.joker ? '🃏' : card.n.name)],
         ),
-        span(
-          style: 'color:${card.type.index < 2 ? 'red' : 'black'};',
-          children: [txt(card.type.unicode)],
-        )
+        if (card.n != CardN.joker)
+          span(
+            style: 'color:${card.type.index < 2 ? 'red' : 'black'};',
+            children: [txt(card.type.unicode)],
+          )
       ],
     );
   }
