@@ -6,3 +6,9 @@ targets:
           named_parameters: true
           generate_values_in_copy_with: true
           # named_parameters_always_required: true
+      artemis:
+        options:
+          schema_mapping:
+            - output: lib/api.graphql.dart
+              schema: lib/schema.graphql
+              queries_glob: lib/*/**.graphql
