@@ -1,0 +1,8 @@
+projects:
+  example:
+    schema: example/lib/schema.graphql
+    documents: example/lib/**/*.{graphql,gql}
+    extensions:
+      endpoints:
+        default:
+          url: http://localhost:8051/graphql
