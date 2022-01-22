@@ -1,0 +1,38 @@
+CREATE TABLE continental_commands (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    storeId TEXT NOT NULL REFERENCES continental_state(id),
+    payload TEXT NOT NULL,
+    playerId TEXT NOT NULL
+);
+
+CREATE TABLE continental_state (
+    id TEXT NOT NULL PRIMARY KEY,
+    payload TEXT NOT NULL
+);
+
+CREATE TABLE command (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    stateId TEXT NOT NULL REFERENCES state(id),
+    userId TEXT NOT NULL,
+    payload TEXT NOT NULL
+);
+
+CREATE TABLE state (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    lastCommandId INT NULL REFERENCES command(id),
+    payload TEXT NOT NULL
+);
+
+selectContinentalCommands: SELECT * FROM continental_commands WHERE storeId = :storeId ORDER BY id;
+insertContinentalCommand: INSERT INTO continental_commands (payload, playerId, storeId) VALUES (:payload, :playerId, :storeId);
+insertContinentalState: INSERT INTO continental_state (id, payload) VALUES (:id, :payload);
+updateContinentalState: UPDATE continental_state SET payload = :payload where id = :id;
+
+
+selectCommands(:lastCommandId AS INT OR NULL): SELECT * FROM command
+    WHERE stateId = :stateId AND id > :lastCommandId ORDER BY id;
+insertCommand: INSERT INTO command (payload, type, userId, stateId) VALUES (:payload, :type, :userId, :stateId);
+insertState: INSERT INTO state (id, type, payload) VALUES (:id, :type, :payload);
+updateState(REQUIRED :lastCommandId AS INT): UPDATE state SET payload = :payload, lastCommandId = :lastCommandId where id = :id;

@@ -1,0 +1,8 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          named_parameters: true
+          generate_values_in_copy_with: true
+          # named_parameters_always_required: true
