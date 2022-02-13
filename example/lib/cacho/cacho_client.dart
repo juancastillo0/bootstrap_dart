@@ -50,7 +50,7 @@ class CachoClient {
     await _load(() async {
       final response = await client.execute(SendCachoCommandMutation(
         variables: SendCachoCommandArguments(
-          gameId: 'data.value.id',
+          gameId: data.value!.id,
           command: command,
         ),
       ));

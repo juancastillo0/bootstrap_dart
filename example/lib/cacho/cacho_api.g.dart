@@ -25,16 +25,20 @@ final _createCachoGraphQLField =
               },
             )));
 
-GraphQLObjectField<String?, Object?, Object?>
+GraphQLObjectField<Result<CachoData, String>, Object?, Object?>
     get sendCachoCommandGraphQLField => _sendCachoCommandGraphQLField.value;
 final _sendCachoCommandGraphQLField = HotReloadableDefinition<
-        GraphQLObjectField<String?, Object?, Object?>>(
-    (setValue) => setValue(graphQLString.field<Object?>(
+        GraphQLObjectField<Result<CachoData, String>, Object?, Object?>>(
+    (setValue) => setValue(resultGraphQLType<CachoData, String>(
+                cachoDataGraphQLType.nonNull(), graphQLString.nonNull())
+            .nonNull()
+            .field<Object?>(
           'sendCachoCommand',
           resolve: (obj, ctx) {
             final args = ctx.args;
 
             final _call = (CachoGQLApi r) => r.sendCachoCommand(
+                ctx,
                 (args["gameId"] as String),
                 (args["command"] as CachoCommandInput));
             // ignore: unnecessary_non_null_assertion
@@ -46,7 +50,7 @@ final _sendCachoCommandGraphQLField = HotReloadableDefinition<
           },
         ))
           ..inputs.addAll([
-            graphQLString.nonNull().coerceToInputObject().inputField('gameId'),
+            graphQLString.nonNull().inputField('gameId'),
             cachoCommandInputGraphQLTypeInput.nonNull().inputField('command')
           ]));
 
@@ -69,9 +73,4 @@ final _cachoStateGraphQLField =
                   return _call(_obj);
               },
             ))
-              ..inputs.addAll([
-                graphQLString
-                    .nonNull()
-                    .coerceToInputObject()
-                    .inputField('gameId')
-              ]));
+              ..inputs.addAll([graphQLString.nonNull().inputField('gameId')]));

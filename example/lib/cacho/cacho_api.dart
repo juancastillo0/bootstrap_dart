@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bootstrap_dart_example/cacho/cacho_command.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_store.dart';
+import 'package:bootstrap_dart_example/models/result.dart';
 import 'package:bootstrap_dart_example/sql_db/database.dart';
 import 'package:bootstrap_dart_example/utils.dart';
 import 'package:leto_schema/leto_schema.dart';
@@ -42,17 +43,20 @@ class CachoGQLApi {
   }
 
   @Mutation()
-  Future<String?> sendCachoCommand(
+  Future<Result<CachoData, String>> sendCachoCommand(
+    Ctx ctx,
     String gameId,
     CachoCommandInput command,
   ) async {
+    final userId = userIdFromCtx(ctx);
     final store = api.stores[gameId];
-    if (store == null) return 'Store "$gameId" not found.';
+    if (store == null) return Err('Store "$gameId" not found.');
 
     final result = await store.consume(command.asCommand());
     if (result != null) {
-      return result.error;
+      return Err(result.error);
     }
+    return Ok(store.data(userId));
     // if (kIsWeb) {
     //   final response = await http.post(
     //     Uri.parse('/graphql'),

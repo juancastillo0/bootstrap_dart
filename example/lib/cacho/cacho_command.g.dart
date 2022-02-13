@@ -22,12 +22,10 @@ final _cachoCommandInputGraphQLTypeInput =
   setValue(__cachoCommandInputGraphQLTypeInput);
   __cachoCommandInputGraphQLTypeInput.fields.addAll(
     [
-      suggestionInputGraphQLTypeInput
-          .coerceToInputObject()
-          .inputField('suggest'),
-      graphQLBoolean.coerceToInputObject().inputField('start'),
-      graphQLBoolean.coerceToInputObject().inputField('cazar'),
-      graphQLBoolean.coerceToInputObject().inputField('dudar')
+      suggestionInputGraphQLTypeInput.inputField('suggest'),
+      graphQLBoolean.inputField('start'),
+      graphQLBoolean.inputField('cazar'),
+      graphQLBoolean.inputField('dudar')
     ],
   );
 
@@ -186,8 +184,8 @@ final _suggestionInputGraphQLTypeInput =
   setValue(__suggestionInputGraphQLTypeInput);
   __suggestionInputGraphQLTypeInput.fields.addAll(
     [
-      suggestionDicesGraphQLTypeInput.coerceToInputObject().inputField('dices'),
-      graphQLBoolean.coerceToInputObject().inputField('salpicon')
+      suggestionDicesGraphQLTypeInput.inputField('dices'),
+      graphQLBoolean.inputField('salpicon')
     ],
   );
 
@@ -267,8 +265,8 @@ final _suggestionDicesGraphQLTypeInput =
   setValue(__suggestionDicesGraphQLTypeInput);
   __suggestionDicesGraphQLTypeInput.fields.addAll(
     [
-      graphQLInt.nonNull().coerceToInputObject().inputField('amount'),
-      graphQLInt.nonNull().coerceToInputObject().inputField('dice')
+      graphQLInt.nonNull().inputField('amount'),
+      graphQLInt.nonNull().inputField('dice')
     ],
   );
 

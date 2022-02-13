@@ -2,7 +2,7 @@ type Query
 
 type Mutation {
   createCacho: CachoData!
-  sendCachoCommand(gameId: String!, command: CachoCommandInput!): String
+  sendCachoCommand(gameId: String!, command: CachoCommandInput!): ResultCachoDataReqStringReq!
 }
 
 type CachoData {
@@ -36,6 +36,12 @@ input SuggestionDicesInput {
 }
 
 type SuggestionSalpicon
+
+interface ResultCachoDataReqStringReq {
+  ok: CachoData
+  err: String
+  isOk: Boolean!
+}
 
 input CachoCommandInput @oneOf {
   suggest: SuggestionInput
