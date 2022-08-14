@@ -26,14 +26,14 @@ DeactNode icon(
 extension BIconExt on BIcon {
   String get nameHtml {
     final _name = toString().split('.').last;
-    return _name.startsWith('_')
+    return _name.startsWith('\$')
         ? _name.substring(1).replaceAll('_', '-')
         : _name.replaceAll('_', '-');
   }
 }
 
 enum BIcon {
-  _123,
+  $123,
   alarm_fill,
   alarm,
   align_bottom,

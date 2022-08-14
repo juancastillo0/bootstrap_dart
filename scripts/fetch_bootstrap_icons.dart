@@ -23,13 +23,13 @@ void main() async {
   final numRegExp = RegExp('[0-9]');
   final _mappedIconNames = iconNames.reversed
       .map((e) => e.replaceAll('-', '_'))
-      .map((e) => e.startsWith(numRegExp) ? '_$e' : e);
+      .map((e) => e.startsWith(numRegExp) ? '\$$e' : e);
 
   final iconsStr = '''
 extension BIconExt on BIcon {
   String get nameHtml {
     final _name = toString().split('.').last;
-    return _name.startsWith('_')
+    return _name.startsWith('\\\$')
         ? _name.substring(1).replaceAll('_', '-')
         : _name.replaceAll('_', '-');
   }
@@ -40,27 +40,34 @@ enum BIcon {
 }
 ''';
 
-  final file = await File('./web/bootstrap_icons.dart').create();
+  final file = await File('./lib/bootstrap/icons.dart').create();
   await file.writeAsString(_iconComponent + iconsStr);
 }
 
 const _iconComponent = r'''
-import 'package:deact/deact.dart';
+// ignore_for_file: constant_identifier_names
+
+import 'bootstrap_core.dart';
 
 DeactNode icon(
   BIcon icon, {
   String? color,
-  String fontSize = '1rem',
+  String? fontSize,
   String? ariaLabel,
+  String? style,
+  Map<String, Object>? attributes,
 }) {
   return el(
     'i',
     attributes: {
       'class': 'bi-${icon.nameHtml}',
-      'style': 'font-size: $fontSize;${color == null ? '' : ' color: $color;'}',
+      'style': '${fontSize == null ? '' : 'font-size: $fontSize;'}'
+          '${color == null ? '' : ' color: $color;'}${style ?? ''}',
       'role': "img",
       if (ariaLabel != null) 'aria-label': ariaLabel,
+      if (attributes != null) ...attributes,
     },
   );
 }
+
 ''';
