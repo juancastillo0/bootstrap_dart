@@ -1,4 +1,4 @@
-import 'bootstrap_core.dart';
+import '../src/prelude.dart';
 
 String formControlClass({
   BSize? size,

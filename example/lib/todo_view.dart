@@ -50,7 +50,7 @@ class CreateTodoSection extends ComponentNode {
         div(
           id: 'collapse-create',
           className: collapse(show: todos.showCreate.value) +
-              ' mt-3 ${borderClass(sides: {OffcanvasPlacement.top})}',
+              ' mt-3 ${borderClass(sides: {Placement.top})}',
           children: [
             fc((ctx) {
               final todoState = ctx.hookState(

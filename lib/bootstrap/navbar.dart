@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 export 'user_selection.dart';
 

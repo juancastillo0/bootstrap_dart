@@ -1,64 +1,13 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:async';
 import 'package:universal_html/html.dart' as html;
 
-import 'bootstrap_renderer.dart';
-import 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
+import '../src/prelude.dart';
 import 'user_selection.dart';
-import 'offcanvas.dart'; // TODO: use more generic name
 
-export 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
-export 'user_selection.dart';
-export 'bootstrap_renderer.dart' show BootstrapBuildContext, Ref, State;
-
-typedef DeactNode = dynamic;
-
-DeactNode el(
-  String tag, {
-  Map<String, Object?>? attributes,
-  Iterable<DeactNode>? children,
-  Object? key,
-  Map<String, void Function(html.Event)>? listeners,
-  Ref<html.Element?>? ref,
-}) =>
-    bootstrapRenderer.el(
-      tag,
-      attributes: attributes,
-      children: children,
-      key: key,
-      listeners: listeners,
-      ref: ref,
-    );
-
-DeactNode txt(String text) => bootstrapRenderer.txt(text);
-
-DeactNode fragment(List<DeactNode> children) =>
-    bootstrapRenderer.fragment(children);
-
-DeactNode fc(
-  DeactNode Function(BootstrapBuildContext) builder, {
-  Object? key,
-}) =>
-    bootstrapRenderer.fc(builder, key: key);
-
-DeactNode div({
-  Object? key,
-  String? className,
-  Iterable<DeactNode>? children,
-  String? id,
-  String? style,
-  void Function(html.MouseEvent)? onclick,
-}) =>
-    el(
-      'div',
-      key: key,
-      attributes: {'class': className, 'id': id, 'style': style},
-      listeners: onclick == null
-          ? null
-          : {'onclick': (e) => onclick(e as html.MouseEvent)},
-      children: children,
-    );
+export '../bootstrap/user_selection.dart';
+export '../src/js_bindings_interface.dart'
+    if (dart.library.html) '../src/js_bindings.dart';
 
 enum BColor {
   primary,
@@ -85,10 +34,6 @@ extension BtnTypeExt on BColor {
 enum BSize {
   lg,
   sm,
-}
-
-extension BSizeExt on BSize {
-  String get name => toString().split('.').last;
 }
 
 /// Alerts https://getbootstrap.com/docs/5.1/components/alerts/
@@ -143,6 +88,13 @@ DeactNode buttonGroup<T>({
       }),
     ],
   );
+}
+
+enum Placement {
+  top,
+  bottom,
+  start,
+  end,
 }
 
 enum AxisAlign {
@@ -273,10 +225,6 @@ enum Direction {
   end,
 }
 
-extension DirectionExt on Direction {
-  String get name => toString().split('.').last;
-}
-
 enum AutoClose {
   true_,
   false_,
@@ -397,7 +345,7 @@ String stackClass({required Space gap, required bool vert}) =>
 String borderClass({
   BColor? color,
   Space? size,
-  Set<OffcanvasPlacement> sides = const {},
+  Set<Placement> sides = const {},
 }) =>
     [
       if (color != null) 'border-${color.name}',
@@ -420,7 +368,7 @@ String roundedClass({
   bool circle = false,
   bool pill = false,
   RoundedSize? size,
-  Set<OffcanvasPlacement> sides = const {},
+  Set<Placement> sides = const {},
 }) =>
     sides.isEmpty
         ? 'rounded${pill ? '-pill' : circle ? '-circle' : ''}'
@@ -471,10 +419,6 @@ enum TogglableComponent {
   modal,
   offcanvas,
   collapse,
-}
-
-extension TogglableComponentExt on TogglableComponent {
-  String get name => toString().split('.').last;
 }
 
 Map<String, Object> toggleButtonAttributes({
@@ -616,10 +560,6 @@ enum ResponsiveBreakPoint {
   always,
 }
 
-extension ModalFullScreenBellowExt on ResponsiveBreakPoint {
-  String get name => toString().split('.').last;
-}
-
 enum VerticalAlign {
   baseline,
   top,
@@ -664,10 +604,6 @@ enum PlaceholderSize {
   xs,
   sm,
   lg,
-}
-
-extension PlaceholderSizeExt on PlaceholderSize {
-  String get name => toString().split('.').last;
 }
 
 String placeholder({
@@ -719,10 +655,6 @@ enum TabType {
   tab,
   pill,
   list,
-}
-
-extension TabTypeExt on TabType {
-  String get name => toString().split('.').last;
 }
 
 DeactNode tabs({
@@ -810,29 +742,4 @@ class TabItem {
     required this.content,
     this.disabled = false,
   });
-}
-
-Ref<html.Element?> useSetUpElement(
-  BootstrapBuildContext ctx, {
-  void Function(html.Element)? onSetUp,
-  void Function()? onDispose,
-}) {
-  final elemRef = ctx.hookRef<html.Element?>(() => null);
-  bool disposed = false;
-
-  ctx.hookEffect(
-    () {
-      Future(() {
-        if (!disposed && elemRef.value != null) {
-          onSetUp?.call(elemRef.value!);
-        }
-      });
-      return () {
-        disposed = true;
-        onDispose?.call();
-      };
-    },
-    const [],
-  );
-  return elemRef;
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:universal_html/html.dart' as html;
-import 'bootstrap_core.dart';
+import '../src/prelude.dart';
 
 /// Modal https://getbootstrap.com/docs/5.1/components/modal/
 

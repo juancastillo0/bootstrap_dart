@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:universal_html/html.dart' as html;
 
+import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 
 /// Toasts https://getbootstrap.com/docs/5.1/components/toasts/

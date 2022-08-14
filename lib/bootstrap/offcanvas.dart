@@ -1,20 +1,10 @@
 import 'package:universal_html/html.dart' as html;
 
+import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 
-enum OffcanvasPlacement {
-  top,
-  bottom,
-  start,
-  end,
-}
-
-extension OffcanvasPlacementExt on OffcanvasPlacement {
-  String get name => toString().split('.').last;
-}
-
 Map<String, Object> offcanvasAttributes({
-  required OffcanvasPlacement placement,
+  required Placement placement,
   String? className,
   String? id,
   String? labelledBy,

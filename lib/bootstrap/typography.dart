@@ -1,4 +1,4 @@
-import 'bootstrap_core.dart';
+import '../src/prelude.dart';
 
 /// https://getbootstrap.com/docs/5.0/content/typography/
 class BTypography {

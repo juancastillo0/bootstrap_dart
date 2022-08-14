@@ -711,7 +711,7 @@ div(
                   '<br>placed right<br>with "5,5" offset',
               attributes: tooltipAttributes(
                 allowHtml: true,
-                placement: Placement.right,
+                placement: TooltipPlacement.right,
                 offset: '5,5',
               ),
               children: [
@@ -771,7 +771,7 @@ div(
                   '<br>placed bottom<br>with "25,8" offset',
               attributes: popoverAttributes(
                 allowHtml: true,
-                placement: Placement.bottom,
+                placement: TooltipPlacement.bottom,
                 offset: '25,8',
               ),
               children: [
@@ -1491,8 +1491,7 @@ div(
               final scroll = ctx.hookState(() => false);
               final offcanvasRef = ctx.hookRef<Offcanvas?>(() => null);
 
-              final placement = ctx
-                  .hookState<OffcanvasPlacement>(() => OffcanvasPlacement.end);
+              final placement = ctx.hookState<Placement>(() => Placement.end);
               const labelId = 'offcanvas-example-label';
 
               return fragment([
@@ -1519,7 +1518,7 @@ div(
                   buttonClass: btn(outlined: true),
                   buttonContent: [txt('Placement: ${placement.value.name}')],
                   children: [
-                    ...OffcanvasPlacement.values.map(
+                    ...Placement.values.map(
                       (e) => dropdownItem(
                         onClick: (_) => placement.value = e,
                         active: placement.value == e,

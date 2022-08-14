@@ -1,5 +1,5 @@
 import 'package:universal_html/html.dart' as html;
-import 'bootstrap_core.dart';
+import '../src/prelude.dart';
 import 'form.dart';
 
 enum CheckType {

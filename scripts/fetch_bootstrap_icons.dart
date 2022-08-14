@@ -47,7 +47,7 @@ enum BIcon {
 const _iconComponent = r'''
 // ignore_for_file: constant_identifier_names
 
-import 'bootstrap_core.dart';
+import '../src/prelude.dart';
 
 DeactNode icon(
   BIcon icon, {

@@ -1,3 +1,4 @@
+import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 
 class AccordionItem {
