@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:universal_html/html.dart' as html;
 
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-
 import 'bootstrap_core.dart';
 
 /// Toasts https://getbootstrap.com/docs/5.1/components/toasts/
@@ -149,10 +146,13 @@ DeactNode toastsContainer({
   //     'style': 'width:100%;height:100%;top:0;left:0;',
   //   },
   //   children: [
-  return div(
-    className: 'toast-container position-absolute p-3',
-    style: '${verticalPosition.verticalStyle()}'
-        '${horizontalPosition.horizontalStyle()}',
+  return el(
+    'div',
+    attributes: {
+      'class': 'toast-container position-absolute p-3',
+      'style': '${verticalPosition.verticalStyle()}'
+          '${horizontalPosition.horizontalStyle()}',
+    },
     children: children,
   );
   //   ],

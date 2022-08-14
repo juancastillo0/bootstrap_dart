@@ -1,6 +1,3 @@
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-
 import 'bootstrap_core.dart';
 
 class AccordionItem {
@@ -36,9 +33,9 @@ DeactNode accordion({
             'div',
             attributes: {'class': 'accordion-item'},
             children: [
-              h2(
-                className: 'accordion-header',
-                id: headerId,
+              el(
+                'h2',
+                attributes: {'class': 'accordion-header', 'id': headerId},
                 children: [
                   el(
                     'button',

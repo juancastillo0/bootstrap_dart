@@ -8,7 +8,7 @@ import 'package:highlight/languages/dart.dart';
 import 'package:bootstrap_dart/hooks.dart';
 
 import 'package:bootstrap_dart/bootstrap/accordion.dart';
-import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
 import 'package:bootstrap_dart/bootstrap/checks_radios.dart';
 import 'package:bootstrap_dart/bootstrap/form.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
@@ -19,6 +19,8 @@ import 'package:bootstrap_dart/bootstrap/table.dart';
 import 'package:bootstrap_dart/bootstrap/toast.dart';
 import 'package:bootstrap_dart/bootstrap/tooltip_popover.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
+
+import 'deact_bootstrap.dart';
 
 import 'generated_example_snippets.dart';
 
@@ -90,7 +92,7 @@ DeactNode codeSection(String dartCode) {
               if (showModal.value)
                 modal(
                   id: 'example-code-modal',
-                  modalRef: modalRef,
+                  modalRef: modalRef.bootstrapRef,
                   dialog: modalDialog(
                     dialogClass: modalDialogClass(
                       scrollable: true,
@@ -221,8 +223,8 @@ DeactNode _allExamples(ComponentContext ctx) {
         content: div(
           children: [
             fc((ctx) {
-              final flush = ctx.state('flush', false);
-              final multipleOpened = ctx.state('multipleOpened', false);
+              final flush = ctx.hookState(() => false);
+              final multipleOpened = ctx.hookState(() => false);
 
               return div(
                 className: 'd-flex flex-column mx-3',
@@ -334,9 +336,9 @@ button(
 // @example-start{bootstrap-button-group-example}
         content: fc(
           (ctx) {
-            final value1 = ctx.state('value1', 'Left');
-            final value2 = ctx.state('value2', {'B', 'C'});
-            final value3 = ctx.state<String?>('value3', null);
+            final value1 = ctx.hookState(() => 'Left');
+            final value2 = ctx.hookState(() => {'B', 'C'});
+            final value3 = ctx.hookState<String?>(() => null);
 
             return div(
               className: 'hstack gap-3 align-self-center',
@@ -520,7 +522,7 @@ div(
               ],
             ),
             fc((ctx) {
-              final selected = ctx.state<String>('selected', 'Option A');
+              final selected = ctx.hookState<String>(() => 'Option A');
               return dropdown(
                 buttonClass: btn(outlined: true),
                 buttonContent: [txt(selected.value)],
@@ -827,7 +829,7 @@ div(
                 ctx,
                 () => ToastsController(),
               );
-              final text = ctx.state('text', 'A message');
+              final text = ctx.hookState(() => 'A message');
 
               return div(
                 className: 'd-flex flex-column',
@@ -1291,16 +1293,16 @@ div(
         content: div(
           children: [
             fc((ctx) {
-              final fade = ctx.state('fade', true);
-              final focus = ctx.state('focus', true);
-              final closeOnClick = ctx.state('closeOnClick', true);
-              final closeOnEscKey = ctx.state('closeOnEscKey', true);
-              final backdrop = ctx.state('backdrop', true);
+              final fade = ctx.hookState(() => true);
+              final focus = ctx.hookState(() => true);
+              final closeOnClick = ctx.hookState(() => true);
+              final closeOnEscKey = ctx.hookState(() => true);
+              final backdrop = ctx.hookState(() => true);
               //
-              final center = ctx.state('center', true);
-              final fullscreen = ctx.state('fullscreen', false);
-              final scrollable = ctx.state('scrollable', false);
-              final size = ctx.state<DialogSize?>('size', null);
+              final center = ctx.hookState(() => true);
+              final fullscreen = ctx.hookState(() => false);
+              final scrollable = ctx.hookState(() => false);
+              final size = ctx.hookState<DialogSize?>(() => null);
 
               final ref = ctx.hookRef<Modal?>(() => null);
 
@@ -1431,7 +1433,7 @@ div(
                     closeOnEscKey: closeOnEscKey.value,
                     fade: fade.value,
                     focus: focus.value,
-                    modalRef: ref,
+                    modalRef: ref.bootstrapRef,
                     backdrop: backdrop.value,
                     dialog: modalDialog(
                       dialogClass: modalDialogClass(
@@ -1485,13 +1487,13 @@ div(
         content: div(
           children: [
             fc((ctx) {
-              final backdrop = ctx.state('backdrop', true);
-              final keyboard = ctx.state('keyboard', true);
-              final scroll = ctx.state('scroll', false);
+              final backdrop = ctx.hookState(() => true);
+              final keyboard = ctx.hookState(() => true);
+              final scroll = ctx.hookState(() => false);
               final offcanvasRef = ctx.hookRef<Offcanvas?>(() => null);
 
-              final placement = ctx.state<OffcanvasPlacement>(
-                  'placement', OffcanvasPlacement.end);
+              final placement = ctx
+                  .hookState<OffcanvasPlacement>(() => OffcanvasPlacement.end);
               const labelId = 'offcanvas-example-label';
 
               return fragment([
@@ -1536,7 +1538,7 @@ div(
                     scroll: scroll.value,
                     labelledBy: labelId,
                   ),
-                  offcanvasRef: offcanvasRef,
+                  offcanvasRef: offcanvasRef.bootstrapRef,
                   labelId: labelId,
                   title: [txt('Title')],
                   body: [
@@ -1655,8 +1657,11 @@ div(
               children: [
                 fc((ctx) {
                   final ref = ctx.hookRef<html.Element?>(() => null);
-                  final scrollSpy =
-                      useScrollSpy(ctx, ref, target: '#list-example');
+                  final scrollSpy = useScrollSpy(
+                    ctx.bootstrapCtx,
+                    ref.bootstrapRef,
+                    target: '#list-example',
+                  );
                   return el(
                     'div',
                     ref: ref,

@@ -1,17 +1,64 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
-
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 
+import 'bootstrap_renderer.dart';
 import 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
-import 'offcanvas.dart';
 import 'user_selection.dart';
+import 'offcanvas.dart'; // TODO: use more generic name
 
 export 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
 export 'user_selection.dart';
+export 'bootstrap_renderer.dart' show BootstrapBuildContext, Ref, State;
+
+typedef DeactNode = dynamic;
+
+DeactNode el(
+  String tag, {
+  Map<String, Object?>? attributes,
+  Iterable<DeactNode>? children,
+  Object? key,
+  Map<String, void Function(html.Event)>? listeners,
+  Ref<html.Element?>? ref,
+}) =>
+    bootstrapRenderer.el(
+      tag,
+      attributes: attributes,
+      children: children,
+      key: key,
+      listeners: listeners,
+      ref: ref,
+    );
+
+DeactNode txt(String text) => bootstrapRenderer.txt(text);
+
+DeactNode fragment(List<DeactNode> children) =>
+    bootstrapRenderer.fragment(children);
+
+DeactNode fc(
+  DeactNode Function(BootstrapBuildContext) builder, {
+  Object? key,
+}) =>
+    bootstrapRenderer.fc(builder, key: key);
+
+DeactNode div({
+  Object? key,
+  String? className,
+  Iterable<DeactNode>? children,
+  String? id,
+  String? style,
+  void Function(html.MouseEvent)? onclick,
+}) =>
+    el(
+      'div',
+      key: key,
+      attributes: {'class': className, 'id': id, 'style': style},
+      listeners: onclick == null
+          ? null
+          : {'onclick': (e) => onclick(e as html.MouseEvent)},
+      children: children,
+    );
 
 enum BColor {
   primary,
@@ -82,10 +129,15 @@ DeactNode buttonGroup<T>({
     },
     children: [
       ...values.map((e) {
-        return button(
-          className: buttonClass + (selectedSet.contains(e) ? ' active' : ''),
-          type: 'button',
-          onclick: (_) => selection.onSelect(e),
+        return el(
+          'button',
+          attributes: {
+            'class': buttonClass + (selectedSet.contains(e) ? ' active' : ''),
+            'type': 'button',
+          },
+          listeners: {
+            'onclick': (_) => selection.onSelect(e),
+          },
           children: renderItem(e),
         );
       }),
@@ -251,9 +303,12 @@ DeactNode dropdown({
   String offset = '0,2',
   AutoClose autoClose = AutoClose.true_,
 }) {
-  return div(
-    className: 'btn-group ${dropdownClass ?? ''}'
-        '${direction != Direction.down ? ' drop${direction.name}' : ''}',
+  return el(
+    'div',
+    attributes: {
+      'class': 'btn-group ${dropdownClass ?? ''}'
+          '${direction != Direction.down ? ' drop${direction.name}' : ''}',
+    },
     children: [
       el(
         'button',
@@ -381,7 +436,7 @@ class ScrollSpyHook {
 }
 
 ScrollSpyHook useScrollSpy(
-  ComponentContext ctx,
+  BootstrapBuildContext ctx,
   Ref<html.Element?> ref, {
   required String target,
   int offset = 50,
@@ -464,11 +519,14 @@ DeactNode card({
           children: [header],
         ),
       if (imageSrc != null && !imageBottom)
-        img(
+        el(
+          'img',
           key: 'image-top',
-          className: 'card-img-top',
-          alt: imageAlt,
-          src: imageSrc,
+          attributes: {
+            'class': 'card-img-top',
+            'alt': imageAlt,
+            'src': imageSrc,
+          },
         ),
       div(
         key: 'body',
@@ -492,11 +550,14 @@ DeactNode card({
         ],
       ),
       if (imageSrc != null && imageBottom)
-        img(
+        el(
+          'img',
           key: 'image-bottom',
-          className: 'card-img-bottom',
-          alt: imageAlt,
-          src: imageSrc,
+          attributes: {
+            'class': 'card-img-bottom',
+            'alt': imageAlt,
+            'src': imageSrc,
+          },
         ),
       if (footer != null)
         div(
@@ -527,8 +588,9 @@ DeactNode spinner({
     },
     children: [
       if (!ariaHidden)
-        span(
-          className: 'visually-hidden',
+        el(
+          'span',
+          attributes: {'class': 'visually-hidden'},
           children: [txt('Loading...')],
         )
     ],
@@ -673,7 +735,7 @@ DeactNode tabs({
   String? tabContentClass,
 }) {
   return fragment([
-    nav(children: [
+    el('nav', children: [
       el(
         'div',
         attributes: {
@@ -751,7 +813,7 @@ class TabItem {
 }
 
 Ref<html.Element?> useSetUpElement(
-  ComponentContext ctx, {
+  BootstrapBuildContext ctx, {
   void Function(html.Element)? onSetUp,
   void Function()? onDispose,
 }) {

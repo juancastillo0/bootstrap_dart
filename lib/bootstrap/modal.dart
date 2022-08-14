@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'package:universal_html/html.dart' as html;
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-
 import 'bootstrap_core.dart';
 
 /// Modal https://getbootstrap.com/docs/5.1/components/modal/
@@ -52,7 +49,7 @@ class ModalHook {
   void toggle() => show.value = !show.value;
 }
 
-ModalHook useModal(ComponentContext ctx) {
+ModalHook useModal(BootstrapBuildContext ctx) {
   final showModal = ctx.hookState(() => false);
   final modalRef = ctx.hookRef<Modal?>(() => null);
 

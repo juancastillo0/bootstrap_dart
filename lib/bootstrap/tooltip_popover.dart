@@ -1,5 +1,4 @@
 import 'package:universal_html/html.dart' as html;
-import 'package:deact/deact.dart';
 import 'package:collection/collection.dart';
 
 import 'bootstrap_core.dart';

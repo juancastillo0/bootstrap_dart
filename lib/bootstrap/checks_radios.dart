@@ -1,7 +1,5 @@
 import 'package:universal_html/html.dart' as html;
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-
+import 'bootstrap_core.dart';
 import 'form.dart';
 
 enum CheckType {
@@ -27,6 +25,7 @@ DeactNode check({
   bool? isValid,
   InputFeedback? feedback,
   String? divClass,
+  String? labelStyle,
 }) {
   return div(
     className: 'form-check${type == CheckType.switch_ ? ' form-switch' : ''}'
@@ -59,6 +58,7 @@ DeactNode check({
               'label',
               attributes: {
                 'class': 'form-check-label',
+                if (labelStyle != null) 'style': labelStyle,
                 if (id != null) 'for': id,
               },
               children: [label],
@@ -70,39 +70,64 @@ DeactNode check({
   );
 }
 
-class RadiosInput extends ComponentNode {
-  RadiosInput({
-    Object? key,
-    required this.items,
-    required this.selectedId,
-    required this.onChanged,
-    required this.name,
-    this.inline = false,
-  }) : super(key: key);
-
-  final String? selectedId;
-  final Map<String, DeactNode> items;
-  final void Function(String) onChanged;
-  final bool inline;
-  final String name;
-
-  @override
-  DeactNode render(ComponentContext context) {
-    return fragment([
-      ...items.entries.map(
-        (e) => check(
-          id: e.key,
-          label: e.value,
-          inline: inline,
-          name: name,
-          type: CheckType.radio,
-          checked: selectedId == e.key,
-          onChange: (_) => onChanged(e.key),
-        ),
+// TODO: support class components
+// ignore: non_constant_identifier_names
+DeactNode RadiosInput({
+  Object? key,
+  required String? selectedId,
+  required Map<String, DeactNode> items,
+  required void Function(String) onChanged,
+  required String name,
+  bool inline = false,
+}) {
+  return fragment([
+    ...items.entries.map(
+      (e) => check(
+        id: e.key,
+        label: e.value,
+        inline: inline,
+        name: name,
+        type: CheckType.radio,
+        checked: selectedId == e.key,
+        onChange: (_) => onChanged(e.key),
       ),
-    ]);
-  }
+    ),
+  ]);
 }
+
+// class RadiosInput extends ComponentNode {
+//   RadiosInput({
+//     Object? key,
+//     required this.items,
+//     required this.selectedId,
+//     required this.onChanged,
+//     required this.name,
+//     this.inline = false,
+//   }) : super(key: key);
+
+//   final String? selectedId;
+//   final Map<String, DeactNode> items;
+//   final void Function(String) onChanged;
+//   final bool inline;
+//   final String name;
+
+//   @override
+//   DeactNode render(ComponentContext context) {
+//     return fragment([
+//       ...items.entries.map(
+//         (e) => check(
+//           id: e.key,
+//           label: e.value,
+//           inline: inline,
+//           name: name,
+//           type: CheckType.radio,
+//           checked: selectedId == e.key,
+//           onChange: (_) => onChanged(e.key),
+//         ),
+//       ),
+//     ]);
+//   }
+// }
 
 class RadioItem {
   final String id;

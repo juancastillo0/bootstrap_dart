@@ -1,6 +1,3 @@
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-
 import 'bootstrap_core.dart';
 
 String formControlClass({
@@ -84,8 +81,9 @@ DeactNode labeledInput({
     if (colClasses == null)
       input
     else
-      div(
-        className: colClasses.input,
+      el(
+        'div',
+        attributes: {'class': colClasses.input},
         children: [input],
       )
   ];

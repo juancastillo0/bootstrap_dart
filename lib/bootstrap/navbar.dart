@@ -1,8 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
-
 import 'bootstrap_core.dart';
 export 'user_selection.dart';
 
@@ -48,9 +45,9 @@ DeactNode navbar({
       div(
         className: containerClass,
         children: [
-          a(
-            className: 'navbar-brand',
-            href: brandHref,
+          el(
+            'a',
+            attributes: {'class': 'navbar-brand', 'href': brandHref},
             children: brand,
           ),
           if (collapseId != null)

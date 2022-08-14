@@ -1,6 +1,4 @@
 import 'package:universal_html/html.dart' as html;
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
 
 import 'bootstrap_core.dart';
 
@@ -60,9 +58,12 @@ DeactNode offcanvas({
         div(
           className: 'offcanvas-header',
           children: [
-            h5(
-              className: 'offcanvas-title',
-              id: labelId,
+            el(
+              'h5',
+              attributes: {
+                'class': 'offcanvas-title',
+                'id': labelId,
+              },
               children: title,
             ),
             if (showCloseButton)

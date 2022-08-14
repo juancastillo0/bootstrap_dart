@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:deact/deact.dart';
+import 'bootstrap_core.dart';
 
 DeactNode icon(
   BIcon icon, {

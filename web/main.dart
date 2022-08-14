@@ -8,15 +8,17 @@ import 'package:logging/logging.dart';
 import 'package:bootstrap_dart/mobx_deact.dart';
 import 'package:bootstrap_dart/server_renderer.dart';
 
-import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
 import 'bootstrap_examples.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
+import 'deact_bootstrap.dart';
 import 'store.dart';
 import 'package:bootstrap_dart/bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
 
 void main() async {
+  DeactBootstrapRenderer.setUp();
   mainContext.config = ReactiveConfig(
     writePolicy: ReactiveWritePolicy.never,
   );
@@ -54,8 +56,8 @@ DeactNode rootComponent() {
                 fc((ctx) {
                   final ref = ctx.hookRef<html.Element?>(() => null);
                   final scrollSpy = useScrollSpy(
-                    ctx,
-                    ref,
+                    ctx.bootstrapCtx,
+                    ref.bootstrapRef,
                     target: '#navbar-example',
                     offset: 10,
                   );
