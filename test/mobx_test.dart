@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:test/test.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'package:bootstrap_dart/mobx_deact.dart';
+import 'package:deact_bootstrap/mobx_deact.dart';
 
 class Action1<T, O> {
   final Action action;

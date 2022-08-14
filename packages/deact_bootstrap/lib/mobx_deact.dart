@@ -26,7 +26,11 @@ DeactNode mobxWrapper(
   late final DeactNode node;
   rxtRef.value.track(() {
     print('${ctx.hashCode} start-track');
-    node = next(ctx);
+    try {
+      node = next(ctx);
+    } catch (e, s) {
+      print('mobx.track error $e $s');
+    }
     print('${ctx.hashCode} end-track');
   });
   return node;

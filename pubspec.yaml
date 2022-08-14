@@ -4,7 +4,7 @@ version: 1.0.0
 homepage: https://github.com/juancastillo0/bootstrap_dart
 
 environment:
-  sdk: ">=2.14.0 <3.0.0"
+  sdk: ">=2.17.6 <3.0.0"
 
 dependencies:
   mobx:
@@ -24,3 +24,5 @@ dev_dependencies:
   test: ^1.0.0
   build_web_compilers: ^2.11.0
   lints: ^1.0.0
+  deact_bootstrap:
+    path: packages/deact_bootstrap

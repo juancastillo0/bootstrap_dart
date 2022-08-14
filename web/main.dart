@@ -5,13 +5,13 @@ import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:mobx/mobx.dart';
 import 'package:logging/logging.dart';
-import 'package:bootstrap_dart/mobx_deact.dart';
-import 'package:bootstrap_dart/server_renderer.dart';
+import 'package:deact_bootstrap/mobx_deact.dart';
+import 'package:deact_bootstrap/server_renderer.dart';
+import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
 import 'bootstrap_examples.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
-import 'deact_bootstrap.dart';
 import 'store.dart';
 import 'package:bootstrap_dart/bootstrap/toast.dart';
 

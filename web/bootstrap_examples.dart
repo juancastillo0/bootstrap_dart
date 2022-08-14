@@ -5,7 +5,8 @@ import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight_core.dart' show highlight;
 import 'package:highlight/languages/dart.dart';
-import 'package:bootstrap_dart/hooks.dart';
+import 'package:deact_bootstrap/hooks.dart';
+import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 import 'package:bootstrap_dart/bootstrap/accordion.dart';
 import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
@@ -19,8 +20,6 @@ import 'package:bootstrap_dart/bootstrap/table.dart';
 import 'package:bootstrap_dart/bootstrap/toast.dart';
 import 'package:bootstrap_dart/bootstrap/tooltip_popover.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
-
-import 'deact_bootstrap.dart';
 
 import 'generated_example_snippets.dart';
 
