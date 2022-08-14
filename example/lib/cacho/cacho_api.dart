@@ -16,10 +16,10 @@ class CachoApi {
 
   CachoApi();
 
-  static final ref = RefWithDefault.global((_) => CachoApi());
+  static final ref = ScopedRef.global((_) => CachoApi());
 }
 
-final databaseRef = RefWithDefault.global((_) => constructDb());
+final databaseRef = ScopedRef.global((_) => constructDb());
 
 @ClassResolver()
 class CachoGQLApi {
@@ -27,9 +27,16 @@ class CachoGQLApi {
 
   final CachoApi api;
 
-  static final ref = RefWithDefault.global(
+  static final ref = ScopedRef.global(
     (holder) => CachoGQLApi(api: CachoApi.ref.get(holder)),
   );
+
+  /// TODO: throw when type does not have fields and there are no queries in schema
+  @Query()
+  List<CachoData> cachoGames(Ctx ctx) {
+    final userId = userIdFromCtx(ctx);
+    return api.stores.values.map((store) => store.data(userId)).toList();
+  }
 
   @Mutation()
   CachoData createCacho(Ctx ctx) {

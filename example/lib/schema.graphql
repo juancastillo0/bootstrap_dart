@@ -1,8 +1,8 @@
-type Query
-
-type Mutation {
-  createCacho: CachoData!
-  sendCachoCommand(gameId: String!, command: CachoCommandInput!): ResultCachoDataReqStringReq!
+type Query {
+  """
+  TODO: throw when type does not have fields and there are no queries in schema
+  """
+  cachoGames: [CachoData!]!
 }
 
 type CachoData {
@@ -25,17 +25,19 @@ type CachoData {
 union Suggestion = SuggestionDices | SuggestionSalpicon
 
 type SuggestionDices {
-  compareTo(other: SuggestionDicesInput!): Int!
   amount: Int!
   dice: Int!
+  variant: String!
 }
 
-input SuggestionDicesInput {
-  amount: Int!
-  dice: Int!
+type SuggestionSalpicon {
+  variant: String!
 }
 
-type SuggestionSalpicon
+type Mutation {
+  createCacho: CachoData!
+  sendCachoCommand(gameId: String!, command: CachoCommandInput!): ResultCachoDataReqStringReq!
+}
 
 interface ResultCachoDataReqStringReq {
   ok: CachoData
@@ -53,6 +55,11 @@ input CachoCommandInput @oneOf {
 input SuggestionInput @oneOf {
   dices: SuggestionDicesInput
   salpicon: Boolean
+}
+
+input SuggestionDicesInput {
+  amount: Int!
+  dice: Int!
 }
 
 type Subscription {

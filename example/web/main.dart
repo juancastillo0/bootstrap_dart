@@ -1,6 +1,6 @@
-import 'package:bootstrap_dart/mobx_deact.dart';
-import 'package:bootstrap_dart/router.dart';
-import 'package:bootstrap_dart/server_renderer.dart';
+import 'package:deact_bootstrap/mobx_deact.dart';
+import 'package:deact_bootstrap/router.dart';
+import 'package:deact_bootstrap/server_renderer.dart';
 import 'package:deact/deact.dart';
 import 'package:mobx/mobx.dart';
 import 'package:universal_io/io.dart' as io;

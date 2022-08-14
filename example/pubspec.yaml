@@ -11,10 +11,12 @@ dependencies:
   incremental_dom_bindings: ^2.1.0
   universal_html: ^2.0.8
   deact:
-    # git:
-    #   url: https://github.com/juancastillo0/deact.git
-    #   ref: d884bdd0a44e4e3098def601fc5a5f48a7349706
-    path: ../../deact
+    git:
+      url: https://github.com/juancastillo0/deact.git
+      ref: 537a9e600641a0aed15b7811c61f80fe4c0c0d12
+    # path: ../deact
+  deact_bootstrap:
+    path: ../packages/deact_bootstrap
   bootstrap_dart:
     path: ../
   shelf:
@@ -69,16 +71,6 @@ dependency_overrides:
   #   path: ../../gql/gql
   # gql_code_builder:
   #   path: ../../gql/codegen/gql_code_builder
-  gql:
-    git:
-      url: https://github.com/juancastillo0/gql
-      path: gql
-      ref: ae9618799aae2f084a65d9a06addcaee8eec1ab4
-  gql_code_builder:
-    git:
-      url: https://github.com/juancastillo0/gql
-      path: codegen/gql_code_builder
-      ref: ae9618799aae2f084a65d9a06addcaee8eec1ab4
 
   leto_generator:
     path: ../../leto/leto_generator

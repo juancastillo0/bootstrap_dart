@@ -41,8 +41,8 @@ Card _$CardFromJson(Map<String, dynamic> json) => Card(
     );
 
 Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
-      'n': _$CardNEnumMap[instance.n],
-      'type': _$CardTypeEnumMap[instance.type],
+      'n': _$CardNEnumMap[instance.n]!,
+      'type': _$CardTypeEnumMap[instance.type]!,
     };
 
 const _$CardNEnumMap = {
@@ -71,58 +71,70 @@ const _$CardTypeEnumMap = {
 
 _$ContinentalCommStart _$$ContinentalCommStartFromJson(
         Map<String, dynamic> json) =>
-    _$ContinentalCommStart();
+    _$ContinentalCommStart(
+      $type: json['runtimeType'] as String?,
+    );
 
 Map<String, dynamic> _$$ContinentalCommStartToJson(
         _$ContinentalCommStart instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };
 
 _$ContinentalCommAddPlayer _$$ContinentalCommAddPlayerFromJson(
         Map<String, dynamic> json) =>
     _$ContinentalCommAddPlayer(
       playerId: json['playerId'] as String,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ContinentalCommAddPlayerToJson(
         _$ContinentalCommAddPlayer instance) =>
     <String, dynamic>{
       'playerId': instance.playerId,
+      'runtimeType': instance.$type,
     };
 
 _$ContinentalCommComer _$$ContinentalCommComerFromJson(
         Map<String, dynamic> json) =>
     _$ContinentalCommComer(
       fromDropped: json['fromDropped'] as bool,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ContinentalCommComerToJson(
         _$ContinentalCommComer instance) =>
     <String, dynamic>{
       'fromDropped': instance.fromDropped,
+      'runtimeType': instance.$type,
     };
 
 _$ContinentalCommBajar _$$ContinentalCommBajarFromJson(
         Map<String, dynamic> json) =>
     _$ContinentalCommBajar(
       cardSet: CardSet.fromJson(json['cardSet'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ContinentalCommBajarToJson(
         _$ContinentalCommBajar instance) =>
     <String, dynamic>{
       'cardSet': instance.cardSet,
+      'runtimeType': instance.$type,
     };
 
 _$ContinentalCommCastigarse _$$ContinentalCommCastigarseFromJson(
         Map<String, dynamic> json) =>
     _$ContinentalCommCastigarse(
       playerId: json['playerId'] as String,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ContinentalCommCastigarseToJson(
         _$ContinentalCommCastigarse instance) =>
     <String, dynamic>{
       'playerId': instance.playerId,
+      'runtimeType': instance.$type,
     };
 
 _$_ExternalCard _$$_ExternalCardFromJson(Map<String, dynamic> json) =>

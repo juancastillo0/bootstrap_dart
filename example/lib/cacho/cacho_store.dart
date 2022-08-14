@@ -73,9 +73,9 @@ class CachoStore extends TreeStore<CachoCommand, String> {
 
   late final state = obs(CachoPlayState.idle);
   late final currentSuggestion = obs<Suggestion?>(null);
-  late final currentDiceSuggestion = obs<SuggestionDices?>(null);
-  final salpiconedPlayers = ObservableSet<String>();
-  late final currentPlayer = obs<String?>(null);
+  late final currentDiceSuggestion = obs<SuggestionDices?>(null); // 12 * 6
+  final salpiconedPlayers = ObservableSet<String>(); // 2^n
+  late final currentPlayer = obs<String?>(null); // n
 
   final players = ObservableMap<String, CachoPlayerStore>();
   final playerOrder = ObservableList<String>();

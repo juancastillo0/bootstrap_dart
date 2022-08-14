@@ -1,4 +1,4 @@
-import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
 import 'package:bootstrap_dart/bootstrap/checks_radios.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
@@ -9,6 +9,7 @@ import 'package:bootstrap_dart_example/todo_store.dart';
 import 'package:bootstrap_dart_example/utils.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
+import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 class CreateTodoSection extends ComponentNode {
   const CreateTodoSection({Object? key}) : super(key: key);
@@ -275,7 +276,7 @@ class TodoItemView extends ComponentNode {
               else
                 modal(
                   id: 'edit-modal-${e.id}',
-                  modalRef: modalRef,
+                  modalRef: modalRef.bootstrapRef,
                   dialog: modalDialog(
                     dialogClass: modalDialogClass(
                       fullScreen: ResponsiveBreakPoint.sm,

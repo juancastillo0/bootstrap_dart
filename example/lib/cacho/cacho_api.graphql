@@ -1,5 +1,11 @@
 mutation sendCachoCommand($gameId: String!, $command: CachoCommandInput!) {
-  sendCachoCommand(gameId: $gameId, command: $command)
+  sendCachoCommand(gameId: $gameId, command: $command) {
+    ok {
+      ...AllState
+    }
+    err
+    isOk
+  }
 }
 
 mutation createCacho {

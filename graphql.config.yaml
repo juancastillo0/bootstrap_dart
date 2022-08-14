@@ -1,8 +1,10 @@
 projects:
   example:
     schema: example/lib/schema.graphql
-    documents: example/lib/**/*.{graphql,gql}
+    documents: example/lib/cacho/**/*.graphql
     extensions:
       endpoints:
         default:
           url: http://localhost:8051/graphql
+      customDirectives:
+        - "directive @oneOf on INPUT_OBJECT"

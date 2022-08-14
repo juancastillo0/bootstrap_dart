@@ -25,13 +25,68 @@ mixin AllStateMixin {
 }
 
 @JsonSerializable(explicitToJson: true)
+class SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData
+    extends JsonSerializable with EquatableMixin, AllStateMixin {
+  SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData();
+
+  factory SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData.fromJson(
+          Map<String, dynamic> json) =>
+      _$SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoDataFromJson(
+          json);
+
+  @override
+  List<Object?> get props => [
+        id,
+        totalDices,
+        canCazar,
+        minAs,
+        minOther,
+        isPlaying,
+        playerNumber,
+        players,
+        currentPlayer,
+        previousPlayer,
+        currentSuggestion,
+        currentDiceSuggestion,
+        dices,
+        salpiconedPlayers
+      ];
+  @override
+  Map<String, dynamic> toJson() =>
+      _$SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoDataToJson(
+          this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class SendCachoCommand$Mutation$ResultCachoDataReqStringReq
+    extends JsonSerializable with EquatableMixin {
+  SendCachoCommand$Mutation$ResultCachoDataReqStringReq();
+
+  factory SendCachoCommand$Mutation$ResultCachoDataReqStringReq.fromJson(
+          Map<String, dynamic> json) =>
+      _$SendCachoCommand$Mutation$ResultCachoDataReqStringReqFromJson(json);
+
+  SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData? ok;
+
+  String? err;
+
+  late bool isOk;
+
+  @override
+  List<Object?> get props => [ok, err, isOk];
+  @override
+  Map<String, dynamic> toJson() =>
+      _$SendCachoCommand$Mutation$ResultCachoDataReqStringReqToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class SendCachoCommand$Mutation extends JsonSerializable with EquatableMixin {
   SendCachoCommand$Mutation();
 
   factory SendCachoCommand$Mutation.fromJson(Map<String, dynamic> json) =>
       _$SendCachoCommand$MutationFromJson(json);
 
-  String? sendCachoCommand;
+  late SendCachoCommand$Mutation$ResultCachoDataReqStringReq sendCachoCommand;
 
   @override
   List<Object?> get props => [sendCachoCommand];
@@ -269,6 +324,7 @@ class SendCachoCommandArguments extends JsonSerializable with EquatableMixin {
   Map<String, dynamic> toJson() => _$SendCachoCommandArgumentsToJson(this);
 }
 
+final SEND_CACHO_COMMAND_MUTATION_DOCUMENT_OPERATION_NAME = 'sendCachoCommand';
 final SEND_CACHO_COMMAND_MUTATION_DOCUMENT = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.mutation,
@@ -301,7 +357,29 @@ final SEND_CACHO_COMMAND_MUTATION_DOCUMENT = DocumentNode(definitions: [
                   value: VariableNode(name: NameNode(value: 'command')))
             ],
             directives: [],
-            selectionSet: null)
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                  name: NameNode(value: 'ok'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FragmentSpreadNode(
+                        name: NameNode(value: 'AllState'), directives: [])
+                  ])),
+              FieldNode(
+                  name: NameNode(value: 'err'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null),
+              FieldNode(
+                  name: NameNode(value: 'isOk'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null)
+            ]))
       ])),
   FragmentDefinitionNode(
       name: NameNode(value: 'AllState'),
@@ -445,7 +523,8 @@ class SendCachoCommandMutation
   final DocumentNode document = SEND_CACHO_COMMAND_MUTATION_DOCUMENT;
 
   @override
-  final String operationName = 'sendCachoCommand';
+  final String operationName =
+      SEND_CACHO_COMMAND_MUTATION_DOCUMENT_OPERATION_NAME;
 
   @override
   final SendCachoCommandArguments variables;
@@ -457,6 +536,7 @@ class SendCachoCommandMutation
       SendCachoCommand$Mutation.fromJson(json);
 }
 
+final CREATE_CACHO_MUTATION_DOCUMENT_OPERATION_NAME = 'createCacho';
 final CREATE_CACHO_MUTATION_DOCUMENT = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.mutation,
@@ -616,7 +696,7 @@ class CreateCachoMutation
   final DocumentNode document = CREATE_CACHO_MUTATION_DOCUMENT;
 
   @override
-  final String operationName = 'createCacho';
+  final String operationName = CREATE_CACHO_MUTATION_DOCUMENT_OPERATION_NAME;
 
   @override
   List<Object?> get props => [document, operationName];
@@ -641,6 +721,7 @@ class CachoStateArguments extends JsonSerializable with EquatableMixin {
   Map<String, dynamic> toJson() => _$CachoStateArgumentsToJson(this);
 }
 
+final CACHO_STATE_SUBSCRIPTION_DOCUMENT_OPERATION_NAME = 'cachoState';
 final CACHO_STATE_SUBSCRIPTION_DOCUMENT = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.subscription,
@@ -811,7 +892,7 @@ class CachoStateSubscription
   final DocumentNode document = CACHO_STATE_SUBSCRIPTION_DOCUMENT;
 
   @override
-  final String operationName = 'cachoState';
+  final String operationName = CACHO_STATE_SUBSCRIPTION_DOCUMENT_OPERATION_NAME;
 
   @override
   final CachoStateArguments variables;

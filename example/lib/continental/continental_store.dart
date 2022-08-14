@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:bootstrap_dart/server_renderer.dart';
+import 'package:deact_bootstrap/server_renderer.dart';
 import 'package:bootstrap_dart_example/continental/continental_command.dart';
 import 'package:bootstrap_dart_example/database.dart';
 import 'package:collection/collection.dart';
