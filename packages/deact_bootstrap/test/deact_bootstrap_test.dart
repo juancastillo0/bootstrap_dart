@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    bootstrapRenderer = const DeactBootstrapRenderer();
+    DeactBootstrapRenderer.setUp();
 
     setUp(() {
       // Additional setup goes here.

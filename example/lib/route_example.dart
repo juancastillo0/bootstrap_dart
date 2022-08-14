@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
-import 'package:bootstrap_dart/bootstrap/bootstrap_renderer.dart';
 import 'package:bootstrap_dart/bootstrap/navbar.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_view.dart';
@@ -14,7 +13,7 @@ import 'package:deact_bootstrap/router.dart';
 import 'package:deact/deact_html52.dart';
 
 DRouter appRouter() {
-  bootstrapRenderer = const DeactBootstrapRenderer();
+  DeactBootstrapRenderer.setUp();
   return DRouter(
     routes: allRoutes(),
     fallback: notFound(),

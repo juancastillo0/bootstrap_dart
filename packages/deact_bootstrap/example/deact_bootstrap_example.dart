@@ -3,7 +3,7 @@ import 'package:deact/deact.dart';
 import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 void main() {
-  bootstrapRenderer = const DeactBootstrapRenderer();
+  DeactBootstrapRenderer.setUp();
   final div = bootstrapRenderer.el('div') as DeactNode;
 
   print('div $div');
