@@ -88,8 +88,11 @@ class ToastsController {
   DeactNode render() {
     return fc(
       (ctx) {
+        final dummy = ctx.hookState(() => false);
         ctx.hookEffect(
-          () => stream.listen((event) => ctx.scheduleRerender()).cancel,
+          () => stream.listen((event) {
+            dummy.value = !dummy.value;
+          }).cancel,
           const [],
         );
         final toRender =

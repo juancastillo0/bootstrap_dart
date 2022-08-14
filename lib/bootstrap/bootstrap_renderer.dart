@@ -3,6 +3,10 @@ import 'package:universal_html/html.dart' as html;
 const _error = '''
 You should implement a BootstrapRenderer and set the `bootstrapRenderer`
 for Bootstrap Dart to render the components.
+You can use one of the provided packages:
+- jaspr_bootstrap
+- rad_bootstrap
+- deact_bootstrap
 ''';
 
 class BootstrapRenderer<N> {
@@ -33,10 +37,7 @@ abstract class BootstrapBuildContext {
     bool Function(Object?, Object?)? equals,
   ]);
 
-  void scheduleRerender();
-
-  State<T> hookState<T>(T Function() create) =>
-      State(hookRef(create), scheduleRerender);
+  State<T> hookState<T>(T Function() create);
 }
 
 BootstrapRenderer bootstrapRenderer = BootstrapRenderer();
@@ -46,16 +47,4 @@ abstract class Ref<T> {
   T value;
 }
 
-class State<T> {
-  State(this._ref, this._scheduleRerender);
-  final Ref<T> _ref;
-  final void Function() _scheduleRerender;
-
-  T get value => _ref.value;
-  set value(T newValue) {
-    if (value != newValue) {
-      _ref.value = newValue;
-      _scheduleRerender();
-    }
-  }
-}
+typedef State<T> = Ref<T>;

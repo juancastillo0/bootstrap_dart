@@ -67,8 +67,8 @@ class DeactBootstrapContext extends BootstrapBuildContext {
   }
 
   @override
-  void scheduleRerender() {
-    ctx.scheduleRerender();
+  Ref<T> hookState<T>(T Function() create) {
+    return ctx.hookState(create).bootstrapRef;
   }
 
   @override
@@ -84,23 +84,32 @@ extension BootstrapContextExt on deact.ComponentContext {
 }
 
 class DeactBootstrapRef<T> implements Ref<T> {
-  final deact.Ref<T> ref;
+  final deact.Ref<T>? ref;
+  final deact.State<T>? state;
 
-  DeactBootstrapRef(this.ref);
+  bool get isState => state != null;
 
-  @override
-  T get value => ref.value;
-
-  @override
-  set value(T v) => ref.value = v;
+  DeactBootstrapRef.ref(deact.Ref<T> this.ref) : state = null;
+  DeactBootstrapRef.state(deact.State<T> this.state) : ref = null;
 
   @override
-  operator ==(Object other) => other is DeactBootstrapRef && other.ref == ref;
+  T get value => isState ? state!.value : ref!.value;
 
   @override
-  int get hashCode => ref.hashCode;
+  set value(T v) => isState ? state!.value = v : ref!.value = v;
+
+  @override
+  operator ==(Object other) =>
+      other is DeactBootstrapRef && other.ref == ref && other.state == state;
+
+  @override
+  int get hashCode => ref.hashCode ^ state.hashCode;
 }
 
 extension BootstrapRefExt<T> on deact.Ref<T> {
-  Ref<T> get bootstrapRef => DeactBootstrapRef(this);
+  Ref<T> get bootstrapRef => DeactBootstrapRef.ref(this);
+}
+
+extension BootstrapStateExt<T> on deact.State<T> {
+  Ref<T> get bootstrapRef => DeactBootstrapRef.state(this);
 }
