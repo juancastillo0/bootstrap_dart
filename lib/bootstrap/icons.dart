@@ -2,6 +2,9 @@
 
 import '../src/prelude.dart';
 
+/// Return an "i" html element with the bootstrap [icon]
+///
+/// https://icons.getbootstrap.com/
 DeactNode icon(
   BIcon icon, {
   String? color,
@@ -13,7 +16,7 @@ DeactNode icon(
   return el(
     'i',
     attributes: {
-      'class': 'bi-${icon.nameHtml}',
+      'class': icon.nameHtml,
       'style': '${fontSize == null ? '' : 'font-size: $fontSize;'}'
           '${color == null ? '' : ' color: $color;'}${style ?? ''}',
       'role': "img",
@@ -24,14 +27,20 @@ DeactNode icon(
 }
 
 extension BIconExt on BIcon {
+  /// The html name of the icon to be used as a css class
   String get nameHtml {
-    final _name = toString().split('.').last;
-    return _name.startsWith('\$')
+    String _name = name;
+    _name = _name.startsWith('\$')
         ? _name.substring(1).replaceAll('_', '-')
         : _name.replaceAll('_', '-');
+
+    return 'bi-$_name';
   }
 }
 
+/// The list of Bootstrap icons in bootstrap-icons@1.7.2.
+///
+/// https://icons.getbootstrap.com/
 enum BIcon {
   $123,
   alarm_fill,
