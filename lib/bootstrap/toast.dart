@@ -6,6 +6,7 @@ import 'bootstrap_core.dart';
 
 /// Toasts https://getbootstrap.com/docs/5.1/components/toasts/
 
+/// https://getbootstrap.com/docs/5.2/components/toasts/#events
 enum ToastEventType {
   show,
   shown,
@@ -13,11 +14,13 @@ enum ToastEventType {
   hidden,
 }
 
+/// Event type emitted by [ToastsController]
 enum ToastsControllerEvent {
   added,
   deleted,
 }
 
+/// A
 class ToastInfo {
   final int id;
   final DeactNode node;
@@ -30,11 +33,16 @@ class ToastInfo {
   });
 }
 
+/// A controller to [add] nodes as toasts to
+/// the [toastsContainer] returned by [render].
 class ToastsController {
+  /// Wether multiple toasts could be rendered at the same time.
   final bool allowMultiple;
   final Alignment verticalPosition;
   final Alignment horizontalPosition;
 
+  /// A controller to [add] nodes as toasts to
+  /// the [toastsContainer] returned by [render].
   ToastsController({
     this.allowMultiple = true,
     this.verticalPosition = Alignment.end,
@@ -49,12 +57,14 @@ class ToastsController {
 
   int _count = 0;
 
+  /// Adds [content] as a [toast] to the queue for a given [duration].
+  /// Yo can use [toastContent] for creating the [content].
   void Function() add(
-    DeactNode _node, {
+    DeactNode content, {
     Duration duration = const Duration(seconds: 5),
   }) {
     _count++;
-    final node = ToastInfo(id: _count, node: _node, duration: duration);
+    final node = ToastInfo(id: _count, node: content, duration: duration);
     final remove = _setUpRemove(node);
 
     if (allowMultiple || queue.isEmpty) {
@@ -85,6 +95,9 @@ class ToastsController {
     return remove;
   }
 
+  /// Renders a [toastsContainer] with all the toasts in the [queue]
+  /// that should be rendered given their duration and whether [allowMultiple]
+  /// is true.
   DeactNode render() {
     return fc(
       (ctx) {
@@ -136,6 +149,7 @@ void showToast() {
   Toast(elem).show();
 }
 
+/// A container for [toast] components.
 DeactNode toastsContainer({
   Alignment verticalPosition = Alignment.end,
   Alignment horizontalPosition = Alignment.end,
@@ -163,6 +177,11 @@ DeactNode toastsContainer({
   // );
 }
 
+/// A toast is a message or notification for the user.
+/// This could be used within a [toastsContainer] and the [content]
+/// could be specified with [toastContent].
+///
+/// https://getbootstrap.com/docs/5.1/components/toasts/
 DeactNode toast({
   required Object key,
   required DeactNode content,
@@ -210,6 +229,8 @@ DeactNode toast({
   });
 }
 
+/// A button to close a toast.
+/// Used within the header of [toastContent].
 DeactNode closeToastButton({
   bool disabled = false,
   bool white = false,
@@ -226,6 +247,7 @@ DeactNode closeToastButton({
   );
 }
 
+/// The content inside a [toast].
 DeactNode toastContent({
   Iterable<DeactNode>? header,
   Iterable<DeactNode>? body,
@@ -249,6 +271,10 @@ DeactNode toastContent({
   ]);
 }
 
+/// A wrapper around the [ToastJS] instance with utilities
+/// for showing and closing the modal.
+///
+/// https://getbootstrap.com/docs/5.1/components/modal/
 class Toast {
   final ToastJS _inner;
   final html.Element element;

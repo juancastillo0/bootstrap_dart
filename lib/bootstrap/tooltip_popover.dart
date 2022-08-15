@@ -3,7 +3,10 @@ import 'package:collection/collection.dart';
 
 import '../src/prelude.dart';
 
-/// For [attributes] use [popoverAttributes]
+/// Returns a component that shows [content] as a popover over the [children].
+/// [attributes] can be constructed using [popoverAttributes].
+///
+/// https://getbootstrap.com/docs/5.2/components/popovers/
 DeactNode popoverWrapper({
   required String content,
   Iterable<DeactNode>? children,
@@ -35,6 +38,7 @@ DeactNode popoverWrapper({
   });
 }
 
+/// https://getbootstrap.com/docs/5.2/components/popovers/
 Map<String, Object> popoverAttributes({
   String? title,
   String? className,
@@ -71,9 +75,10 @@ Map<String, Object> popoverAttributes({
   };
 }
 
-/// Tooltips https://getbootstrap.com/docs/5.1/components/tooltips/
-///
+/// Returns a component that shows [title] as a tooltip over the [children].
 /// [attributes] can be constructed using [tooltipAttributes].
+///
+/// Tooltips https://getbootstrap.com/docs/5.1/components/tooltips/
 DeactNode tooltipWrapper({
   required String title,
   Iterable<DeactNode>? children,
@@ -101,14 +106,20 @@ DeactNode tooltipWrapper({
   });
 }
 
+/// A wrapper over [TooltipJS].
+/// When instantiated, a tooltip will be shown over [element].
+/// [dispose] will remove the tooltip.
+/// Used in [tooltipWrapper].
 class Tooltip {
   final TooltipJS _inner;
   final html.Element element;
   Tooltip(this.element) : _inner = TooltipJS(element);
 
+  /// Removes the tooltip from the [element].
   void dispose() => _inner.dispose();
 }
 
+/// https://getbootstrap.com/docs/5.2/components/tooltips/#directions
 enum TooltipPlacement {
   auto,
   top,
@@ -117,6 +128,7 @@ enum TooltipPlacement {
   right,
 }
 
+/// https://getbootstrap.com/docs/5.2/components/tooltips/#options
 enum TooltipTrigger {
   click,
   hover,
@@ -129,6 +141,8 @@ enum TooltipTrigger {
 ///
 /// The returned attributes can be used in the `attributes`
 /// parameter of [tooltipWrapper]
+///
+/// https://getbootstrap.com/docs/5.2/components/tooltips
 Map<String, Object> tooltipAttributes({
   String title = '',
   bool animation = true,
