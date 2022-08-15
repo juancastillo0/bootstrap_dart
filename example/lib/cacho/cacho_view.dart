@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
-import 'package:bootstrap_dart/router.dart';
+import 'package:deact_bootstrap/router.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_command.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_store.dart';
 import 'package:bootstrap_dart_example/int_input.dart';

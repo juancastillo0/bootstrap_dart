@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bootstrap_dart/router.dart';
+import 'package:deact_bootstrap/router.dart';
 import 'package:bootstrap_dart_example/graphql_api.schema.dart';
 import 'package:bootstrap_dart_example/route_example.dart';
 import 'package:shelf/shelf.dart';

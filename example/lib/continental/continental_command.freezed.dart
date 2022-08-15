@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'continental_command.dart';
@@ -11,10 +12,10 @@ part of 'continental_command.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ContinentalComm _$ContinentalCommFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType'] as String?) {
+  switch (json['runtimeType']) {
     case 'start':
       return ContinentalCommStart.fromJson(json);
     case 'addPlayer':
@@ -31,46 +32,6 @@ ContinentalComm _$ContinentalCommFromJson(Map<String, dynamic> json) {
           'Invalid union type "${json['runtimeType']}"!');
   }
 }
-
-/// @nodoc
-class _$ContinentalCommTearOff {
-  const _$ContinentalCommTearOff();
-
-  ContinentalCommStart start() {
-    return const ContinentalCommStart();
-  }
-
-  ContinentalCommAddPlayer addPlayer({required String playerId}) {
-    return ContinentalCommAddPlayer(
-      playerId: playerId,
-    );
-  }
-
-  ContinentalCommComer comer({required bool fromDropped}) {
-    return ContinentalCommComer(
-      fromDropped: fromDropped,
-    );
-  }
-
-  ContinentalCommBajar bajar({required CardSet cardSet}) {
-    return ContinentalCommBajar(
-      cardSet: cardSet,
-    );
-  }
-
-  ContinentalCommCastigarse castigarse({required String playerId}) {
-    return ContinentalCommCastigarse(
-      playerId: playerId,
-    );
-  }
-
-  ContinentalComm fromJson(Map<String, Object> json) {
-    return ContinentalComm.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ContinentalComm = _$ContinentalCommTearOff();
 
 /// @nodoc
 mixin _$ContinentalComm {
@@ -151,31 +112,36 @@ class _$ContinentalCommCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class $ContinentalCommStartCopyWith<$Res> {
-  factory $ContinentalCommStartCopyWith(ContinentalCommStart value,
-          $Res Function(ContinentalCommStart) then) =
-      _$ContinentalCommStartCopyWithImpl<$Res>;
+abstract class _$$ContinentalCommStartCopyWith<$Res> {
+  factory _$$ContinentalCommStartCopyWith(_$ContinentalCommStart value,
+          $Res Function(_$ContinentalCommStart) then) =
+      __$$ContinentalCommStartCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$ContinentalCommStartCopyWithImpl<$Res>
+class __$$ContinentalCommStartCopyWithImpl<$Res>
     extends _$ContinentalCommCopyWithImpl<$Res>
-    implements $ContinentalCommStartCopyWith<$Res> {
-  _$ContinentalCommStartCopyWithImpl(
-      ContinentalCommStart _value, $Res Function(ContinentalCommStart) _then)
-      : super(_value, (v) => _then(v as ContinentalCommStart));
+    implements _$$ContinentalCommStartCopyWith<$Res> {
+  __$$ContinentalCommStartCopyWithImpl(_$ContinentalCommStart _value,
+      $Res Function(_$ContinentalCommStart) _then)
+      : super(_value, (v) => _then(v as _$ContinentalCommStart));
 
   @override
-  ContinentalCommStart get _value => super._value as ContinentalCommStart;
+  _$ContinentalCommStart get _value => super._value as _$ContinentalCommStart;
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ContinentalCommStart extends ContinentalCommStart {
-  const _$ContinentalCommStart() : super._();
+  const _$ContinentalCommStart({final String? $type})
+      : $type = $type ?? 'start',
+        super._();
 
   factory _$ContinentalCommStart.fromJson(Map<String, dynamic> json) =>
       _$$ContinentalCommStartFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -184,9 +150,11 @@ class _$ContinentalCommStart extends ContinentalCommStart {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is ContinentalCommStart);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ContinentalCommStart);
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -272,7 +240,9 @@ class _$ContinentalCommStart extends ContinentalCommStart {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContinentalCommStartToJson(this)..['runtimeType'] = 'start';
+    return _$$ContinentalCommStartToJson(
+      this,
+    );
   }
 }
 
@@ -285,30 +255,30 @@ abstract class ContinentalCommStart extends ContinentalComm {
 }
 
 /// @nodoc
-abstract class $ContinentalCommAddPlayerCopyWith<$Res> {
-  factory $ContinentalCommAddPlayerCopyWith(ContinentalCommAddPlayer value,
-          $Res Function(ContinentalCommAddPlayer) then) =
-      _$ContinentalCommAddPlayerCopyWithImpl<$Res>;
+abstract class _$$ContinentalCommAddPlayerCopyWith<$Res> {
+  factory _$$ContinentalCommAddPlayerCopyWith(_$ContinentalCommAddPlayer value,
+          $Res Function(_$ContinentalCommAddPlayer) then) =
+      __$$ContinentalCommAddPlayerCopyWithImpl<$Res>;
   $Res call({String playerId});
 }
 
 /// @nodoc
-class _$ContinentalCommAddPlayerCopyWithImpl<$Res>
+class __$$ContinentalCommAddPlayerCopyWithImpl<$Res>
     extends _$ContinentalCommCopyWithImpl<$Res>
-    implements $ContinentalCommAddPlayerCopyWith<$Res> {
-  _$ContinentalCommAddPlayerCopyWithImpl(ContinentalCommAddPlayer _value,
-      $Res Function(ContinentalCommAddPlayer) _then)
-      : super(_value, (v) => _then(v as ContinentalCommAddPlayer));
+    implements _$$ContinentalCommAddPlayerCopyWith<$Res> {
+  __$$ContinentalCommAddPlayerCopyWithImpl(_$ContinentalCommAddPlayer _value,
+      $Res Function(_$ContinentalCommAddPlayer) _then)
+      : super(_value, (v) => _then(v as _$ContinentalCommAddPlayer));
 
   @override
-  ContinentalCommAddPlayer get _value =>
-      super._value as ContinentalCommAddPlayer;
+  _$ContinentalCommAddPlayer get _value =>
+      super._value as _$ContinentalCommAddPlayer;
 
   @override
   $Res call({
     Object? playerId = freezed,
   }) {
-    return _then(ContinentalCommAddPlayer(
+    return _then(_$ContinentalCommAddPlayer(
       playerId: playerId == freezed
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
@@ -320,13 +290,19 @@ class _$ContinentalCommAddPlayerCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ContinentalCommAddPlayer extends ContinentalCommAddPlayer {
-  const _$ContinentalCommAddPlayer({required this.playerId}) : super._();
+  const _$ContinentalCommAddPlayer(
+      {required this.playerId, final String? $type})
+      : $type = $type ?? 'addPlayer',
+        super._();
 
   factory _$ContinentalCommAddPlayer.fromJson(Map<String, dynamic> json) =>
       _$$ContinentalCommAddPlayerFromJson(json);
 
   @override
   final String playerId;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -336,21 +312,22 @@ class _$ContinentalCommAddPlayer extends ContinentalCommAddPlayer {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is ContinentalCommAddPlayer &&
-            (identical(other.playerId, playerId) ||
-                const DeepCollectionEquality()
-                    .equals(other.playerId, playerId)));
+        (other.runtimeType == runtimeType &&
+            other is _$ContinentalCommAddPlayer &&
+            const DeepCollectionEquality().equals(other.playerId, playerId));
   }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(playerId);
 
   @JsonKey(ignore: true)
   @override
-  $ContinentalCommAddPlayerCopyWith<ContinentalCommAddPlayer> get copyWith =>
-      _$ContinentalCommAddPlayerCopyWithImpl<ContinentalCommAddPlayer>(
-          this, _$identity);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(playerId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ContinentalCommAddPlayerCopyWith<_$ContinentalCommAddPlayer>
+      get copyWith =>
+          __$$ContinentalCommAddPlayerCopyWithImpl<_$ContinentalCommAddPlayer>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -434,49 +411,50 @@ class _$ContinentalCommAddPlayer extends ContinentalCommAddPlayer {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContinentalCommAddPlayerToJson(this)
-      ..['runtimeType'] = 'addPlayer';
+    return _$$ContinentalCommAddPlayerToJson(
+      this,
+    );
   }
 }
 
 abstract class ContinentalCommAddPlayer extends ContinentalComm {
-  const factory ContinentalCommAddPlayer({required String playerId}) =
+  const factory ContinentalCommAddPlayer({required final String playerId}) =
       _$ContinentalCommAddPlayer;
   const ContinentalCommAddPlayer._() : super._();
 
   factory ContinentalCommAddPlayer.fromJson(Map<String, dynamic> json) =
       _$ContinentalCommAddPlayer.fromJson;
 
-  String get playerId => throw _privateConstructorUsedError;
+  String get playerId;
   @JsonKey(ignore: true)
-  $ContinentalCommAddPlayerCopyWith<ContinentalCommAddPlayer> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ContinentalCommAddPlayerCopyWith<_$ContinentalCommAddPlayer>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ContinentalCommComerCopyWith<$Res> {
-  factory $ContinentalCommComerCopyWith(ContinentalCommComer value,
-          $Res Function(ContinentalCommComer) then) =
-      _$ContinentalCommComerCopyWithImpl<$Res>;
+abstract class _$$ContinentalCommComerCopyWith<$Res> {
+  factory _$$ContinentalCommComerCopyWith(_$ContinentalCommComer value,
+          $Res Function(_$ContinentalCommComer) then) =
+      __$$ContinentalCommComerCopyWithImpl<$Res>;
   $Res call({bool fromDropped});
 }
 
 /// @nodoc
-class _$ContinentalCommComerCopyWithImpl<$Res>
+class __$$ContinentalCommComerCopyWithImpl<$Res>
     extends _$ContinentalCommCopyWithImpl<$Res>
-    implements $ContinentalCommComerCopyWith<$Res> {
-  _$ContinentalCommComerCopyWithImpl(
-      ContinentalCommComer _value, $Res Function(ContinentalCommComer) _then)
-      : super(_value, (v) => _then(v as ContinentalCommComer));
+    implements _$$ContinentalCommComerCopyWith<$Res> {
+  __$$ContinentalCommComerCopyWithImpl(_$ContinentalCommComer _value,
+      $Res Function(_$ContinentalCommComer) _then)
+      : super(_value, (v) => _then(v as _$ContinentalCommComer));
 
   @override
-  ContinentalCommComer get _value => super._value as ContinentalCommComer;
+  _$ContinentalCommComer get _value => super._value as _$ContinentalCommComer;
 
   @override
   $Res call({
     Object? fromDropped = freezed,
   }) {
-    return _then(ContinentalCommComer(
+    return _then(_$ContinentalCommComer(
       fromDropped: fromDropped == freezed
           ? _value.fromDropped
           : fromDropped // ignore: cast_nullable_to_non_nullable
@@ -488,13 +466,18 @@ class _$ContinentalCommComerCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ContinentalCommComer extends ContinentalCommComer {
-  const _$ContinentalCommComer({required this.fromDropped}) : super._();
+  const _$ContinentalCommComer({required this.fromDropped, final String? $type})
+      : $type = $type ?? 'comer',
+        super._();
 
   factory _$ContinentalCommComer.fromJson(Map<String, dynamic> json) =>
       _$$ContinentalCommComerFromJson(json);
 
   @override
   final bool fromDropped;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -504,20 +487,21 @@ class _$ContinentalCommComer extends ContinentalCommComer {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is ContinentalCommComer &&
-            (identical(other.fromDropped, fromDropped) ||
-                const DeepCollectionEquality()
-                    .equals(other.fromDropped, fromDropped)));
+        (other.runtimeType == runtimeType &&
+            other is _$ContinentalCommComer &&
+            const DeepCollectionEquality()
+                .equals(other.fromDropped, fromDropped));
   }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(fromDropped);
 
   @JsonKey(ignore: true)
   @override
-  $ContinentalCommComerCopyWith<ContinentalCommComer> get copyWith =>
-      _$ContinentalCommComerCopyWithImpl<ContinentalCommComer>(
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(fromDropped));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ContinentalCommComerCopyWith<_$ContinentalCommComer> get copyWith =>
+      __$$ContinentalCommComerCopyWithImpl<_$ContinentalCommComer>(
           this, _$identity);
 
   @override
@@ -602,48 +586,50 @@ class _$ContinentalCommComer extends ContinentalCommComer {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContinentalCommComerToJson(this)..['runtimeType'] = 'comer';
+    return _$$ContinentalCommComerToJson(
+      this,
+    );
   }
 }
 
 abstract class ContinentalCommComer extends ContinentalComm {
-  const factory ContinentalCommComer({required bool fromDropped}) =
+  const factory ContinentalCommComer({required final bool fromDropped}) =
       _$ContinentalCommComer;
   const ContinentalCommComer._() : super._();
 
   factory ContinentalCommComer.fromJson(Map<String, dynamic> json) =
       _$ContinentalCommComer.fromJson;
 
-  bool get fromDropped => throw _privateConstructorUsedError;
+  bool get fromDropped;
   @JsonKey(ignore: true)
-  $ContinentalCommComerCopyWith<ContinentalCommComer> get copyWith =>
+  _$$ContinentalCommComerCopyWith<_$ContinentalCommComer> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ContinentalCommBajarCopyWith<$Res> {
-  factory $ContinentalCommBajarCopyWith(ContinentalCommBajar value,
-          $Res Function(ContinentalCommBajar) then) =
-      _$ContinentalCommBajarCopyWithImpl<$Res>;
+abstract class _$$ContinentalCommBajarCopyWith<$Res> {
+  factory _$$ContinentalCommBajarCopyWith(_$ContinentalCommBajar value,
+          $Res Function(_$ContinentalCommBajar) then) =
+      __$$ContinentalCommBajarCopyWithImpl<$Res>;
   $Res call({CardSet cardSet});
 }
 
 /// @nodoc
-class _$ContinentalCommBajarCopyWithImpl<$Res>
+class __$$ContinentalCommBajarCopyWithImpl<$Res>
     extends _$ContinentalCommCopyWithImpl<$Res>
-    implements $ContinentalCommBajarCopyWith<$Res> {
-  _$ContinentalCommBajarCopyWithImpl(
-      ContinentalCommBajar _value, $Res Function(ContinentalCommBajar) _then)
-      : super(_value, (v) => _then(v as ContinentalCommBajar));
+    implements _$$ContinentalCommBajarCopyWith<$Res> {
+  __$$ContinentalCommBajarCopyWithImpl(_$ContinentalCommBajar _value,
+      $Res Function(_$ContinentalCommBajar) _then)
+      : super(_value, (v) => _then(v as _$ContinentalCommBajar));
 
   @override
-  ContinentalCommBajar get _value => super._value as ContinentalCommBajar;
+  _$ContinentalCommBajar get _value => super._value as _$ContinentalCommBajar;
 
   @override
   $Res call({
     Object? cardSet = freezed,
   }) {
-    return _then(ContinentalCommBajar(
+    return _then(_$ContinentalCommBajar(
       cardSet: cardSet == freezed
           ? _value.cardSet
           : cardSet // ignore: cast_nullable_to_non_nullable
@@ -655,13 +641,18 @@ class _$ContinentalCommBajarCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ContinentalCommBajar extends ContinentalCommBajar {
-  const _$ContinentalCommBajar({required this.cardSet}) : super._();
+  const _$ContinentalCommBajar({required this.cardSet, final String? $type})
+      : $type = $type ?? 'bajar',
+        super._();
 
   factory _$ContinentalCommBajar.fromJson(Map<String, dynamic> json) =>
       _$$ContinentalCommBajarFromJson(json);
 
   @override
   final CardSet cardSet;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -671,19 +662,20 @@ class _$ContinentalCommBajar extends ContinentalCommBajar {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is ContinentalCommBajar &&
-            (identical(other.cardSet, cardSet) ||
-                const DeepCollectionEquality().equals(other.cardSet, cardSet)));
+        (other.runtimeType == runtimeType &&
+            other is _$ContinentalCommBajar &&
+            const DeepCollectionEquality().equals(other.cardSet, cardSet));
   }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(cardSet);
 
   @JsonKey(ignore: true)
   @override
-  $ContinentalCommBajarCopyWith<ContinentalCommBajar> get copyWith =>
-      _$ContinentalCommBajarCopyWithImpl<ContinentalCommBajar>(
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(cardSet));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ContinentalCommBajarCopyWith<_$ContinentalCommBajar> get copyWith =>
+      __$$ContinentalCommBajarCopyWithImpl<_$ContinentalCommBajar>(
           this, _$identity);
 
   @override
@@ -768,49 +760,52 @@ class _$ContinentalCommBajar extends ContinentalCommBajar {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContinentalCommBajarToJson(this)..['runtimeType'] = 'bajar';
+    return _$$ContinentalCommBajarToJson(
+      this,
+    );
   }
 }
 
 abstract class ContinentalCommBajar extends ContinentalComm {
-  const factory ContinentalCommBajar({required CardSet cardSet}) =
+  const factory ContinentalCommBajar({required final CardSet cardSet}) =
       _$ContinentalCommBajar;
   const ContinentalCommBajar._() : super._();
 
   factory ContinentalCommBajar.fromJson(Map<String, dynamic> json) =
       _$ContinentalCommBajar.fromJson;
 
-  CardSet get cardSet => throw _privateConstructorUsedError;
+  CardSet get cardSet;
   @JsonKey(ignore: true)
-  $ContinentalCommBajarCopyWith<ContinentalCommBajar> get copyWith =>
+  _$$ContinentalCommBajarCopyWith<_$ContinentalCommBajar> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ContinentalCommCastigarseCopyWith<$Res> {
-  factory $ContinentalCommCastigarseCopyWith(ContinentalCommCastigarse value,
-          $Res Function(ContinentalCommCastigarse) then) =
-      _$ContinentalCommCastigarseCopyWithImpl<$Res>;
+abstract class _$$ContinentalCommCastigarseCopyWith<$Res> {
+  factory _$$ContinentalCommCastigarseCopyWith(
+          _$ContinentalCommCastigarse value,
+          $Res Function(_$ContinentalCommCastigarse) then) =
+      __$$ContinentalCommCastigarseCopyWithImpl<$Res>;
   $Res call({String playerId});
 }
 
 /// @nodoc
-class _$ContinentalCommCastigarseCopyWithImpl<$Res>
+class __$$ContinentalCommCastigarseCopyWithImpl<$Res>
     extends _$ContinentalCommCopyWithImpl<$Res>
-    implements $ContinentalCommCastigarseCopyWith<$Res> {
-  _$ContinentalCommCastigarseCopyWithImpl(ContinentalCommCastigarse _value,
-      $Res Function(ContinentalCommCastigarse) _then)
-      : super(_value, (v) => _then(v as ContinentalCommCastigarse));
+    implements _$$ContinentalCommCastigarseCopyWith<$Res> {
+  __$$ContinentalCommCastigarseCopyWithImpl(_$ContinentalCommCastigarse _value,
+      $Res Function(_$ContinentalCommCastigarse) _then)
+      : super(_value, (v) => _then(v as _$ContinentalCommCastigarse));
 
   @override
-  ContinentalCommCastigarse get _value =>
-      super._value as ContinentalCommCastigarse;
+  _$ContinentalCommCastigarse get _value =>
+      super._value as _$ContinentalCommCastigarse;
 
   @override
   $Res call({
     Object? playerId = freezed,
   }) {
-    return _then(ContinentalCommCastigarse(
+    return _then(_$ContinentalCommCastigarse(
       playerId: playerId == freezed
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
@@ -822,13 +817,19 @@ class _$ContinentalCommCastigarseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ContinentalCommCastigarse extends ContinentalCommCastigarse {
-  const _$ContinentalCommCastigarse({required this.playerId}) : super._();
+  const _$ContinentalCommCastigarse(
+      {required this.playerId, final String? $type})
+      : $type = $type ?? 'castigarse',
+        super._();
 
   factory _$ContinentalCommCastigarse.fromJson(Map<String, dynamic> json) =>
       _$$ContinentalCommCastigarseFromJson(json);
 
   @override
   final String playerId;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -838,21 +839,21 @@ class _$ContinentalCommCastigarse extends ContinentalCommCastigarse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is ContinentalCommCastigarse &&
-            (identical(other.playerId, playerId) ||
-                const DeepCollectionEquality()
-                    .equals(other.playerId, playerId)));
+        (other.runtimeType == runtimeType &&
+            other is _$ContinentalCommCastigarse &&
+            const DeepCollectionEquality().equals(other.playerId, playerId));
   }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(playerId);
 
   @JsonKey(ignore: true)
   @override
-  $ContinentalCommCastigarseCopyWith<ContinentalCommCastigarse> get copyWith =>
-      _$ContinentalCommCastigarseCopyWithImpl<ContinentalCommCastigarse>(
-          this, _$identity);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(playerId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ContinentalCommCastigarseCopyWith<_$ContinentalCommCastigarse>
+      get copyWith => __$$ContinentalCommCastigarseCopyWithImpl<
+          _$ContinentalCommCastigarse>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -936,50 +937,29 @@ class _$ContinentalCommCastigarse extends ContinentalCommCastigarse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContinentalCommCastigarseToJson(this)
-      ..['runtimeType'] = 'castigarse';
+    return _$$ContinentalCommCastigarseToJson(
+      this,
+    );
   }
 }
 
 abstract class ContinentalCommCastigarse extends ContinentalComm {
-  const factory ContinentalCommCastigarse({required String playerId}) =
+  const factory ContinentalCommCastigarse({required final String playerId}) =
       _$ContinentalCommCastigarse;
   const ContinentalCommCastigarse._() : super._();
 
   factory ContinentalCommCastigarse.fromJson(Map<String, dynamic> json) =
       _$ContinentalCommCastigarse.fromJson;
 
-  String get playerId => throw _privateConstructorUsedError;
+  String get playerId;
   @JsonKey(ignore: true)
-  $ContinentalCommCastigarseCopyWith<ContinentalCommCastigarse> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ContinentalCommCastigarseCopyWith<_$ContinentalCommCastigarse>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 ExternalCard _$ExternalCardFromJson(Map<String, dynamic> json) {
   return _ExternalCard.fromJson(json);
 }
-
-/// @nodoc
-class _$ExternalCardTearOff {
-  const _$ExternalCardTearOff();
-
-  _ExternalCard call(
-      Card card, String playerId, int tableCardsId, int position) {
-    return _ExternalCard(
-      card,
-      playerId,
-      tableCardsId,
-      position,
-    );
-  }
-
-  ExternalCard fromJson(Map<String, Object> json) {
-    return ExternalCard.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ExternalCard = _$ExternalCardTearOff();
 
 /// @nodoc
 mixin _$ExternalCard {
@@ -1039,24 +1019,25 @@ class _$ExternalCardCopyWithImpl<$Res> implements $ExternalCardCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ExternalCardCopyWith<$Res>
+abstract class _$$_ExternalCardCopyWith<$Res>
     implements $ExternalCardCopyWith<$Res> {
-  factory _$ExternalCardCopyWith(
-          _ExternalCard value, $Res Function(_ExternalCard) then) =
-      __$ExternalCardCopyWithImpl<$Res>;
+  factory _$$_ExternalCardCopyWith(
+          _$_ExternalCard value, $Res Function(_$_ExternalCard) then) =
+      __$$_ExternalCardCopyWithImpl<$Res>;
   @override
   $Res call({Card card, String playerId, int tableCardsId, int position});
 }
 
 /// @nodoc
-class __$ExternalCardCopyWithImpl<$Res> extends _$ExternalCardCopyWithImpl<$Res>
-    implements _$ExternalCardCopyWith<$Res> {
-  __$ExternalCardCopyWithImpl(
-      _ExternalCard _value, $Res Function(_ExternalCard) _then)
-      : super(_value, (v) => _then(v as _ExternalCard));
+class __$$_ExternalCardCopyWithImpl<$Res>
+    extends _$ExternalCardCopyWithImpl<$Res>
+    implements _$$_ExternalCardCopyWith<$Res> {
+  __$$_ExternalCardCopyWithImpl(
+      _$_ExternalCard _value, $Res Function(_$_ExternalCard) _then)
+      : super(_value, (v) => _then(v as _$_ExternalCard));
 
   @override
-  _ExternalCard get _value => super._value as _ExternalCard;
+  _$_ExternalCard get _value => super._value as _$_ExternalCard;
 
   @override
   $Res call({
@@ -1065,7 +1046,7 @@ class __$ExternalCardCopyWithImpl<$Res> extends _$ExternalCardCopyWithImpl<$Res>
     Object? tableCardsId = freezed,
     Object? position = freezed,
   }) {
-    return _then(_ExternalCard(
+    return _then(_$_ExternalCard(
       card == freezed
           ? _value.card
           : card // ignore: cast_nullable_to_non_nullable
@@ -1112,57 +1093,54 @@ class _$_ExternalCard implements _ExternalCard {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ExternalCard &&
-            (identical(other.card, card) ||
-                const DeepCollectionEquality().equals(other.card, card)) &&
-            (identical(other.playerId, playerId) ||
-                const DeepCollectionEquality()
-                    .equals(other.playerId, playerId)) &&
-            (identical(other.tableCardsId, tableCardsId) ||
-                const DeepCollectionEquality()
-                    .equals(other.tableCardsId, tableCardsId)) &&
-            (identical(other.position, position) ||
-                const DeepCollectionEquality()
-                    .equals(other.position, position)));
+        (other.runtimeType == runtimeType &&
+            other is _$_ExternalCard &&
+            const DeepCollectionEquality().equals(other.card, card) &&
+            const DeepCollectionEquality().equals(other.playerId, playerId) &&
+            const DeepCollectionEquality()
+                .equals(other.tableCardsId, tableCardsId) &&
+            const DeepCollectionEquality().equals(other.position, position));
   }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(card) ^
-      const DeepCollectionEquality().hash(playerId) ^
-      const DeepCollectionEquality().hash(tableCardsId) ^
-      const DeepCollectionEquality().hash(position);
 
   @JsonKey(ignore: true)
   @override
-  _$ExternalCardCopyWith<_ExternalCard> get copyWith =>
-      __$ExternalCardCopyWithImpl<_ExternalCard>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(card),
+      const DeepCollectionEquality().hash(playerId),
+      const DeepCollectionEquality().hash(tableCardsId),
+      const DeepCollectionEquality().hash(position));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ExternalCardCopyWith<_$_ExternalCard> get copyWith =>
+      __$$_ExternalCardCopyWithImpl<_$_ExternalCard>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ExternalCardToJson(this);
+    return _$$_ExternalCardToJson(
+      this,
+    );
   }
 }
 
 abstract class _ExternalCard implements ExternalCard {
-  const factory _ExternalCard(
-          Card card, String playerId, int tableCardsId, int position) =
-      _$_ExternalCard;
+  const factory _ExternalCard(final Card card, final String playerId,
+      final int tableCardsId, final int position) = _$_ExternalCard;
 
   factory _ExternalCard.fromJson(Map<String, dynamic> json) =
       _$_ExternalCard.fromJson;
 
   @override
-  Card get card => throw _privateConstructorUsedError;
+  Card get card;
   @override
-  String get playerId => throw _privateConstructorUsedError;
+  String get playerId;
   @override
-  int get tableCardsId => throw _privateConstructorUsedError;
+  int get tableCardsId;
   @override
-  int get position => throw _privateConstructorUsedError;
+  int get position;
   @override
   @JsonKey(ignore: true)
-  _$ExternalCardCopyWith<_ExternalCard> get copyWith =>
+  _$$_ExternalCardCopyWith<_$_ExternalCard> get copyWith =>
       throw _privateConstructorUsedError;
 }

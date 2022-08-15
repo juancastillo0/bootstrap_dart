@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:bootstrap_dart/server_renderer.dart';
+import 'package:deact_bootstrap/server_renderer.dart';
 import 'package:bootstrap_dart_example/continental/continental_view.dart';
 import 'package:idb_shim/idb_browser.dart';
 import 'package:idb_shim/idb.dart' as idb;

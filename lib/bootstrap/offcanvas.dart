@@ -1,22 +1,10 @@
 import 'package:universal_html/html.dart' as html;
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
 
+import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 
-enum OffcanvasPlacement {
-  top,
-  bottom,
-  start,
-  end,
-}
-
-extension OffcanvasPlacementExt on OffcanvasPlacement {
-  String get name => toString().split('.').last;
-}
-
 Map<String, Object> offcanvasAttributes({
-  required OffcanvasPlacement placement,
+  required Placement placement,
   String? className,
   String? id,
   String? labelledBy,
@@ -60,9 +48,12 @@ DeactNode offcanvas({
         div(
           className: 'offcanvas-header',
           children: [
-            h5(
-              className: 'offcanvas-title',
-              id: labelId,
+            el(
+              'h5',
+              attributes: {
+                'class': 'offcanvas-title',
+                'id': labelId,
+              },
               children: title,
             ),
             if (showCloseButton)

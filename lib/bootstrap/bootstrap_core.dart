@@ -1,17 +1,13 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:async';
-
-import 'package:deact/deact.dart';
-import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
-import 'offcanvas.dart';
+import '../src/prelude.dart';
 import 'user_selection.dart';
 
-export 'js_bindings_interface.dart' if (dart.library.html) 'js_bindings.dart';
-export 'user_selection.dart';
+export '../bootstrap/user_selection.dart';
+export '../src/js_bindings_interface.dart'
+    if (dart.library.html) '../src/js_bindings.dart';
 
 enum BColor {
   primary,
@@ -38,10 +34,6 @@ extension BtnTypeExt on BColor {
 enum BSize {
   lg,
   sm,
-}
-
-extension BSizeExt on BSize {
-  String get name => toString().split('.').last;
 }
 
 /// Alerts https://getbootstrap.com/docs/5.1/components/alerts/
@@ -82,15 +74,27 @@ DeactNode buttonGroup<T>({
     },
     children: [
       ...values.map((e) {
-        return button(
-          className: buttonClass + (selectedSet.contains(e) ? ' active' : ''),
-          type: 'button',
-          onclick: (_) => selection.onSelect(e),
+        return el(
+          'button',
+          attributes: {
+            'class': buttonClass + (selectedSet.contains(e) ? ' active' : ''),
+            'type': 'button',
+          },
+          listeners: {
+            'onclick': (_) => selection.onSelect(e),
+          },
           children: renderItem(e),
         );
       }),
     ],
   );
+}
+
+enum Placement {
+  top,
+  bottom,
+  start,
+  end,
 }
 
 enum AxisAlign {
@@ -221,10 +225,6 @@ enum Direction {
   end,
 }
 
-extension DirectionExt on Direction {
-  String get name => toString().split('.').last;
-}
-
 enum AutoClose {
   true_,
   false_,
@@ -251,9 +251,12 @@ DeactNode dropdown({
   String offset = '0,2',
   AutoClose autoClose = AutoClose.true_,
 }) {
-  return div(
-    className: 'btn-group ${dropdownClass ?? ''}'
-        '${direction != Direction.down ? ' drop${direction.name}' : ''}',
+  return el(
+    'div',
+    attributes: {
+      'class': 'btn-group ${dropdownClass ?? ''}'
+          '${direction != Direction.down ? ' drop${direction.name}' : ''}',
+    },
     children: [
       el(
         'button',
@@ -342,7 +345,7 @@ String stackClass({required Space gap, required bool vert}) =>
 String borderClass({
   BColor? color,
   Space? size,
-  Set<OffcanvasPlacement> sides = const {},
+  Set<Placement> sides = const {},
 }) =>
     [
       if (color != null) 'border-${color.name}',
@@ -365,7 +368,7 @@ String roundedClass({
   bool circle = false,
   bool pill = false,
   RoundedSize? size,
-  Set<OffcanvasPlacement> sides = const {},
+  Set<Placement> sides = const {},
 }) =>
     sides.isEmpty
         ? 'rounded${pill ? '-pill' : circle ? '-circle' : ''}'
@@ -381,7 +384,7 @@ class ScrollSpyHook {
 }
 
 ScrollSpyHook useScrollSpy(
-  ComponentContext ctx,
+  BootstrapBuildContext ctx,
   Ref<html.Element?> ref, {
   required String target,
   int offset = 50,
@@ -416,10 +419,6 @@ enum TogglableComponent {
   modal,
   offcanvas,
   collapse,
-}
-
-extension TogglableComponentExt on TogglableComponent {
-  String get name => toString().split('.').last;
 }
 
 Map<String, Object> toggleButtonAttributes({
@@ -464,11 +463,14 @@ DeactNode card({
           children: [header],
         ),
       if (imageSrc != null && !imageBottom)
-        img(
+        el(
+          'img',
           key: 'image-top',
-          className: 'card-img-top',
-          alt: imageAlt,
-          src: imageSrc,
+          attributes: {
+            'class': 'card-img-top',
+            'alt': imageAlt,
+            'src': imageSrc,
+          },
         ),
       div(
         key: 'body',
@@ -492,11 +494,14 @@ DeactNode card({
         ],
       ),
       if (imageSrc != null && imageBottom)
-        img(
+        el(
+          'img',
           key: 'image-bottom',
-          className: 'card-img-bottom',
-          alt: imageAlt,
-          src: imageSrc,
+          attributes: {
+            'class': 'card-img-bottom',
+            'alt': imageAlt,
+            'src': imageSrc,
+          },
         ),
       if (footer != null)
         div(
@@ -527,8 +532,9 @@ DeactNode spinner({
     },
     children: [
       if (!ariaHidden)
-        span(
-          className: 'visually-hidden',
+        el(
+          'span',
+          attributes: {'class': 'visually-hidden'},
           children: [txt('Loading...')],
         )
     ],
@@ -552,10 +558,6 @@ enum ResponsiveBreakPoint {
   xl,
   xxl,
   always,
-}
-
-extension ModalFullScreenBellowExt on ResponsiveBreakPoint {
-  String get name => toString().split('.').last;
 }
 
 enum VerticalAlign {
@@ -602,10 +604,6 @@ enum PlaceholderSize {
   xs,
   sm,
   lg,
-}
-
-extension PlaceholderSizeExt on PlaceholderSize {
-  String get name => toString().split('.').last;
 }
 
 String placeholder({
@@ -659,10 +657,6 @@ enum TabType {
   list,
 }
 
-extension TabTypeExt on TabType {
-  String get name => toString().split('.').last;
-}
-
 DeactNode tabs({
   required TabType type,
   required Iterable<TabItem> items,
@@ -673,7 +667,7 @@ DeactNode tabs({
   String? tabContentClass,
 }) {
   return fragment([
-    nav(children: [
+    el('nav', children: [
       el(
         'div',
         attributes: {
@@ -748,29 +742,4 @@ class TabItem {
     required this.content,
     this.disabled = false,
   });
-}
-
-Ref<html.Element?> useSetUpElement(
-  ComponentContext ctx, {
-  void Function(html.Element)? onSetUp,
-  void Function()? onDispose,
-}) {
-  final elemRef = ctx.hookRef<html.Element?>(() => null);
-  bool disposed = false;
-
-  ctx.hookEffect(
-    () {
-      Future(() {
-        if (!disposed && elemRef.value != null) {
-          onSetUp?.call(elemRef.value!);
-        }
-      });
-      return () {
-        disposed = true;
-        onDispose?.call();
-      };
-    },
-    const [],
-  );
-  return elemRef;
 }

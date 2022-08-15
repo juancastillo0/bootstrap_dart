@@ -236,15 +236,11 @@ final _suggestionDicesGraphQLType =
   setValue(__suggestionDicesGraphQLType);
   __suggestionDicesGraphQLType.fields.addAll(
     [
-      graphQLInt.nonNull().field('compareTo', resolve: (obj, ctx) {
-        final args = ctx.args;
-
-        return obj.compareTo((args["other"] as SuggestionDices));
-      }, inputs: [
-        suggestionDicesGraphQLTypeInput.nonNull().inputField('other')
-      ]),
       graphQLInt.nonNull().field('amount', resolve: (obj, ctx) => obj.amount),
-      graphQLInt.nonNull().field('dice', resolve: (obj, ctx) => obj.dice)
+      graphQLInt.nonNull().field('dice', resolve: (obj, ctx) => obj.dice),
+      graphQLString
+          .nonNull()
+          .field('variant', resolve: (obj, ctx) => obj.variant)
     ],
   );
 
@@ -286,7 +282,11 @@ final _suggestionSalpiconGraphQLType =
 
   setValue(__suggestionSalpiconGraphQLType);
   __suggestionSalpiconGraphQLType.fields.addAll(
-    [],
+    [
+      graphQLString
+          .nonNull()
+          .field('variant', resolve: (obj, ctx) => obj.variant)
+    ],
   );
 
   return __suggestionSalpiconGraphQLType;

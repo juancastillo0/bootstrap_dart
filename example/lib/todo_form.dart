@@ -2,7 +2,7 @@ import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/form.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
-import 'package:bootstrap_dart/hooks.dart';
+import 'package:deact_bootstrap/hooks.dart';
 import 'package:bootstrap_dart_example/duration_input.dart';
 import 'package:bootstrap_dart_example/int_input.dart';
 import 'package:bootstrap_dart_example/todo_store.dart';

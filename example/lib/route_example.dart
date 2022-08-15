@@ -8,14 +8,18 @@ import 'package:bootstrap_dart_example/continental/continental_view.dart';
 import 'package:bootstrap_dart_example/todo_store.dart';
 import 'package:bootstrap_dart_example/todo_view.dart';
 import 'package:deact/deact.dart';
-import 'package:bootstrap_dart/router.dart';
+import 'package:deact_bootstrap/deact_bootstrap.dart';
+import 'package:deact_bootstrap/router.dart';
 import 'package:deact/deact_html52.dart';
 
-DRouter appRouter() => DRouter(
-      routes: allRoutes(),
-      fallback: notFound(),
-      wrapper: appBarWrapper,
-    );
+DRouter appRouter() {
+  DeactBootstrapRenderer.setUp();
+  return DRouter(
+    routes: allRoutes(),
+    fallback: notFound(),
+    wrapper: appBarWrapper,
+  );
+}
 
 List<Route> allRoutes() {
   return [

@@ -1,8 +1,7 @@
 import 'package:universal_html/html.dart' as html;
-import 'package:deact/deact.dart';
 import 'package:collection/collection.dart';
 
-import 'bootstrap_core.dart';
+import '../src/prelude.dart';
 
 /// For [attributes] use [popoverAttributes]
 DeactNode popoverWrapper({
@@ -40,7 +39,7 @@ Map<String, Object> popoverAttributes({
   String? title,
   String? className,
   String? content,
-  Placement placement = Placement.right,
+  TooltipPlacement placement = TooltipPlacement.right,
   bool animation = true,
   String? container,
   Duration? delay, // default: Duration.zero. TODO: support object
@@ -110,7 +109,7 @@ class Tooltip {
   void dispose() => _inner.dispose();
 }
 
-enum Placement {
+enum TooltipPlacement {
   auto,
   top,
   bottom,
@@ -118,19 +117,11 @@ enum Placement {
   right,
 }
 
-extension PlacementExt on Placement {
-  String get name => toString().split('.').last;
-}
-
 enum TooltipTrigger {
   click,
   hover,
   focus,
   manual,
-}
-
-extension TooltipTriggerExt on TooltipTrigger {
-  String get name => toString().split('.').last;
 }
 
 /// You need to enable the tooltip by instantiating a [Tooltip]
@@ -143,7 +134,7 @@ Map<String, Object> tooltipAttributes({
   bool animation = true,
   Duration delay = Duration.zero,
   bool allowHtml = false,
-  Placement placement = Placement.top,
+  TooltipPlacement placement = TooltipPlacement.top,
   String? selector,
   String? template,
   String? customClass,

@@ -95,7 +95,7 @@ enum CachoCommandType {
   dudar,
 }
 
-@GraphQLClass()
+@GraphQLObject()
 class CachoCommandSuggest extends CachoCommand {
   @override
   CachoCommandType get type => CachoCommandType.suggest;
@@ -113,21 +113,21 @@ class CachoCommandSuggest extends CachoCommand {
   }
 }
 
-@GraphQLClass()
+@GraphQLObject()
 class CachoCommandStart extends CachoCommand {
   @override
   CachoCommandType get type => CachoCommandType.start;
   const CachoCommandStart() : super._();
 }
 
-@GraphQLClass()
+@GraphQLObject()
 class CachoCommandCazar extends CachoCommand {
   @override
   CachoCommandType get type => CachoCommandType.cazar;
   const CachoCommandCazar() : super._();
 }
 
-@GraphQLClass()
+@GraphQLObject()
 class CachoCommandDudar extends CachoCommand {
   @override
   CachoCommandType get type => CachoCommandType.dudar;
@@ -163,6 +163,8 @@ abstract class Suggestion {
   }) = SuggestionDices;
   const factory Suggestion.salpicon() = SuggestionSalpicon;
 
+  String get variant;
+
   Map<String, Object?> toJson();
 
   factory Suggestion.fromJson(Map<String, Object?> json) =>
@@ -172,11 +174,13 @@ abstract class Suggestion {
 }
 
 // TODO: implements Comparable<SuggestionDices>
-@GraphQLClass()
+@GraphQLObject()
 @GraphQLInput()
 class SuggestionDices implements Suggestion, Comparable<SuggestionDices> {
   final int amount;
   final int dice;
+
+  String get variant => 'dices';
 
   const SuggestionDices({
     required this.amount,
@@ -190,21 +194,23 @@ class SuggestionDices implements Suggestion, Comparable<SuggestionDices> {
 
   @override
   Map<String, Object?> toJson() =>
-      {'runtimeType': 'dices', 'amount': amount, 'dice': dice};
+      {'runtimeType': variant, 'amount': amount, 'dice': dice};
 
   factory SuggestionDices.fromJson(Map<String, Object?> json) =>
       SuggestionDices(amount: json['amount'] as int, dice: json['dice'] as int);
 }
 
-@GraphQLClass()
+@GraphQLObject()
 class SuggestionSalpicon implements Suggestion {
   const SuggestionSalpicon();
 
+  String get variant => 'salpicon';
+
   @override
-  Map<String, Object?> toJson() => {'runtimeType': 'salpicon'};
+  Map<String, Object?> toJson() => {'runtimeType': variant};
 }
 
-@GraphQLClass()
+@GraphQLObject()
 class CachoData {
   final String id;
   final int totalDices;

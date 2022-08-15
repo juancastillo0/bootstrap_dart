@@ -7,15 +7,88 @@ part of 'api.graphql.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData
+    _$SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoDataFromJson(
+            Map<String, dynamic> json) =>
+        SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData()
+          ..id = json['id'] as String
+          ..totalDices = json['totalDices'] as int
+          ..canCazar = json['canCazar'] as bool
+          ..minAs = json['minAs'] as int?
+          ..minOther = json['minOther'] as int?
+          ..isPlaying = json['isPlaying'] as bool
+          ..playerNumber = json['playerNumber'] as int
+          ..players = (json['players'] as List<dynamic>)
+              .map((e) => e as String)
+              .toList()
+          ..currentPlayer = json['currentPlayer'] as String?
+          ..previousPlayer = json['previousPlayer'] as String?
+          ..currentSuggestion = json['currentSuggestion'] == null
+              ? null
+              : AllStateMixin$Suggestion.fromJson(
+                  json['currentSuggestion'] as Map<String, dynamic>)
+          ..currentDiceSuggestion = json['currentDiceSuggestion'] == null
+              ? null
+              : AllStateMixin$SuggestionDices.fromJson(
+                  json['currentDiceSuggestion'] as Map<String, dynamic>)
+          ..dices =
+              (json['dices'] as List<dynamic>).map((e) => e as int).toList()
+          ..salpiconedPlayers = (json['salpiconedPlayers'] as List<dynamic>)
+              .map((e) => e as String)
+              .toList();
+
+Map<String, dynamic>
+    _$SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoDataToJson(
+            SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData
+                instance) =>
+        <String, dynamic>{
+          'id': instance.id,
+          'totalDices': instance.totalDices,
+          'canCazar': instance.canCazar,
+          'minAs': instance.minAs,
+          'minOther': instance.minOther,
+          'isPlaying': instance.isPlaying,
+          'playerNumber': instance.playerNumber,
+          'players': instance.players,
+          'currentPlayer': instance.currentPlayer,
+          'previousPlayer': instance.previousPlayer,
+          'currentSuggestion': instance.currentSuggestion?.toJson(),
+          'currentDiceSuggestion': instance.currentDiceSuggestion?.toJson(),
+          'dices': instance.dices,
+          'salpiconedPlayers': instance.salpiconedPlayers,
+        };
+
+SendCachoCommand$Mutation$ResultCachoDataReqStringReq
+    _$SendCachoCommand$Mutation$ResultCachoDataReqStringReqFromJson(
+            Map<String, dynamic> json) =>
+        SendCachoCommand$Mutation$ResultCachoDataReqStringReq()
+          ..ok = json['ok'] == null
+              ? null
+              : SendCachoCommand$Mutation$ResultCachoDataReqStringReq$CachoData
+                  .fromJson(json['ok'] as Map<String, dynamic>)
+          ..err = json['err'] as String?
+          ..isOk = json['isOk'] as bool;
+
+Map<String, dynamic>
+    _$SendCachoCommand$Mutation$ResultCachoDataReqStringReqToJson(
+            SendCachoCommand$Mutation$ResultCachoDataReqStringReq instance) =>
+        <String, dynamic>{
+          'ok': instance.ok?.toJson(),
+          'err': instance.err,
+          'isOk': instance.isOk,
+        };
+
 SendCachoCommand$Mutation _$SendCachoCommand$MutationFromJson(
         Map<String, dynamic> json) =>
     SendCachoCommand$Mutation()
-      ..sendCachoCommand = json['sendCachoCommand'] as String?;
+      ..sendCachoCommand =
+          SendCachoCommand$Mutation$ResultCachoDataReqStringReq.fromJson(
+              json['sendCachoCommand'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$SendCachoCommand$MutationToJson(
         SendCachoCommand$Mutation instance) =>
     <String, dynamic>{
-      'sendCachoCommand': instance.sendCachoCommand,
+      'sendCachoCommand': instance.sendCachoCommand.toJson(),
     };
 
 AllStateMixin$Suggestion$SuggestionDices

@@ -3,14 +3,15 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
+import 'package:deact_bootstrap/deact_bootstrap.dart';
+import 'package:deact_bootstrap/hooks.dart';
+import 'package:deact_bootstrap/router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'package:bootstrap_dart/bootstrap/table.dart';
-import 'package:bootstrap_dart/hooks.dart';
-import 'package:bootstrap_dart/router.dart';
 import 'package:bootstrap_dart_example/continental/continental_command.dart';
 import 'package:bootstrap_dart_example/continental/continental_store.dart';
 import 'package:bootstrap_dart_example/database.dart';
@@ -450,7 +451,7 @@ class ContinentalView extends ComponentNode {
                 children: [
                   h3(children: [txt('Bajar')]),
                   fc((ctx) {
-                    final modalHook = useModal(ctx);
+                    final modalHook = useModal(ctx.bootstrapCtx);
                     return div(
                       children: [
                         button(

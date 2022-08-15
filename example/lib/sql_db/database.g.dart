@@ -6,7 +6,7 @@ part of 'database.dart';
 // MoorGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class ContinentalCommand extends DataClass
     implements Insertable<ContinentalCommand> {
   final int id;
@@ -181,9 +181,10 @@ class ContinentalCommandsCompanion extends UpdateCompanion<ContinentalCommand> {
 
 class ContinentalCommands extends Table
     with TableInfo<ContinentalCommands, ContinentalCommand> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  ContinentalCommands(this._db, [this._alias]);
+  ContinentalCommands(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
@@ -253,7 +254,7 @@ class ContinentalCommands extends Table
 
   @override
   ContinentalCommands createAlias(String alias) {
-    return ContinentalCommands(_db, alias);
+    return ContinentalCommands(attachedDatabase, alias);
   }
 
   @override
@@ -385,9 +386,10 @@ class ContinentalStateCompanion extends UpdateCompanion<ContinentalStateData> {
 
 class ContinentalState extends Table
     with TableInfo<ContinentalState, ContinentalStateData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  ContinentalState(this._db, [this._alias]);
+  ContinentalState(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<String?> id = GeneratedColumn<String?>(
       'id', aliasedName, false,
@@ -436,7 +438,7 @@ class ContinentalState extends Table
 
   @override
   ContinentalState createAlias(String alias) {
-    return ContinentalState(_db, alias);
+    return ContinentalState(attachedDatabase, alias);
   }
 
   @override
@@ -641,9 +643,10 @@ class CommandCompanion extends UpdateCompanion<CommandData> {
 }
 
 class Command extends Table with TableInfo<Command, CommandData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  Command(this._db, [this._alias]);
+  Command(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
@@ -725,7 +728,7 @@ class Command extends Table with TableInfo<Command, CommandData> {
 
   @override
   Command createAlias(String alias) {
-    return Command(_db, alias);
+    return Command(attachedDatabase, alias);
   }
 
   @override
@@ -911,9 +914,10 @@ class StateCompanion extends UpdateCompanion<StateData> {
 }
 
 class State extends Table with TableInfo<State, StateData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  State(this._db, [this._alias]);
+  State(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<String?> id = GeneratedColumn<String?>(
       'id', aliasedName, false,
@@ -986,7 +990,7 @@ class State extends Table with TableInfo<State, StateData> {
 
   @override
   State createAlias(String alias) {
-    return State(_db, alias);
+    return State(attachedDatabase, alias);
   }
 
   @override

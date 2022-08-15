@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:deact/deact.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'package:bootstrap_dart/server_renderer.dart';
+import 'package:deact_bootstrap/server_renderer.dart';
 
 void main() {
   test('server render', () async {

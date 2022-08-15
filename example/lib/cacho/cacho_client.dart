@@ -58,7 +58,7 @@ class CachoClient {
         _errorsController.add(response.errors!.first.message);
       } else {
         final data = response.data!;
-        final error = data.sendCachoCommand;
+        final error = data.sendCachoCommand.err;
         if (error != null) {
           _errorsController.add(error);
         }

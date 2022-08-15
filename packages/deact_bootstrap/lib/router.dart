@@ -2,11 +2,12 @@
 
 import 'dart:async';
 
-import 'package:bootstrap_dart/hooks.dart';
-import 'package:bootstrap_dart/server_renderer.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
+
+import 'hooks.dart';
+import 'server_renderer.dart';
 
 class BaseRouteParams<A> {
   final Uri uri;

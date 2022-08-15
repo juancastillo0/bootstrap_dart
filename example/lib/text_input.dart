@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bootstrap_dart/hooks.dart';
+import 'package:deact_bootstrap/hooks.dart';
 import 'package:deact/deact.dart';
 import 'package:universal_html/html.dart' as html;
 
