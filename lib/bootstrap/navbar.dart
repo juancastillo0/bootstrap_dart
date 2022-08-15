@@ -4,6 +4,10 @@ import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 export 'user_selection.dart';
 
+
+/// The placement of the navigation header
+/// 
+/// https://getbootstrap.com/docs/5.2/components/navbar/#placement
 enum NavbarPosition {
   fixed_top,
   fixed_bottom,
@@ -14,6 +18,12 @@ extension NavbarPositionExt on NavbarPosition {
   String get nameHtml => toString().split('.').last.replaceAll('_', '-');
 }
 
+/// A navigation header component.
+/// Usually present at the top of the page with a [brand] and multiple [itemList].
+/// [expand] sets the breakpoint when the navbar should expand for big screens.
+/// https://getbootstrap.com/docs/5.2/components/navbar/#responsive-behaviors
+///
+/// https://getbootstrap.com/docs/5.2/components/navbar/
 DeactNode navbar({
   String? navbarClass,
   required ResponsiveBreakPoint? expand,
