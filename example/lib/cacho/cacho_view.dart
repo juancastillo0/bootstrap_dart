@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
 import 'package:deact_bootstrap/router.dart';
 import 'package:bootstrap_dart_example/cacho/cacho_command.dart';

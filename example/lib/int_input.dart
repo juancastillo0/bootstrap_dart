@@ -1,4 +1,4 @@
-import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/form.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';

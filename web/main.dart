@@ -9,7 +9,7 @@ import 'package:deact_bootstrap/mobx_deact.dart';
 import 'package:deact_bootstrap/server_renderer.dart';
 import 'package:deact_bootstrap/deact_bootstrap.dart';
 
-import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'bootstrap_examples.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'store.dart';

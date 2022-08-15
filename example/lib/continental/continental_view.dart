@@ -9,7 +9,7 @@ import 'package:deact_bootstrap/router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
 import 'package:bootstrap_dart/bootstrap/table.dart';
 import 'package:bootstrap_dart_example/continental/continental_command.dart';

@@ -1,8 +1,7 @@
-import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/checks_radios.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
 import 'package:bootstrap_dart/bootstrap/modal.dart';
-import 'package:bootstrap_dart/bootstrap/offcanvas.dart';
 import 'package:bootstrap_dart/bootstrap/typography.dart';
 import 'package:bootstrap_dart_example/todo_form.dart';
 import 'package:bootstrap_dart_example/todo_store.dart';

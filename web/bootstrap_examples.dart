@@ -8,7 +8,7 @@ import 'package:highlight/languages/dart.dart';
 import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 import 'package:bootstrap_dart/bootstrap/accordion.dart';
-import 'package:bootstrap_dart/bootstrap/bootstrap.dart';
+import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'package:bootstrap_dart/bootstrap/checks_radios.dart';
 import 'package:bootstrap_dart/bootstrap/form.dart';
 import 'package:bootstrap_dart/bootstrap/icons.dart';
