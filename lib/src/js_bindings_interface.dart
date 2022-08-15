@@ -1,20 +1,23 @@
 import 'package:universal_html/html.dart' as html;
 
+/// https://getbootstrap.com/docs/5.2/components/scrollspy/
 class ScrollSpy {
-  ScrollSpy(html.Element element, ScrollSpyConfig config) {}
+  ScrollSpy(html.Element element, ScrollSpyConfig config);
   void dispose() {}
   void refresh() {}
 }
 
+/// https://getbootstrap.com/docs/5.2/components/scrollspy/
 class ScrollSpyConfig {
-  ScrollSpyConfig({required this.target}) {}
+  ScrollSpyConfig({required this.target});
 
   /// #navbar-example
   final String target;
 }
 
+/// https://getbootstrap.com/docs/5.2/components/modal/
 class ModalJS {
-  ModalJS(html.Element element) {}
+  ModalJS(html.Element element);
 
   void toggle() {}
   void handleUpdate() {}
@@ -23,29 +26,33 @@ class ModalJS {
   void dispose() {}
 }
 
+/// https://getbootstrap.com/docs/5.2/components/modal/
 class ToastJS {
-  ToastJS(html.Element element) {}
+  ToastJS(html.Element element);
 
   void show() {}
   void hide() {}
   void dispose() {}
 }
 
+/// https://getbootstrap.com/docs/5.2/components/tooltips/
 class TooltipJS {
-  TooltipJS(html.Element element) {}
+  TooltipJS(html.Element element);
 
   void dispose() {}
 }
 
+/// https://getbootstrap.com/docs/5.2/components/offcanvas/
 class Offcanvas {
-  Offcanvas(html.Element element) {}
+  Offcanvas(html.Element element);
   void toggle() {}
   void show() {}
   void hide() {}
 }
 
+/// https://getbootstrap.com/docs/5.2/components/popovers/
 class Popover {
-  Popover(html.Element element) {}
+  Popover(html.Element element);
   void show() {}
   void hide() {}
   void toggle() {}
