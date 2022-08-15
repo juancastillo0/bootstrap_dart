@@ -27,12 +27,10 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
       ctx.hookEffect(
         () {
           if (!jaspr.kIsWeb || ref == null) return;
-          Future.microtask(() {
-            final elem = html.document.getElementById(id);
-            if (elem != null) {
-              ref.value = elem;
-            }
-          });
+          final elem = html.document.getElementById(id);
+          if (elem != null) {
+            ref.value = elem;
+          }
           return null;
         },
         [id, ref],
@@ -87,7 +85,21 @@ class JasprBootstrapContext extends BootstrapBuildContext {
     bool Function(Object? p1, Object? p2)? equals,
   ]) {
     jaspr_hooks.useEffect(
-      effect,
+      () {
+        bool disposed = false;
+        void Function()? onDispose;
+        // TODO: test this. At the moment jaspr_hooks.useEffect is executed synchronously
+        Future.microtask(() {
+          if (!disposed) {
+            onDispose = effect();
+          }
+        });
+
+        return () {
+          disposed = true;
+          onDispose?.call();
+        };
+      },
       keys,
       equals ?? jaspr_hooks.defaultKeysEquals,
     );
