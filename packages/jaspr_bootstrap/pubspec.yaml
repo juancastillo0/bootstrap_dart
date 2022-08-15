@@ -15,7 +15,9 @@ dependencies:
       ref: heads/develop
       path: experiments/mobx_hooks
   bootstrap_dart:
-    path: ../..
+    # path: ../..
+    git:
+      url: https://github.com/juancastillo0/bootstrap_dart.git
 
 dev_dependencies:
   lints: ^2.0.0

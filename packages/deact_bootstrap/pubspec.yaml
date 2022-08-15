@@ -16,7 +16,9 @@ dependencies:
       ref: 537a9e600641a0aed15b7811c61f80fe4c0c0d12
     # path: ../../../deact
   bootstrap_dart:
-    path: ../..
+    # path: ../..
+    git:
+      url: https://github.com/juancastillo0/bootstrap_dart.git
 
 dev_dependencies:
   lints: ^2.0.0
