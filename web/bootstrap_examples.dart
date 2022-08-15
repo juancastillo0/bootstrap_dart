@@ -5,7 +5,6 @@ import 'package:deact/deact_html52.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight_core.dart' show highlight;
 import 'package:highlight/languages/dart.dart';
-import 'package:deact_bootstrap/hooks.dart';
 import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 import 'package:bootstrap_dart/bootstrap/accordion.dart';
@@ -824,10 +823,7 @@ div(
           children: [
             fc((ctx) {
               final withHeader = ctx.hookRef(() => true);
-              final controller = useMemo(
-                ctx,
-                () => ToastsController(),
-              );
+              final controller = ctx.hookRef(() => ToastsController()).value;
               final text = ctx.hookState(() => 'A message');
 
               return div(
