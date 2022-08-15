@@ -2,6 +2,7 @@ import 'package:universal_html/html.dart' as html;
 import '../src/prelude.dart';
 import 'form.dart';
 
+/// The type of check selector that should be rendered in [check]
 enum CheckType {
   checkbox,
   radio,
@@ -9,10 +10,13 @@ enum CheckType {
 }
 
 extension CheckTypeExt on CheckType {
-  String get htmlName =>
-      this == CheckType.switch_ ? 'checkbox' : toString().split('.').last;
+  String get htmlName => this == CheckType.switch_ ? 'checkbox' : name;
 }
 
+/// A single input checkbox, radio or switch to represent a boolean value.
+/// For a collection of radios, you may want to use [RadiosInput].
+///
+/// https://getbootstrap.com/docs/5.2/forms/checks-radios/
 DeactNode check({
   bool? checked,
   String? name,
@@ -70,6 +74,12 @@ DeactNode check({
   );
 }
 
+/// Utility input for rendering a collection of radios.
+/// [items] is a Map from the html id to the [check]'s label node.
+/// [onChanged] will receive the id from [items].
+/// The [selectedId] should represent the selected node in [items].
+///
+/// https://getbootstrap.com/docs/5.2/forms/checks-radios/#radios
 // TODO: support class components
 // ignore: non_constant_identifier_names
 DeactNode RadiosInput({
@@ -128,10 +138,3 @@ DeactNode RadiosInput({
 //     ]);
 //   }
 // }
-
-class RadioItem {
-  final String id;
-  final DeactNode node;
-
-  RadioItem(this.id, this.node);
-}
