@@ -28,6 +28,7 @@ crypto:packages/crypto/
 csslib:packages/csslib/
 dart_style:packages/dart_style/
 deact:packages/deact/
+deact_bootstrap:packages/deact_bootstrap/
 file:packages/file/
 fixnum:packages/fixnum/
 glob:packages/glob/
