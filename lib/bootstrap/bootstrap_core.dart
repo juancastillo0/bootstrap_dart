@@ -431,6 +431,7 @@ ScrollSpyHook useScrollSpy(
   Ref<html.Element?> ref, {
   required String target,
   int offset = 50,
+  bool smoothScroll = false,
 }) {
   final scrollSpy = ctx.hookRef<ScrollSpy?>(() => null);
 
@@ -453,6 +454,7 @@ ScrollSpyHook useScrollSpy(
   return ScrollSpyHook(scrollSpy, {
     'data-bs-spy': 'scroll',
     'data-bs-target': target,
+    if (smoothScroll) 'data-bs-smooth-scroll': 'true',
     'data-bs-offset': offset.toString(),
     'tabindex': '0',
   });
