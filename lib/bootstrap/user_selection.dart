@@ -1,19 +1,28 @@
+/// The selection of an input with multiple choices.
+///
+/// Used in [buttonGroup].
 abstract class UserSelection<T> {
   const UserSelection._();
 
+  /// Represents that the user should select a single value.
   const factory UserSelection.single(
     T selected,
     void Function(T) onChanged,
   ) = _UserSelectionSingle;
+
+  /// Represents that the user could select multiple values.
   const factory UserSelection.many(
     Set<T> selected,
     void Function(Set<T>) onChanged,
   ) = _UserSelectionMany;
+
+  /// Represents that the user should select a single optional value.
   const factory UserSelection.indeterminate(
     T? selected,
     void Function(T?) onChanged,
   ) = _UserSelectionIndeterminate;
 
+  /// A Set with the selected values
   Set<T> selectedSet() {
     return when(
       single: (v) => {v.selected},
@@ -22,6 +31,9 @@ abstract class UserSelection<T> {
     );
   }
 
+  /// Executes the callback for each selection when the [value] is selected.
+  /// Removes the selected value if the selection is many or indeterminate and
+  /// the value was already selected.
   void onSelect(T value) {
     when(
       single: (v) => v.onChanged(value),
