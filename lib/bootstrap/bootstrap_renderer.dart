@@ -9,6 +9,7 @@ You can use one of the provided packages:
 - deact_bootstrap
 ''';
 
+// @example-start{bootstrap-renderer-interface}
 class BootstrapRenderer<N> {
   N el(
     String tag, {
@@ -48,3 +49,4 @@ abstract class Ref<T> {
 }
 
 typedef State<T> = Ref<T>;
+// @example-end{bootstrap-renderer-interface}

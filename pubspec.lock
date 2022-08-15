@@ -289,21 +289,21 @@ packages:
       name: js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.3"
+    version: "0.6.4"
   json_annotation:
     dependency: transitive
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "4.6.0"
   lints:
     dependency: "direct dev"
     description:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   logging:
     dependency: transitive
     description:

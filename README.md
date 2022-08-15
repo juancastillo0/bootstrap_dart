@@ -1,11 +1,10 @@
-# Bootstrap Dart
+# Bootstrap Dart <!-- omit in toc -->
 
-[Bootstrap](https://getbootstrap.com/) web components in Dart. For more information on the different components provided by Bootstrap, please view the [documentation](https://getbootstrap.com/docs/5.1/getting-started/introduction/).
+[Bootstrap](https://getbootstrap.com/) web components in Dart. For more information on the different components, check out Bootstrap's [documentation](https://getbootstrap.com/docs/5.1/getting-started/introduction/).
 
-You can view all the implemented components (and the Dart code) in the deployed page (https://juancastillo0.github.io/bootstrap_dart/). The source code for the deployed page is in the [`web/bootstrap_examples.dart` file](web/bootstrap_examples.dart).
+You can view all the implemented components (and the Dart code) in the deployed page (https://juancastillo0.github.io/bootstrap_dart/). The code for the deployed page is in the [`web/bootstrap_examples.dart` file](web/bootstrap_examples.dart).
 
 
-- [Bootstrap Dart](#bootstrap-dart)
 - [Usage](#usage)
 - [Examples](#examples)
   - [Components Gallery](#components-gallery)
@@ -24,25 +23,29 @@ You can view all the implemented components (and the Dart code) in the deployed 
 
 Add the dependencies to your `pubspec.yaml`
 
+Since the package is agnostic to the rendering package, can chose any of the [supported frameworks](#supported-frameworks): `deact_bootstrap`, `jaspr_bootstrap` or `rad_bootstrap`.
+
 ```yaml
 dependencies:
-  universal_html: ^2.0.8
-  bootstrap_dart:
+  bootstrap_dart: # main bootstrap package
     git:
       url: https://github.com/juancastillo0/bootstrap_dart.git
-  deact:
+
+  deact: # could also be jaspr or rad
     git:
       url: https://github.com/juancastillo0/deact.git
       ref: 537a9e600641a0aed15b7811c61f80fe4c0c0d12
-  deact_bootstrap:
+  incremental_dom_bindings: ^2.1.0 # only required for deact
+  deact_bootstrap: # could also be jaspr_bootstrap or rad_bootstrap
     git:
       url: https://github.com/juancastillo0/bootstrap_dart.git
       path: packages/deact_bootstrap
+  
+  universal_html: ^2.0.8 # optional
 
 dev_dependencies:
   build_runner: ^1.10.0
-  build_test: ^1.0.0
-  test: ^1.0.0
+  build_test: ^1.0.0 # for testing
   build_web_compilers: ^2.11.0
 ```
 
@@ -86,12 +89,18 @@ Set up your `web/index.html`
 
 ## Components Gallery
 
+You can view all the implemented components (and the Dart code) in the deployed page (https://juancastillo0.github.io/bootstrap_dart/). The code for the deployed page is in the [`web/bootstrap_examples.dart` file](web/bootstrap_examples.dart).
+
 ## Cacho Game
 
+Work in progress.
+
+A multiplayer board game. The code for complete example is in the [`example/` directory](example/).
 
 # Packages
 
-This repository contains multiple Dart packages.
+This repository contains multiple Dart packages. The main bootstrap package and the bindings
+for external rendering frameworks.
 
 ## bootstrap_dart
 
@@ -99,23 +108,81 @@ Main package with all Bootstrap components. Independent of the rendering framewo
 
 ## Supported Frameworks
 
-The main does not have a rendering framework, for that you need to provide a [Bootstrap Renderer](#bootstrap-renderer). We implement the bindings for rendering the components for multiple frameworks in the following package:
+The main package does not have a rendering framework, for that you need to provide a [Bootstrap Renderer](#bootstrap-renderer). We implement the rendering bindings for multiple frameworks in the following packages:
 
 ### deact_bootstrap for [package:deact](https://github.com/juancastillo0/deact)
 
+SPA framework inspired by React.
+
 ### jaspr_bootstrap for [package:jaspr](https://github.com/schultek/jaspr)
 
+Support for SPA, SSR, Islands with good test coverage. Inspired by Flutter.
+
 You need to use the `MobXHooksObserverComponent` at the root of the Component tree.
+This component is exported in `jaspr_bootstrap`.
 
 ### rad_bootstrap for [package:rad](https://github.com/erlage/rad)
 
+SPA framework with Hooks, great test coverage and performance. Inspired by Flutter and React.
+
 # Bootstrap Renderer
 
-To support multiple rendering frameworks an user has to override the `BootstrapRenderer bootstrapRenderer` found in [`lib/bootstrap/bootstrap_renderer.dart`](lib/bootstrap/bootstrap_renderer.dart). 
+To support multiple rendering frameworks a global `bootstrapRenderer` should be overridden. The code is found in [`lib/bootstrap/bootstrap_renderer.dart`](lib/bootstrap/bootstrap_renderer.dart).
 
-We provide bindings for the [supported frameworks](#supported-frameworks).
+At the moment, the framework should support the following interface.
 
-An usage example for the `package:rad` framework would be the following:
+- Hooks (useRef, useState and useEffect)
+- Render HTML elements
+- Render text nodes
+- Render a node with multiple children (React's fragment)
+- Create functional components with Hooks support
+
+<!-- include{bootstrap-renderer-interface} -->
+```dart
+class BootstrapRenderer<N> {
+  N el(
+    String tag, {
+    Map<String, Object?>? attributes,
+    Iterable<dynamic>? children,
+    Object? key,
+    Map<String, void Function(html.Event)>? listeners,
+    Ref<html.Element?>? ref,
+  }) =>
+      throw _error;
+
+  N txt(String text) => throw _error;
+
+  N fragment(List<dynamic> children) => throw _error;
+
+  N fc(dynamic Function(BootstrapBuildContext) builder, {Object? key}) =>
+      throw _error;
+}
+
+abstract class BootstrapBuildContext {
+  Ref<T> hookRef<T>(T Function() create);
+
+  void hookEffect(
+    void Function()? Function() effect, [
+    List<Object?>? keys,
+    bool Function(Object?, Object?)? equals,
+  ]);
+
+  State<T> hookState<T>(T Function() create);
+}
+
+BootstrapRenderer bootstrapRenderer = BootstrapRenderer();
+
+abstract class Ref<T> {
+  Ref(this.value);
+  T value;
+}
+
+typedef State<T> = Ref<T>;
+```
+<!-- include-end{bootstrap-renderer-interface} -->
+
+
+We provide bindings as a `BootstrapRenderer` class implementation for the [supported frameworks](#supported-frameworks). An usage example for the `package:rad` framework would be the following:
 
 ```dart
 import 'package:rad/rad.dart';
@@ -141,7 +208,7 @@ dart pub global activate webdev
 Serve the web page locally
 
 ```bash
-webdev serve web:8050 --auto refresh
+webdev serve web:8050 --auto refresh -- --delete-conflicting-outputs
 ```
 
 Run a test file
