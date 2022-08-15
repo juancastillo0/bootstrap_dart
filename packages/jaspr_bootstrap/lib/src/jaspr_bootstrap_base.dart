@@ -1,3 +1,4 @@
+import 'package:mobx_hooks_experiment/mobx_hooks/hooks.dart' show useMemo;
 import 'package:universal_html/html.dart' as html;
 import 'package:jaspr/jaspr.dart' as jaspr;
 import 'package:mobx_hooks_experiment/mobx_hooks/mobx_hooks.dart'
@@ -21,23 +22,20 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
     Ref<html.Element?>? ref,
   }) {
     return fc((ctx) {
-      final id = ctx.hookRef(() => ctx.hashCode.toString());
       final attrId = attributes?['id'] as String?;
-      if (attrId != null) {
-        id.value = attrId;
-      }
+      final id = useMemo(() => attrId ?? ctx.hashCode.toString(), [attrId]);
       ctx.hookEffect(
         () {
-          if (!jaspr.kIsWeb) return;
+          if (!jaspr.kIsWeb || ref == null) return;
           Future.microtask(() {
-            final elem = html.document.getElementById(id.value);
-            if (elem != null && ref != null) {
+            final elem = html.document.getElementById(id);
+            if (elem != null) {
               ref.value = elem;
             }
           });
           return null;
         },
-        [id.value, ref],
+        [id, ref],
       );
 
       return jaspr.DomComponent(
@@ -48,7 +46,7 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
                 .cast(),
         children: children?.cast<jaspr.Component>().toList(),
         events: listeners?.map((key, value) => MapEntry(key, (e) => value(e))),
-        id: attrId != null || ref != null ? id.value : null,
+        id: attrId != null || ref != null ? id : null,
         key: key == null ? null : jaspr.ValueKey(key),
         // ref: (ref as JasprBootstrapRef<Element?>?)?.ref,
       );
