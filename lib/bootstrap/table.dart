@@ -1,5 +1,8 @@
 import 'bootstrap_core.dart';
 
+/// Returns the css class with the styles for the Table component.
+///
+/// https://getbootstrap.com/docs/5.2/content/tables/
 String tableClass({
   BColor? color,
   bool striped = false,

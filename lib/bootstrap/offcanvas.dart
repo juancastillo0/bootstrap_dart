@@ -3,6 +3,9 @@ import 'package:universal_html/html.dart' as html;
 import '../src/prelude.dart';
 import 'bootstrap_core.dart';
 
+/// The html attributes for [offcanvas].
+///
+/// https://getbootstrap.com/docs/5.2/components/offcanvas/
 Map<String, Object> offcanvasAttributes({
   required Placement placement,
   String? className,
@@ -22,7 +25,11 @@ Map<String, Object> offcanvasAttributes({
       if (id != null) 'id': id,
     };
 
-/// use [offcanvasAttributes] to populate [attributes]
+/// A modal-like section or sheet that is shown from a side of the
+/// page. The `placement` parameter in [offcanvasAttributes] specifies the side.
+/// Use [offcanvasAttributes] to populate [attributes].
+///
+/// https://getbootstrap.com/docs/5.2/components/offcanvas/
 DeactNode offcanvas({
   Object? key,
   required Map<String, Object> attributes,

@@ -1,6 +1,6 @@
 import '../src/prelude.dart';
 
-/// https://getbootstrap.com/docs/5.0/content/typography/
+/// https://getbootstrap.com/docs/5.1/content/typography/
 class BTypography {
   static const h1 = 'h1';
   static const h2 = 'h2';
