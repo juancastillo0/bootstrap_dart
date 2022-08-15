@@ -2,44 +2,8 @@ import 'dart:async';
 import 'package:universal_html/html.dart' as html;
 import '../src/prelude.dart';
 
-/// Modal https://getbootstrap.com/docs/5.1/components/modal/
-
-class ModalConfig {
-  final bool fade;
-  final bool center;
-  final bool backdrop;
-  final bool closeOnClick;
-  final bool closeOnEscKey;
-  final bool focus;
-  final bool scrollable;
-  final BSize? size; // TODO: add more sizes
-  final ResponsiveBreakPoint? fullScreen;
-
-  ModalConfig({
-    this.fade = true,
-    this.center = true,
-    this.backdrop = true,
-    this.closeOnClick = false,
-    this.closeOnEscKey = true,
-    this.focus = true,
-    this.scrollable = false,
-    this.size,
-    this.fullScreen,
-  });
-}
-
-enum ModalEventType {
-  show,
-  shown,
-  hide,
-  hidden,
-  hidePrevented,
-}
-
-extension ModalEventExt on ModalEventType {
-  String get name => toString().split('.').last;
-}
-
+/// The state created in [useModal]. Can be used to access the [Modal] class
+/// and edit the [show] state.
 class ModalHook {
   final State<bool> show;
   final Ref<Modal?> ref;
@@ -49,6 +13,7 @@ class ModalHook {
   void toggle() => show.value = !show.value;
 }
 
+/// Can be used with the [modal] component to access the [Modal] class.
 ModalHook useModal(BootstrapBuildContext ctx) {
   final showModal = ctx.hookState(() => false);
   final modalRef = ctx.hookRef<Modal?>(() => null);
@@ -71,6 +36,9 @@ ModalHook useModal(BootstrapBuildContext ctx) {
   return ModalHook(showModal, modalRef);
 }
 
+/// For the [dialog] you may use the [modalDialog] component.
+///
+/// https://getbootstrap.com/docs/5.2/components/modal/
 DeactNode modal({
   Object? key,
   required String id,
@@ -120,6 +88,11 @@ DeactNode modal({
   }, key: key);
 }
 
+/// A utility component for creating the content in a modal dialog.
+/// Can be used as the `dialog` argument in [modal].
+/// The [dialogClass] could be composed with [modalDialogClass].
+///
+/// https://getbootstrap.com/docs/5.2/components/modal/
 DeactNode modalDialog({
   Iterable<DeactNode>? body,
   Iterable<DeactNode>? header,
@@ -166,10 +139,9 @@ enum DialogSize {
   xl,
 }
 
-extension DialogSizeExt on DialogSize {
-  String get name => toString().split('.').last;
-}
-
+/// The css class for a modal dialog.
+///
+/// https://getbootstrap.com/docs/5.2/components/modal/
 String modalDialogClass({
   bool center = true,
   bool scrollable = false,
@@ -188,6 +160,20 @@ String modalDialogClass({
       '$_fullScreen';
 }
 
+/// The modal event types
+///
+/// https://getbootstrap.com/docs/5.2/components/modal/#events
+enum ModalEventType {
+  show,
+  shown,
+  hide,
+  hidden,
+  hidePrevented,
+}
+
+/// An event emitted by a [Modal].
+///
+/// https://getbootstrap.com/docs/5.2/components/modal/#events
 class ModalEvent {
   final Modal modal;
   final ModalEventType type;
@@ -196,6 +182,10 @@ class ModalEvent {
   ModalEvent(this.modal, this.type, this.event);
 }
 
+/// A wrapper around the [ModalJS] instance with a stream ([events]) of [ModalEvent]
+/// and other utilities for showing and closing the modal.
+///
+/// https://getbootstrap.com/docs/5.1/components/modal/
 class Modal {
   final ModalJS _inner;
   final html.Element element;
@@ -261,3 +251,28 @@ class Modal {
     _controller.close();
   }
 }
+
+/// Modal https://getbootstrap.com/docs/5.1/components/modal/
+// class ModalConfig {
+//   final bool fade;
+//   final bool center;
+//   final bool backdrop;
+//   final bool closeOnClick;
+//   final bool closeOnEscKey;
+//   final bool focus;
+//   final bool scrollable;
+//   final BSize? size; // TODO: add more sizes
+//   final ResponsiveBreakPoint? fullScreen;
+
+//   ModalConfig({
+//     this.fade = true,
+//     this.center = true,
+//     this.backdrop = true,
+//     this.closeOnClick = false,
+//     this.closeOnEscKey = true,
+//     this.focus = true,
+//     this.scrollable = false,
+//     this.size,
+//     this.fullScreen,
+//   });
+// }
