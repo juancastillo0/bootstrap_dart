@@ -9,6 +9,9 @@ export '../bootstrap/user_selection.dart';
 export '../src/js_bindings_interface.dart'
     if (dart.library.html) '../src/js_bindings.dart';
 
+/// Bootstrap theme colors.
+///
+/// https://getbootstrap.com/docs/5.2/customize/color/
 enum BColor {
   primary,
   secondary,
@@ -36,13 +39,21 @@ enum BSize {
   sm,
 }
 
+/// A sections that brings attention to the user.
+/// The alert css class with the background [color].
+///
 /// Alerts https://getbootstrap.com/docs/5.1/components/alerts/
 String alert({required BColor color}) => 'alert alert-${color.name}';
 
+/// A small pill or tag.
+/// The badge css class with the background [color].
+///
 /// Badge https://getbootstrap.com/docs/5.1/components/badge/
 String badge({bool rounded = false, required BColor color}) =>
     'badge${rounded ? ' rounded-pill' : ''} bg-${color.name}';
 
+/// The button ("btn") class.
+///
 /// Buttons https://getbootstrap.com/docs/5.1/components/buttons/
 String btn({
   BColor color = BColor.primary,
@@ -54,6 +65,10 @@ String btn({
       '${size != null ? ' btn-${size.name}' : ''}${active ? ' active' : ''} ';
 }
 
+/// Group a series of buttons together on a single line or stack them in a vertical column.
+/// Returns the component with the multiple [values] as buttons.
+///
+/// https://getbootstrap.com/docs/5.2/components/button-group
 DeactNode buttonGroup<T>({
   required String buttonClass,
   required List<T> values,
@@ -158,6 +173,9 @@ String colStyle({
   );
 }
 
+/// An "X" button.
+/// Returns the component button.
+///
 /// Close Button https://getbootstrap.com/docs/5.1/components/close-button/
 DeactNode closeButton({
   Object? key,
@@ -180,6 +198,9 @@ DeactNode closeButton({
   );
 }
 
+/// Show and hide a section.
+/// The collapse css class.
+///
 /// Collapse https://getbootstrap.com/docs/5.1/components/collapse/
 String collapse({
   bool horizontal = false,
@@ -189,6 +210,11 @@ String collapse({
     'collapse${horizontal ? ' collapse-horizontal' : ''}'
     '${multi ? ' multi-collapse' : ''}${show ? ' show' : ''}';
 
+/// A button that collapses the element with id [collapseId].
+/// Return the component that toggles the hide/show state.
+/// You could also use the [toggleButtonAttributes] primitive.
+///
+/// Collapse https://getbootstrap.com/docs/5.1/components/collapse/
 DeactNode collapseButton({
   required String collapseId,
   required String buttonClass,
@@ -236,6 +262,10 @@ extension AutoCloseExt on AutoClose {
   String get nameHtml => toString().split('.').last.replaceAll('_', '');
 }
 
+/// A collection of buttons that is shown when [buttonContent] is tapped.
+/// Returns the component that shows a context menu with [children].
+/// You may want to use [dropdownItem] and [dropdownDivider] for the [children].
+///
 /// DropDowns https://getbootstrap.com/docs/5.1/components/dropdowns/
 DeactNode dropdown({
   required Iterable<DeactNode> children,
@@ -285,6 +315,7 @@ DeactNode dropdown({
   );
 }
 
+/// A divider for buttons in a [dropdown]
 final DeactNode dropdownDivider = el('li', children: [
   el('hr', attributes: {'class': 'dropdown-divider'})
 ]);
@@ -339,9 +370,11 @@ enum Space {
   s5,
 }
 
+/// https://getbootstrap.com/docs/5.2/helpers/stacks
 String stackClass({required Space gap, required bool vert}) =>
     '${vert ? 'v' : 'h'}stack gap-${gap.index}';
 
+/// https://getbootstrap.com/docs/5.2/utilities/borders
 String borderClass({
   BColor? color,
   Space? size,
@@ -364,6 +397,7 @@ enum RoundedSize {
   s3,
 }
 
+/// https://getbootstrap.com/docs/5.2/utilities/borders/#radius
 String roundedClass({
   bool circle = false,
   bool pill = false,
@@ -376,13 +410,22 @@ String roundedClass({
             .followedBy(sides.map((e) => 'rounded-${e.name}'))
             .join(' ');
 
+/// The state of a ScrollSpy created with [useScrollSpy].
+///
+/// https://getbootstrap.com/docs/5.2/components/scrollspy/
 class ScrollSpyHook {
   final Ref<ScrollSpy?> ref;
-  final Map<String, Object> attributes;
+  final Map<String, String> attributes;
 
   ScrollSpyHook(this.ref, this.attributes);
 }
 
+/// A ScrollSpy is a list that shows the current section given by
+/// the scroll position of an element with id [target].
+/// This hook returns the state [ScrollSpyHook] that can be used to
+/// retrieve the [ScrollSpy] and set the Bootstrap attributes in the list of sections.
+///
+/// https://getbootstrap.com/docs/5.2/components/scrollspy/
 ScrollSpyHook useScrollSpy(
   BootstrapBuildContext ctx,
   Ref<html.Element?> ref, {
@@ -415,12 +458,16 @@ ScrollSpyHook useScrollSpy(
   });
 }
 
+/// A list of components that can be toggled.
+/// Used within [toggleButtonAttributes].
 enum TogglableComponent {
   modal,
   offcanvas,
   collapse,
 }
 
+/// The html attributes to use for a button that toggles
+/// an element with id [targetId] of type [component].
 Map<String, Object> toggleButtonAttributes({
   required TogglableComponent component,
   required String targetId,
@@ -433,6 +480,9 @@ Map<String, Object> toggleButtonAttributes({
   };
 }
 
+/// A section of content.
+/// Returns a div with all the specified content.
+///
 /// Card https://getbootstrap.com/docs/5.1/components/card/
 DeactNode card({
   Object? key,
@@ -513,6 +563,10 @@ DeactNode card({
   );
 }
 
+/// An animated loading indicator.
+/// Returns the component that renders the spinner.
+/// You can also use the primitive [spinnerClass].
+///
 /// Spinners https://getbootstrap.com/docs/5.1/components/spinners/
 DeactNode spinner({
   String? className,
@@ -541,6 +595,10 @@ DeactNode spinner({
   );
 }
 
+/// An animated loading indicator.
+/// Returns the css class.
+///
+/// Spinners https://getbootstrap.com/docs/5.1/components/spinners/
 String spinnerClass({
   bool grow = false,
   BSize? size,
@@ -600,12 +658,17 @@ extension AlignmentExt on Alignment {
   }
 }
 
+/// The size for [placeholder]
 enum PlaceholderSize {
   xs,
   sm,
   lg,
 }
 
+/// A loading placeholder for text or content.
+/// Returns the css class.
+///
+/// https://getbootstrap.com/docs/5.2/components/placeholders
 String placeholder({
   bool glow = false,
   BColor? color,
@@ -629,6 +692,11 @@ DeactNode placeholderButton(String btnClass) => el(
       },
     );
 
+/// A list of items.
+/// Returns the css class.
+/// You may want to use [listGroupItem] for the items.
+///
+/// https://getbootstrap.com/docs/5.2/components/list-group/
 String listGroup({
   bool numbered = false,
   bool flush = false,
@@ -642,6 +710,11 @@ String listGroup({
   ].join(' ');
 }
 
+/// An item in a list.
+/// Returns the css class.
+/// You may want to use [listGroup] for the list wrapper for the items.
+///
+/// https://getbootstrap.com/docs/5.2/components/list-group/
 String listGroupItem({
   BColor? color,
   bool action = false,
@@ -651,12 +724,17 @@ String listGroupItem({
       '${action ? ' list-group-item-action' : ''}${active ? ' active' : ''}';
 }
 
+/// The type of tab the [tabs] component.
 enum TabType {
   tab,
   pill,
   list,
 }
 
+/// Returns the component that renders [items] tabs and their
+/// contents in a separate element.
+///
+/// https://getbootstrap.com/docs/5.2/components/navs-tabs/
 DeactNode tabs({
   required TabType type,
   required Iterable<TabItem> items,
@@ -730,6 +808,9 @@ DeactNode tabs({
   ]);
 }
 
+/// An item within [tabs].
+/// The [tab] node will be the title or button for the tab
+/// and the [content] will be displayed whe it is selected.
 class TabItem {
   final String id;
   final DeactNode tab;

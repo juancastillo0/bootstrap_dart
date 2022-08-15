@@ -11,6 +11,10 @@ class AccordionItem {
   });
 }
 
+/// A group of collapsible components.
+/// Returns the component with the list of [items].
+///
+/// https://getbootstrap.com/docs/5.2/components/accordion/
 DeactNode accordion({
   required String id,
   required Map<String, AccordionItem> items,
