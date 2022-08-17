@@ -59,7 +59,12 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
                   ..removeWhere((key, value) => value == null))
                 .cast(),
         children: children?.cast<jaspr.Component>().toList(),
-        events: listeners?.map((key, value) => MapEntry(key, (e) => value(e))),
+        events: listeners?.map(
+          (key, value) => MapEntry(
+            key.substring(2), // remove on. oninput -> input
+            (e) => value(e),
+          ),
+        ),
         id: elemId,
         // ref: (ref as JasprBootstrapRef<Element?>?)?.ref,
       );
