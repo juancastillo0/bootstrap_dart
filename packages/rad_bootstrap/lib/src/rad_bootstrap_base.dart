@@ -20,7 +20,7 @@ class RadBootstrapRenderer implements BootstrapRenderer<rad.Widget> {
     Map<String, void Function(html.Event p1)>? listeners,
     Ref<html.Element?>? ref,
   }) {
-    return fc((ctx) {
+    return fc(key: key, (ctx) {
       final attrId = attributes?['id'] as String?;
       final id = rad_hooks.useMemo(
         () => attrId ?? ctx.hashCode.toString(),
@@ -39,17 +39,18 @@ class RadBootstrapRenderer implements BootstrapRenderer<rad.Widget> {
         [id, ref],
       );
 
+      final elemId = attrId != null || ref != null ? id : null;
       return rad.RawEventDetector(
         events: listeners,
         child: CustomTagDomWidget(
           correspondingTag: rad.DomTagType.values.byName(tag),
           additionalAttributes: attributes == null
               ? null
-              : ({...attributes}..removeWhere((key, value) => value == null))
+              : ({...attributes, 'id': elemId}
+                    ..removeWhere((key, value) => value == null))
                   .cast(),
           children: children?.cast<rad.Widget>().toList(),
-          id: attrId != null || ref != null ? id : null,
-          key: _keyFromObject(key),
+          id: elemId,
         ),
       );
     });

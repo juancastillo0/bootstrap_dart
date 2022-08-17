@@ -6,10 +6,25 @@ import 'package:mobx_hooks_experiment/mobx_hooks/mobx_hooks.dart'
 import 'package:bootstrap_dart/bootstrap/bootstrap_renderer.dart';
 
 class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
-  const JasprBootstrapRenderer();
+  const JasprBootstrapRenderer._();
+
+  static List<void Function()> _effects = [];
+  static Future? _executeEffects;
 
   static void setUp() {
-    bootstrapRenderer = const JasprBootstrapRenderer();
+    bootstrapRenderer = const JasprBootstrapRenderer._();
+    jaspr_hooks.HookCtxConfig.global = jaspr_hooks.HookCtxConfig(
+      effectsScheduler: (previous, execute) {
+        _effects.add(execute);
+        _executeEffects ??= Future.microtask(() {
+          for (final effect in _effects) {
+            effect();
+          }
+          _effects = [];
+          _executeEffects = null;
+        });
+      },
+    );
   }
 
   @override
@@ -21,7 +36,7 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
     Map<String, void Function(html.Event p1)>? listeners,
     Ref<html.Element?>? ref,
   }) {
-    return fc((ctx) {
+    return fc(key: key, (ctx) {
       final attrId = attributes?['id'] as String?;
       final id = useMemo(() => attrId ?? ctx.hashCode.toString(), [attrId]);
       ctx.hookEffect(
@@ -35,17 +50,17 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
         },
         [id, ref],
       );
-
+      final elemId = attrId != null || ref != null ? id : null;
       return jaspr.DomComponent(
         tag: tag,
         attributes: attributes == null
             ? null
-            : ({...attributes}..removeWhere((key, value) => value == null))
+            : ({...attributes, 'id': elemId}
+                  ..removeWhere((key, value) => value == null))
                 .cast(),
         children: children?.cast<jaspr.Component>().toList(),
         events: listeners?.map((key, value) => MapEntry(key, (e) => value(e))),
-        id: attrId != null || ref != null ? id : null,
-        key: key == null ? null : jaspr.ValueKey(key),
+        id: elemId,
         // ref: (ref as JasprBootstrapRef<Element?>?)?.ref,
       );
     });
@@ -85,21 +100,7 @@ class JasprBootstrapContext extends BootstrapBuildContext {
     bool Function(Object? p1, Object? p2)? equals,
   ]) {
     jaspr_hooks.useEffect(
-      () {
-        bool disposed = false;
-        void Function()? onDispose;
-        // TODO: test this. At the moment jaspr_hooks.useEffect is executed synchronously
-        Future.microtask(() {
-          if (!disposed) {
-            onDispose = effect();
-          }
-        });
-
-        return () {
-          disposed = true;
-          onDispose?.call();
-        };
-      },
+      effect,
       keys,
       equals ?? jaspr_hooks.defaultKeysEquals,
     );
