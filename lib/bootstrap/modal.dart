@@ -73,9 +73,9 @@ DeactNode modal({
         'class': 'modal${fade ? ' fade' : ''}',
         'tabindex': "-1",
         if (!closeOnClick) 'data-bs-backdrop': 'static',
-        if (closeOnClick && !backdrop) 'data-bs-backdrop': false,
-        if (!closeOnEscKey) 'data-bs-keyboard': false,
-        if (!focus) 'data-bs-focus': false,
+        if (closeOnClick && !backdrop) 'data-bs-backdrop': 'false',
+        if (!closeOnEscKey) 'data-bs-keyboard': 'false',
+        if (!focus) 'data-bs-focus': 'false',
 
         /// accessibility
         'role': "dialog",

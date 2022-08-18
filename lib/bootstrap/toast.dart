@@ -221,7 +221,7 @@ DeactNode toast({
         'aria-atomic': 'true',
         if (toastId != null) 'id': toastId,
         if (!autoHide) 'data-bs-autohide': 'false',
-        'data-bs-delay': delay.inMilliseconds,
+        'data-bs-delay': delay.inMilliseconds.toString(),
         if (!animated) 'data-bs-animation': 'false',
       },
       children: [content],

@@ -182,7 +182,7 @@ DeactNode closeButton({
   void Function(html.Event)? onClick,
   bool disabled = false,
   bool white = false,
-  Map<String, Object>? attributes,
+  ElementAttributes? attributes,
 }) {
   return el(
     'button',
@@ -191,7 +191,7 @@ DeactNode closeButton({
       'class': 'btn-close${white ? ' btn-close-white' : ''}',
       'aria-label': 'Close',
       'type': 'button',
-      if (disabled) 'disabled': true,
+      if (disabled) 'disabled': 'true',
       if (attributes != null) ...attributes,
     },
     listeners: onClick != null ? {'onclick': onClick} : null,
@@ -415,7 +415,7 @@ String roundedClass({
 /// https://getbootstrap.com/docs/5.2/components/scrollspy/
 class ScrollSpyHook {
   final Ref<ScrollSpy?> ref;
-  final Map<String, String> attributes;
+  final ElementAttributes attributes;
 
   ScrollSpyHook(this.ref, this.attributes);
 }
@@ -470,7 +470,7 @@ enum TogglableComponent {
 
 /// The html attributes to use for a button that toggles
 /// an element with id [targetId] of type [component].
-Map<String, Object> toggleButtonAttributes({
+ElementAttributes toggleButtonAttributes({
   required TogglableComponent component,
   required String targetId,
 }) {
@@ -520,7 +520,7 @@ DeactNode card({
           key: 'image-top',
           attributes: {
             'class': 'card-img-top',
-            'alt': imageAlt,
+            if (imageAlt != null) 'alt': imageAlt,
             'src': imageSrc,
           },
         ),
@@ -551,7 +551,7 @@ DeactNode card({
           key: 'image-bottom',
           attributes: {
             'class': 'card-img-bottom',
-            'alt': imageAlt,
+            if (imageAlt != null) 'alt': imageAlt,
             'src': imageSrc,
           },
         ),
@@ -688,7 +688,7 @@ DeactNode placeholderButton(String btnClass) => el(
       'a',
       attributes: {
         'class': 'placeholder disabled $btnClass',
-        'tabindex': -1,
+        'tabindex': '-1',
         'href': '#',
         'aria-hidden': 'true',
       },

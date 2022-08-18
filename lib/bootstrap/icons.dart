@@ -11,7 +11,7 @@ DeactNode icon(
   String? fontSize,
   String? ariaLabel,
   String? style,
-  Map<String, Object>? attributes,
+  ElementAttributes? attributes,
 }) {
   return el(
     'i',

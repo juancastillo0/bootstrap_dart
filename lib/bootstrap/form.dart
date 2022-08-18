@@ -91,7 +91,7 @@ DeactNode labeledInput({
   String? divClass,
   String? wrapperDivClass,
   ColInputClasses? colClasses,
-  Map<String, Object>? attributes,
+  ElementAttributes? attributes,
   // validation
   InputFeedback? feedback,
 }) {

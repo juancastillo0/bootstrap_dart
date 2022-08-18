@@ -12,7 +12,7 @@ class DeactBootstrapRenderer implements BootstrapRenderer<deact.DeactNode> {
   @override
   el(
     String tag, {
-    Map<String, Object?>? attributes,
+    Map<String, String>? attributes,
     Iterable<dynamic>? children,
     Object? key,
     Map<String, void Function(Event p1)>? listeners,
@@ -20,10 +20,7 @@ class DeactBootstrapRenderer implements BootstrapRenderer<deact.DeactNode> {
   }) {
     return deact.el(
       tag,
-      attributes: attributes == null
-          ? null
-          : ({...attributes}..removeWhere((key, value) => value == null))
-              .cast(),
+      attributes: attributes,
       children: children?.cast(),
       key: key,
       listeners: listeners,

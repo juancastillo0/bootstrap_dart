@@ -14,14 +14,14 @@ class RadBootstrapRenderer implements BootstrapRenderer<rad.Widget> {
   @override
   el(
     String tag, {
-    Map<String, Object?>? attributes,
+    Map<String, String>? attributes,
     Iterable<dynamic>? children,
     Object? key,
     Map<String, void Function(html.Event p1)>? listeners,
     Ref<html.Element?>? ref,
   }) {
     return fc(key: key, (ctx) {
-      final attrId = attributes?['id'] as String?;
+      final attrId = attributes?['id'];
       final id = rad_hooks.useMemo(
         () => attrId ?? ctx.hashCode.toString(),
         [attrId],
@@ -44,11 +44,7 @@ class RadBootstrapRenderer implements BootstrapRenderer<rad.Widget> {
         events: listeners,
         child: CustomTagDomWidget(
           correspondingTag: rad.DomTagType.values.byName(tag),
-          additionalAttributes: attributes == null
-              ? null
-              : ({...attributes, 'id': elemId}
-                    ..removeWhere((key, value) => value == null))
-                  .cast(),
+          additionalAttributes: attributes,
           children: children?.cast<rad.Widget>().toList(),
           id: elemId,
         ),

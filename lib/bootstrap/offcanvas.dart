@@ -6,7 +6,7 @@ import 'bootstrap_core.dart';
 /// The html attributes for [offcanvas].
 ///
 /// https://getbootstrap.com/docs/5.2/components/offcanvas/
-Map<String, Object> offcanvasAttributes({
+ElementAttributes offcanvasAttributes({
   required Placement placement,
   String? className,
   String? id,
@@ -17,9 +17,9 @@ Map<String, Object> offcanvasAttributes({
 }) =>
     {
       'class': '${className ?? ''} offcanvas offcanvas-${placement.name}',
-      'data-bs-scroll': scroll,
+      'data-bs-scroll': scroll.toString(),
       'data-bs-backdrop': '$backdrop',
-      'data-bs-keyboard': keyboard,
+      'data-bs-keyboard': keyboard.toString(),
       'tabindex': "-1",
       if (labelledBy != null) 'aria-labelledby': labelledBy,
       if (id != null) 'id': id,
@@ -32,7 +32,7 @@ Map<String, Object> offcanvasAttributes({
 /// https://getbootstrap.com/docs/5.2/components/offcanvas/
 DeactNode offcanvas({
   Object? key,
-  required Map<String, Object> attributes,
+  required ElementAttributes attributes,
   required Iterable<DeactNode> title,
   required Iterable<DeactNode> body,
   String? labelId,
@@ -59,7 +59,7 @@ DeactNode offcanvas({
               'h5',
               attributes: {
                 'class': 'offcanvas-title',
-                'id': labelId,
+                if (labelId != null) 'id': labelId,
               },
               children: title,
             ),

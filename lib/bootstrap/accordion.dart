@@ -50,7 +50,7 @@ DeactNode accordion({
                         targetId: itemId,
                       ),
                       'class': 'accordion-button collapsed',
-                      'aria-expanded': false,
+                      'aria-expanded': 'false',
                     },
                     children: item.header,
                   )

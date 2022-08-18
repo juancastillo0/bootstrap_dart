@@ -8,11 +8,13 @@ export '../src/js_bindings_interface.dart'
 export '../bootstrap/bootstrap_renderer.dart'
     show BootstrapBuildContext, Ref, State;
 
+typedef ElementAttributes = Map<String, String>;
+
 typedef DeactNode = dynamic;
 
 DeactNode el(
   String tag, {
-  Map<String, Object?>? attributes,
+  ElementAttributes? attributes,
   Iterable<DeactNode>? children,
   Object? key,
   Map<String, void Function(html.Event)>? listeners,
@@ -49,7 +51,9 @@ DeactNode div({
     el(
       'div',
       key: key,
-      attributes: {'class': className, 'id': id, 'style': style},
+      attributes: ({'class': className, 'id': id, 'style': style}
+            ..removeWhere((key, value) => value == null))
+          .cast(),
       listeners: onclick == null
           ? null
           : {'onclick': (e) => onclick(e as html.MouseEvent)},

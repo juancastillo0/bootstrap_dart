@@ -10,7 +10,7 @@ import '../src/prelude.dart';
 DeactNode popoverWrapper({
   required String content,
   Iterable<DeactNode>? children,
-  Map<String, Object>? attributes,
+  ElementAttributes? attributes,
   Ref<Popover?>? popoverRef,
 }) {
   return fc((ctx) {
@@ -39,7 +39,7 @@ DeactNode popoverWrapper({
 }
 
 /// https://getbootstrap.com/docs/5.2/components/popovers/
-Map<String, Object> popoverAttributes({
+ElementAttributes popoverAttributes({
   String? title,
   String? className,
   String? content,
@@ -63,10 +63,10 @@ Map<String, Object> popoverAttributes({
     if (content != null) 'data-bs-content': content,
     'data-bs-placement': placement.name,
     // if (triggers.contains(TooltipTrigger.focus)) 'tabindex': '0',
-    'data-bs-animation': animation,
+    'data-bs-animation': animation.toString(),
     if (container != null) 'data-bs-container': container,
-    if (delay != null) 'data-bs-delay': delay.inMilliseconds,
-    if (allowHtml) 'data-bs-html': true,
+    if (delay != null) 'data-bs-delay': delay.inMilliseconds.toString(),
+    if (allowHtml) 'data-bs-html': true.toString(),
     if (selector != null) 'data-bs-selector': selector,
     if (template != null) 'data-bs-template': template,
     if (offset != null) 'data-bs-offset': offset,
@@ -82,7 +82,7 @@ Map<String, Object> popoverAttributes({
 DeactNode tooltipWrapper({
   required String title,
   Iterable<DeactNode>? children,
-  Map<String, Object>? attributes,
+  ElementAttributes? attributes,
 }) {
   return fc((ctx) {
     final tooltip = ctx.hookRef<Tooltip?>(() => null);
@@ -143,7 +143,7 @@ enum TooltipTrigger {
 /// parameter of [tooltipWrapper]
 ///
 /// https://getbootstrap.com/docs/5.2/components/tooltips
-Map<String, Object> tooltipAttributes({
+ElementAttributes tooltipAttributes({
   String title = '',
   bool animation = true,
   Duration delay = Duration.zero,
@@ -162,8 +162,8 @@ Map<String, Object> tooltipAttributes({
   return {
     'data-bs-toggle': 'tooltip',
     if (!animation) 'data-bs-animation': 'false',
-    'data-bs-delay': delay.inMilliseconds,
-    if (allowHtml) 'data-bs-html': true,
+    'data-bs-delay': delay.inMilliseconds.toString(),
+    if (allowHtml) 'data-bs-html': true.toString(),
     'data-bs-title': title,
     'data-bs-placement': placement.name,
     if (selector != null) 'data-bs-selector': selector,

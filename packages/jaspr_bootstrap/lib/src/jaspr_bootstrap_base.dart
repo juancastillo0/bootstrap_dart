@@ -30,14 +30,14 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
   @override
   el(
     String tag, {
-    Map<String, Object?>? attributes,
+    Map<String, String>? attributes,
     Iterable<dynamic>? children,
     Object? key,
     Map<String, void Function(html.Event p1)>? listeners,
     Ref<html.Element?>? ref,
   }) {
     return fc(key: key, (ctx) {
-      final attrId = attributes?['id'] as String?;
+      final attrId = attributes?['id'];
       final id = useMemo(() => attrId ?? ctx.hashCode.toString(), [attrId]);
       ctx.hookEffect(
         () {
@@ -53,11 +53,7 @@ class JasprBootstrapRenderer implements BootstrapRenderer<jaspr.Component> {
       final elemId = attrId != null || ref != null ? id : null;
       return jaspr.DomComponent(
         tag: tag,
-        attributes: attributes == null
-            ? null
-            : ({...attributes, 'id': elemId}
-                  ..removeWhere((key, value) => value == null))
-                .cast(),
+        attributes: attributes,
         children: children?.cast<jaspr.Component>().toList(),
         events: listeners?.map(
           (key, value) => MapEntry(

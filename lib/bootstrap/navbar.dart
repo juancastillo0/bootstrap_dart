@@ -30,7 +30,7 @@ DeactNode navbar({
   bool dark = false,
   BColor? background,
   NavbarPosition? position,
-  Map<String, Object>? attributes,
+  ElementAttributes? attributes,
   // content
   String? collapseId,
   String containerClass = 'container-fluid',
@@ -66,7 +66,7 @@ DeactNode navbar({
               'button',
               attributes: {
                 'class': 'navbar-toggler',
-                'aria-expanded': false,
+                'aria-expanded': 'false',
                 ...toggleButtonAttributes(
                   component: TogglableComponent.collapse,
                   targetId: collapseId,

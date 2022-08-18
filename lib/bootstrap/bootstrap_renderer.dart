@@ -19,7 +19,7 @@ class BootstrapRenderer<N> {
   /// The [ref] should be populated when an effect using [BootstrapBuildContext.hookEffect] is run.
   N el(
     String tag, {
-    Map<String, Object?>? attributes,
+    Map<String, String>? attributes,
     Iterable<dynamic>? children,
     Object? key,
     Map<String, void Function(html.Event)>? listeners,
