@@ -19,6 +19,7 @@ built_collection:packages/built_collection/
 built_value:packages/built_value/
 charcode:packages/charcode/
 checked_yaml:packages/checked_yaml/
+cli_repl:packages/cli_repl/
 cli_util:packages/cli_util/
 code_builder:packages/code_builder/
 collection:packages/collection/
@@ -35,6 +36,7 @@ glob:packages/glob/
 graphs:packages/graphs/
 highlight:packages/highlight/
 html:packages/html/
+http:packages/http/
 http_multi_server:packages/http_multi_server/
 http_parser:packages/http_parser/
 incremental_dom_bindings:packages/incremental_dom_bindings/
@@ -47,6 +49,7 @@ matcher:packages/matcher/
 meta:packages/meta/
 mime:packages/mime/
 mobx:packages/mobx/
+node_interop:packages/node_interop/
 node_preamble:packages/node_preamble/
 package_config:packages/package_config/
 path:packages/path/
@@ -55,6 +58,9 @@ pool:packages/pool/
 protobuf:packages/protobuf/
 pub_semver:packages/pub_semver/
 pubspec_parse:packages/pubspec_parse/
+quiver:packages/quiver/
+sass:packages/sass/
+sass_builder:packages/sass_builder/
 scratch_space:packages/scratch_space/
 shelf:packages/shelf/
 shelf_packages_handler:packages/shelf_packages_handler/
@@ -72,6 +78,7 @@ test:packages/test/
 test_api:packages/test_api/
 test_core:packages/test_core/
 timing:packages/timing/
+tuple:packages/tuple/
 typed_data:packages/typed_data/
 universal_html:packages/universal_html/
 universal_io:packages/universal_io/

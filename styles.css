@@ -38,6 +38,11 @@ body {
   overflow: auto;
 }
 
+[data-bs-color-scheme="dark"] .codebox {
+  border: 1px solid rgb(58, 58, 58);
+  background-color: #2a2b2c;
+}
+
 .hljs-string {
   color: #1c6dff;
 }
