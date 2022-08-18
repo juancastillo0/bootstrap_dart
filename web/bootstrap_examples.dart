@@ -1,7 +1,9 @@
 import 'dart:math' as math;
+import 'package:bootstrap_dart/dark_mode/dark_mode.dart';
 import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
+import 'package:deact_bootstrap/hooks.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight_core.dart' show highlight;
 import 'package:highlight/languages/dart.dart';
@@ -144,66 +146,90 @@ DeactNode bootstrapExamples() {
 }
 
 DeactNode examplesNavbar() {
-  return nav(
-    id: 'navbar-example',
-    className: 'navbar navbar-light bg-light'
-        ' flex-column align-items-stretch p-3 justify-content-start',
-    style: 'overflow:hidden;height: 100%;',
-    children: [
-      a(
-        className: 'navbar-brand m-1 d-flex flex-column',
-        href: '#',
+  return fc(
+    (ctx) {
+      final inDarkMode = useStream(
+        ctx,
+        darkMode.inDarkModeChanges,
+        initialValue: () => darkMode.inDarkMode,
+      ).asValue!.value;
+      return nav(
+        id: 'navbar-example',
+        className:
+            'navbar ${inDarkMode ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}'
+            ' flex-column align-items-stretch p-3 justify-content-start',
+        style: 'overflow:hidden;height: 100%;',
         children: [
-          txt('Bootstrap Dart'),
-          div(
-            style: flexCenter(),
+          a(
+            className: 'navbar-brand m-1 d-flex flex-column',
+            href: '#',
             children: [
-              icon(BIcon.bootstrap_fill, color: '#7a10f7'),
-              span(style: 'width:10px;'),
-              img(src: 'https://pub.dev/favicon.ico', style: 'width:1.25rem;')
+              txt('Bootstrap Dart'),
+              div(
+                style: flexCenter(),
+                children: [
+                  icon(BIcon.bootstrap_fill, color: '#7a10f7'),
+                  span(style: 'width:10px;'),
+                  img(
+                    src: 'https://pub.dev/favicon.ico',
+                    style: 'width:1.25rem;',
+                  )
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-      nav(
-        className: 'nav nav-pills flex-column',
-        style: 'overflow-y:auto;flex:1;flex-wrap:nowrap;',
-        children: [
-          ...const [
-            'Accordion',
-            'Buttons',
-            'Button Group',
-            'Icons',
-            'Alerts',
-            'Badge',
-            'Close Button',
-            'Collapse',
-            'Dropdowns',
-            'Table',
-            'Tooltip',
-            'Popover',
-            'Spinners',
-            'Toasts',
-            'Forms',
-            'Navs Tabs',
-            'Navbar',
-            'Modal',
-            'Offcanvas',
-            'Placeholder',
-            'ScrollSpy',
-          ].map(
-            (e) => a(
-              className: 'nav-link',
-              style: 'padding-top:5px;padding-bottom:5px;',
-              href: '#${e.replaceAll(' ', '-')}',
-              children: [
-                txt(e),
-              ],
-            ),
+          check(
+            label: txt('Dark Mode'),
+            id: 'darkModeSwitch',
+            divClass: 'mb-2 mx-auto',
+            type: CheckType.switch_,
+            checked: inDarkMode,
+            inline: true,
+            onChange: (_) {
+              darkMode.toggleDarkMode();
+            },
           ),
+          nav(
+            className: 'nav nav-pills flex-column',
+            style: 'overflow-y:auto;flex:1;flex-wrap:nowrap;',
+            children: [
+              ...const [
+                'Accordion',
+                'Buttons',
+                'Button Group',
+                'Icons',
+                'Alerts',
+                'Badge',
+                'Close Button',
+                'Collapse',
+                'Dropdowns',
+                'Table',
+                'Tooltip',
+                'Popover',
+                'Spinners',
+                'Toasts',
+                'Forms',
+                'Navs Tabs',
+                'Navbar',
+                'Modal',
+                'Offcanvas',
+                'Placeholder',
+                'ScrollSpy',
+              ].map(
+                (e) => a(
+                  className: 'nav-link',
+                  style: 'padding-top:5px;padding-bottom:5px;',
+                  href: '#${e.replaceAll(' ', '-')}',
+                  children: [
+                    txt(e),
+                  ],
+                ),
+              ),
+            ],
+          )
         ],
-      )
-    ],
+      );
+    },
   );
 }
 
@@ -478,7 +504,7 @@ div(
           children: [
             closeButton(),
             div(
-              className: 'bg-success rounded-3 p-2 text-light d-flex',
+              className: 'bg-success rounded-3 p-2 text-white d-flex',
               children: [
                 span(className: 'pe-2', children: [txt('White close button')]),
                 closeButton(white: true)

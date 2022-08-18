@@ -1,0 +1,44 @@
+// Include any default variable overrides here (though functions won't be available)
+
+$primary: #0d6efd; // #01388a;
+$secondary: #6c757d; // #077371;
+$success: #198754; // #92edcd;
+$info: #0dcaf0; // #71c4ea;
+$warning: #ffc107; // #ffc107;
+$danger: #dc3545; // #dc3545;
+$light: #f8f9fa; // #f8f9fa;
+$dark: #212529; // #212529;
+
+$body-color: #212529; // #212529;
+$body-bg: #fff; // #fff;
+
+$border-width:  1px; //  1px;
+$border-style:  solid; //  solid;
+$border-color: #dee2e6; // #dee2e6;
+
+$border-color-translucent: rgba(0, 0, 0, 0.175); // rgba(0, 0, 0, 0.175);
+
+$border-radius: 0.375rem; // 0.375rem;
+$border-radius-sm: 0.25rem; // 0.25rem;
+$border-radius-lg: 0.5rem; // 0.5rem;
+$border-radius-xl: 1rem; // 1rem;
+$border-radius-2xl: 2rem; // 2rem;
+$border-radius-pill: 50rem; // 50rem;
+
+
+@import "package:bootstrap_dart/scss/bootstrap-blackbox";
+
+
+// Then add additional custom code here
+
+:root {
+  --light-darker: #{shade-color($light, 5%)};
+  --dark-darker: #{shade-color($dark, 10%)};
+}
+
+.min-width-100 {
+  min-width: 100px;
+}
+.min-width-200 {
+  min-width: 200px;
+}
