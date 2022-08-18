@@ -1,3 +1,5 @@
+/// https://github.com/vinorodrigues/bootstrap-dark-5/blob/main/docs/darkmode.js.md
+/// version 1.1.3
 const darkMode = DarkMode._();
 
 class DarkMode {
