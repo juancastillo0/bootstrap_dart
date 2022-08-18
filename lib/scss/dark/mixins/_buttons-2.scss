@@ -1,0 +1,183 @@
+@use "sass:string";
+@use "sass:list";
+
+// --------------------------------------------------
+// !!!! Interpolation fix/hack, for issue #32
+// --------------------------------------------------
+
+@function str-split($string, $separator: " ") {
+  // from: https://stackoverflow.com/questions/32376461/how-to-split-a-string-into-two-lists-of-numbers-in-sass#answer-42295154
+  $split-arr: ();  // empty array/list
+  $index: str-index($string, $separator);  // first index of separator in string
+  @while $index != null {  // loop through string
+    $item: str-slice($string, 1, $index - 1);  // get the substring from the first character to the separator
+    $split-arr: append($split-arr, $item);  // push item to array
+    $string: str-slice($string, $index + 1);  // remove item and separator from string
+    $index: str-index($string, $separator);  // find new index of separator
+  }
+  $split-arr: append($split-arr, $string);  // add the remaining string to list (the last item)
+  @return $split-arr;
+}
+
+// !!!! ---------- end of Hack
+
+// Button variants
+
+@mixin button-variant-alt(
+  $background,
+  $border,
+  $color: color-contrast($background, $color-contrast-dark-alt, $color-contrast-light-alt, $min-contrast-ratio-alt),
+  $hover-background: if($color == $color-contrast-light-alt, shade-color($background, $btn-hover-bg-shade-amount-alt), tint-color($background, $btn-hover-bg-tint-amount-alt)),
+  $hover-border: if($color == $color-contrast-light-alt, shade-color($border, $btn-hover-border-shade-amount-alt), tint-color($border, $btn-hover-border-tint-amount-alt)),
+  $hover-color: color-contrast($hover-background, $color-contrast-dark-alt, $color-contrast-light-alt, $min-contrast-ratio-alt),
+  $active-background: if($color == $color-contrast-light-alt, shade-color($background, $btn-active-bg-shade-amount-alt), tint-color($background, $btn-active-bg-tint-amount-alt)),
+  $active-border: if($color == $color-contrast-light-alt, shade-color($border, $btn-active-border-shade-amount-alt), tint-color($border, $btn-active-border-tint-amount-alt)),
+  $active-color: color-contrast($active-background, $color-contrast-dark-alt, $color-contrast-light-alt, $min-contrast-ratio-alt),
+  $disabled-background: $background,
+  $disabled-border: $border,
+  $disabled-color: color-contrast($disabled-background, $color-contrast-dark-alt, $color-contrast-light-alt, $min-contrast-ratio-alt),
+  $btn-box-shadow: $btn-box-shadow-alt
+) {
+  color: $color;
+  @include gradient-bg($background);
+  border-color: $border;
+  @include box-shadow($btn-box-shadow);
+
+  &:hover {
+    color: $hover-color;
+    @include gradient-bg($hover-background);
+    border-color: $hover-border;
+  }
+
+  // --------------------------------------------------
+  // !!!! Interpolation fix/hack, for issue #32
+  // --------------------------------------------------
+  $in: str-split(#{&});
+  $a1: #{null};
+  $a2: #{null};
+  @if length($in) < 2 {
+    $a2: nth($in, 1);
+  } @else {
+    @for $i from 1 through length($in) - 1 {
+      $a1: append($a1, nth($in, $i), space);
+    }
+    $a2: nth($in, -1);  // last one
+  }
+  // @debug "$in = #{$in}";
+  // @debug "$a1 = #{$a1}";
+  // @debug "$a2 = #{$a2}";
+
+  // .www {
+  //   content: "---------- WWWWWWWWWW ---------- DEBUG REMOVE THIS";
+  // }
+
+  @at-root #{$a1} .btn-check:focus + #{$a2},
+  #{$a1} #{$a2}:focus {
+    color: $hover-color;
+    @include gradient-bg($hover-background);
+    border-color: $hover-border;
+    @if $enable-shadows {
+      @include box-shadow($btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5));
+    } @else {
+      // Avoid using mixin so we can pass custom focus shadow properly
+      box-shadow: 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5);
+    }
+  }
+
+  @at-root #{$a1} .btn-check:checked + #{$a2},
+  #{$a1} .btn-check:active + #{$a2},
+  #{$a1} #{$a2}:active,
+  #{$a1} #{$a2}.active,
+  #{$a1} .show > #{$a2}.dropdown-toggle {
+    color: $active-color;
+    background-color: $active-background;
+    // Remove CSS gradients if they're enabled
+    background-image: if($enable-gradients, none, null);
+    border-color: $active-border;
+
+    &:focus {
+      @if $enable-shadows {
+        @include box-shadow($btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5));
+      } @else {
+        // Avoid using mixin so we can pass custom focus shadow properly
+        box-shadow: 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5);
+      }
+    }
+  }
+
+  // .xxx {
+  //   content: "---------- XXXXXXXXXX ---------- DEBUG REMOVE THIS";
+  // }
+
+  &:disabled,
+  &.disabled {
+    color: $disabled-color;
+    background-color: $disabled-background;
+    // Remove CSS gradients if they're enabled
+    background-image: if($enable-gradients, none, null);
+    border-color: $disabled-border;
+  }
+}
+
+@mixin button-outline-variant-alt(
+  $color,
+  $color-hover: color-contrast($color),
+  $active-background: $color,
+  $active-border: $color,
+  $active-color: color-contrast($active-background),
+  $btn-active-box-shadow: $btn-active-box-shadow-alt
+) {
+  color: $color;
+  border-color: $color;
+
+  &:hover {
+    color: $color-hover;
+    background-color: $active-background;
+    border-color: $active-border;
+  }
+
+  // --------------------------------------------------
+  // !!!! Interpolation fix/hack, for issue #32
+  // --------------------------------------------------
+  $in: str-split(#{&});
+  $a1: #{null};
+  $a2: #{null};
+  @if length($in) < 2 {
+    $a2: nth($in, 1);
+  } @else {
+    @for $i from 1 through length($in) - 1 {
+      $a1: append($a1, nth($in, $i), space);
+    }
+    $a2: nth($in, -1);  // last one
+  }
+
+  @at-root #{$a1} .btn-check:focus + #{$a2},
+  #{$a1} #{$a2}:focus {
+    box-shadow: 0 0 0 $btn-focus-width rgba($color, .5);
+  }
+
+  @at-root #{$a1} .btn-check:checked + #{$a2},
+  #{$a1} .btn-check:active + #{$a2},
+  #{$a1} #{$a2}:active,
+  #{$a1} #{$a2}.active,
+  #{$a1} #{$a2}.dropdown-toggle.show {
+    color: $active-color;
+    background-color: $active-background;
+    border-color: $active-border;
+
+    &:focus {
+      @if $enable-shadows {
+        @include box-shadow($btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($color, .5));
+      } @else {
+        // Avoid using mixin so we can pass custom focus shadow properly
+        box-shadow: 0 0 0 $btn-focus-width rgba($color, .5);
+      }
+    }
+  }
+
+  &:disabled,
+  &.disabled {
+    color: $color;
+    background-color: transparent;
+  }
+}

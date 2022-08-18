@@ -1,0 +1,83 @@
+@use "sass:string";
+@use "sass:list";
+
+// Base styles
+
+.btn {
+  color: $body-color-alt;
+  background-color: transparent;
+  border: $btn-border-width solid transparent;
+
+  &:hover {
+    color: $body-color-alt;
+  }
+
+  // --------------------------------------------------
+  // !!!! Interpolation fix/hack, for issue #32
+  // --------------------------------------------------
+  $in: str-split(#{&});
+  $a1: #{null};
+  $a2: #{null};
+  @if length($in) < 2 {
+    $a2: nth($in, 1);
+  } @else {
+    @for $i from 1 through length($in) - 1 {
+      $a1: append($a1, nth($in, $i), space);
+    }
+    $a2: nth($in, -1);  // last one
+  }
+
+  @at-root #{$a1} .btn-check:focus + #{$a2},
+  #{$a1} #{$a2}:focus {
+    box-shadow: $btn-focus-box-shadow-alt;
+  }
+
+  @at-root #{$a1} .btn-check:checked + #{$a2},
+  #{$a1} .btn-check:active + #{$a2},
+  #{$a1} #{$a2}:active,
+  #{$a1} #{$a2}.active {
+    @include box-shadow($btn-active-box-shadow-alt);
+
+    &:focus {
+      @include box-shadow($btn-focus-box-shadow-alt, $btn-active-box-shadow-alt);
+    }
+  }
+
+  @at-root #{$a1} #{$a2}:disabled,
+  #{$a1} #{$a2}.disabled,
+  #{$a1} fieldset:disabled #{$a2} {
+    opacity: $btn-disabled-opacity-alt;
+    @include box-shadow(none);
+  }
+}
+
+
+// Alternate buttons
+
+@each $color, $value in $theme-colors-alt {
+  .btn-#{$color} {
+    @include button-variant-alt($value, $value);
+  }
+}
+
+@each $color, $value in $theme-colors-alt {
+  .btn-outline-#{$color} {
+    @include button-outline-variant-alt($value);
+  }
+}
+
+// Link buttons
+
+// Make a button look and behave like a link
+.btn-link {
+  color: $btn-link-color-alt;
+
+  &:hover {
+    color: $btn-link-hover-color-alt;
+  }
+
+  &:disabled,
+  &.disabled {
+    color: $btn-link-disabled-color-alt;
+  }
+}

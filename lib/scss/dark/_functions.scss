@@ -1,0 +1,38 @@
+// ***************************************************************************
+//  Bootstrap 5.1.0 introduced a color utility leveraging CSS variables
+//  embedded in the `:root` scope.  This makes the techniques described in
+//  some of this projects code untenable without hackery.
+//
+//  The functions in this file will generate color generation depending on
+//  the variant being compiled.  These are enabled by setting the following
+//  to true:
+//
+//  $enable-colors-hack: enable the generation of `-alt` CSS variable within
+//                       the `:root` scope.
+//                     > Used in the `-nightshade` and `-backbox` variants.
+//
+//  $enable-color-func-revert: enable the `-alt` helper functions to recall
+//                             the original functions thereby reverting to it.
+//                           > Used in the `-night` variant.
+//
+// ***************************************************************************
+
+$enable-colors-hack: false !default;
+$enable-color-func-revert: false !default;
+
+@function rgba-css-var-alt($identifier, $target) {
+  @if $enable-colors-hack {
+
+    @return rgba(var(--#{$variable-prefix}#{$identifier}-rgb-alt), var(--#{$variable-prefix}#{$target}-opacity));
+
+  } @else if $enable-color-func-revert {
+
+    @return rgba-css-var($identifier, $target);  // call core's function
+
+  } @else {
+
+    // @return rgba(var(--#{$variable-prefix}#{$identifier}-rgb), var(--#{$variable-prefix}#{$target}-opacity));
+    @return null;  // uses vars, so no need to re-declare
+
+  }
+}

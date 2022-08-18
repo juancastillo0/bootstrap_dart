@@ -1,0 +1,67 @@
+/*!
+ * Bootstrap v5.x.x (https://getbootstrap.com/)
+ * Copyright 2011-2022 The Bootstrap Authors
+ * Copyright 2011-2022 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ *
+ * Bootstrap-Night (https://vinorodrigues.github.io/bootstrap-dark-5/)
+ * Copyright 2020-2022 Vino Rodrigues
+ * This version is a fully fledged dark theme
+ */
+
+// stylelint-disable-next-line scss/dollar-variable-default
+$enable-color-func-revert: true;
+
+// Configuration
+@import "functions";
+@import "dark/functions";
+@import "variables";  // defaults are here
+@import "variables-alt";  // dark color set is here
+@import "mixins";
+@import "utilities";
+@import "dark/variables-map-alt-to-core";  // map the `-alt`'s back to core colors
+@import "dark/patch";  // missing from BS, unsupported patch/hack
+
+:root { color-scheme: dark; }  // TODO: this should be code based.
+
+// Layout & components
+@import "root";
+@import "reboot";
+@import "type";
+@import "images";
+@import "containers";
+@import "grid";
+@import "tables";
+@import "forms";
+@import "buttons";
+@import "transitions";
+@import "dropdown";
+@import "button-group";
+@import "nav";
+@import "navbar";
+@import "card";
+@import "accordion";
+@import "breadcrumb";
+@import "pagination";
+@import "badge";
+@import "alert";
+@import "progress";
+@import "list-group";
+@import "close";
+@import "toasts";
+@import "modal";
+@import "tooltip";
+@import "popover";
+@import "carousel";
+@import "spinners";
+@import "offcanvas";
+@import "placeholders";
+
+// Helpers
+@import "helpers";
+
+// Utilities
+@import "utilities/api";
+
+// Unique to dark-mode
+@import "dark/dark";

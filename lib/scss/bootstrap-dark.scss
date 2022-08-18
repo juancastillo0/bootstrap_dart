@@ -1,0 +1,114 @@
+/*!
+ * Bootstrap v5.x.x (https://getbootstrap.com/)
+ * Copyright 2011-2022The Bootstrap Authors
+ * Copyright 2011-2022 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ *
+ * Bootstrap-Dark (https://vinorodrigues.github.io/bootstrap-dark-5/)
+ * Copyright 2020-2022 Vino Rodrigues
+ * This version is a dual color theme, with the default light mode and the dark
+ * elements optioned in by a `prefers-color-scheme: dark` media query
+ */
+
+// Configuration
+@import "functions";
+@import "dark/functions";
+@import "variables";  // defaults are here
+@import "variables-alt";  // dark color set is here
+@import "mixins";
+@import "dark/mixins";
+@import "utilities";
+@import "dark/utilities";
+@import "dark/patch";  // missing from BS, unsupported patch/hack
+
+// Layout & components
+@import "dark/color-scheme";
+@import "root";
+@import "reboot";
+@import "type";
+@import "images";
+@import "containers";
+@import "grid";
+@import "tables";
+@import "forms";
+@import "buttons";
+@import "transitions";
+@import "dropdown";
+@import "button-group";
+@import "nav";
+@import "navbar";
+@import "card";
+@import "accordion";
+@import "breadcrumb";
+@import "pagination";
+@import "badge";
+@import "alert";
+@import "progress";
+@import "list-group";
+@import "close";
+@import "toasts";
+@import "modal";
+@import "tooltip";
+@import "popover";
+@import "carousel";
+@import "spinners";
+@import "offcanvas";
+@import "placeholders";
+
+// Helpers
+@import "helpers";
+
+// Utilities
+@import "utilities/api";
+
+/*
+ * ---------- Dark Mode ------------------------------------------------------
+ */
+
+@include color-scheme-alt(alternative-color-scheme($default-color-scheme)) {
+
+  // Layout & components
+  @import "dark/root";
+  @import "dark/reboot";
+  @import "dark/type";
+  @import "dark/images";
+  // no colors in containers
+  // no colors in grid
+  @import "dark/tables";
+  @import "dark/forms";
+  @import "dark/buttons";
+  // no colors in transitions
+  @import "dark/dropdown";
+  @import "dark/button-group";
+  @import "dark/nav";
+  @import "dark/navbar";
+  @import "dark/card";
+  @import "dark/accordion";
+  @import "dark/breadcrumb";
+  @import "dark/pagination";
+  @import "dark/badge";
+  @import "dark/alert";
+  @import "dark/progress";
+  @import "dark/list-group";
+  @import "dark/close";
+  @import "dark/toasts";
+  @import "dark/modal";
+  @import "dark/tooltip";
+  @import "dark/popover";
+  @import "dark/carousel";
+  // no colors in spinners
+  @import "dark/offcanvas";
+  @import "dark/placeholders";
+
+  // Helpers
+  @import "dark/helpers";
+
+  // Utilities
+  @import "dark/utilities/api";
+
+  // Unique to dark-mode
+  @import "dark/dark";
+}
+
+// Additional Global Utilities
+@import "dark/utilities/api-all";
