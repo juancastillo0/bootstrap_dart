@@ -1,0 +1,67 @@
+type Query {
+  """
+  TODO: throw when type does not have fields and there are no queries in schema
+  """
+  cachoGames: [CachoData!]!
+}
+
+type CachoData {
+  id: ID!
+  totalDices: Int!
+  canCazar: Boolean!
+  minAs: Int
+  minOther: Int
+  isPlaying: Boolean!
+  playerNumber: Int!
+  players: [String!]!
+  currentPlayer: String
+  previousPlayer: String
+  currentSuggestion: Suggestion
+  currentDiceSuggestion: SuggestionDices
+  dices: [Int!]!
+  salpiconedPlayers: [String!]!
+}
+
+union Suggestion = SuggestionDices | SuggestionSalpicon
+
+type SuggestionDices {
+  amount: Int!
+  dice: Int!
+  variant: String!
+}
+
+type SuggestionSalpicon {
+  variant: String!
+}
+
+type Mutation {
+  createCacho: CachoData!
+  sendCachoCommand(gameId: String!, command: CachoCommandInput!): ResultCachoDataReqStringReq!
+}
+
+interface ResultCachoDataReqStringReq {
+  ok: CachoData
+  err: String
+  isOk: Boolean!
+}
+
+input CachoCommandInput @oneOf {
+  suggest: SuggestionInput
+  start: Boolean
+  cazar: Boolean
+  dudar: Boolean
+}
+
+input SuggestionInput @oneOf {
+  dices: SuggestionDicesInput
+  salpicon: Boolean
+}
+
+input SuggestionDicesInput {
+  amount: Int!
+  dice: Int!
+}
+
+type Subscription {
+  cachoState(gameId: String!): CachoData!
+}

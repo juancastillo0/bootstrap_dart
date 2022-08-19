@@ -1,0 +1,12 @@
+@each $color, $value in $theme-colors-alt {
+  .link-#{$color} {
+    color: $value !important;  // stylelint-disable-line declaration-no-important
+
+    @if $link-shade-percentage != 0 {
+      &:hover,
+      &:focus {
+        color: if(color-contrast($value, $color-contrast-dark-alt, $color-contrast-light-alt, $min-contrast-ratio-alt) == $color-contrast-light-alt, shade-color($value, $link-shade-percentage-alt), tint-color($value, $link-shade-percentage-alt)) !important;  // stylelint-disable-line declaration-no-important
+      }
+    }
+  }
+}

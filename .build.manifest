@@ -14,6 +14,16 @@ packages/_fe_analyzer_shared/src/parser/parser.md
 packages/analyzer/src/summary/format.fbs
 packages/bootstrap_dart/dark_mode/darkmode.js
 packages/bootstrap_dart/dark_mode/darkmode.min.js
+packages/bootstrap_dart/icons/bootstrap-icons.css
+packages/bootstrap_dart/icons/bootstrap-icons.json
+packages/bootstrap_dart/icons/fonts/bootstrap-icons.woff
+packages/bootstrap_dart/icons/fonts/bootstrap-icons.woff2
+packages/bootstrap_dart/js/bootstrap.bundle.js
+packages/bootstrap_dart/js/bootstrap.bundle.min.js
+packages/bootstrap_dart/js/bootstrap.esm.js
+packages/bootstrap_dart/js/bootstrap.esm.min.js
+packages/bootstrap_dart/js/bootstrap.js
+packages/bootstrap_dart/js/bootstrap.min.js
 packages/bootstrap_dart/scss/bootstrap-blackbox.css
 packages/bootstrap_dart/scss/bootstrap-colors.css
 packages/bootstrap_dart/scss/bootstrap-dark-plugin.css

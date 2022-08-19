@@ -1,0 +1,47 @@
+mutation sendCachoCommand($gameId: String!, $command: CachoCommandInput!) {
+  sendCachoCommand(gameId: $gameId, command: $command) {
+    ok {
+      ...AllState
+    }
+    err
+    isOk
+  }
+}
+
+mutation createCacho {
+  createCacho {
+    ...AllState
+  }
+}
+
+subscription cachoState($gameId: String!) {
+  cachoState(gameId: $gameId) {
+    ...AllState
+  }
+}
+
+fragment AllState on CachoData {
+  id
+  totalDices
+  canCazar
+  minAs
+  minOther
+  isPlaying
+  playerNumber
+  players
+  currentPlayer
+  previousPlayer
+  currentSuggestion {
+    __typename
+    ... on SuggestionDices {
+      amount
+      dice
+    }
+  }
+  currentDiceSuggestion {
+    amount
+    dice
+  }
+  dices
+  salpiconedPlayers
+}

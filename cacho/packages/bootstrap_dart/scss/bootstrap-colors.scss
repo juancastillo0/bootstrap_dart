@@ -1,0 +1,117 @@
+/*!
+ * Bootstrap v5.x.x (https://getbootstrap.com/)
+ * Copyright 2011-2022 The Bootstrap Authors
+ * Copyright 2011-2022 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ *
+ * Bootstrap-Colors (https://vinorodrigues.github.io/bootstrap-dark-5/)
+ * Copyright 2020-2022 Vino Rodrigues
+ * An add-on to bring out the theme colors as CSS variables
+ */
+
+@import "functions";
+@import "dark/functions";
+@import "variables";  // defaults are here
+@import "variables-alt";  // dark color set is here
+@import "mixins";
+@import "dark/mixins";
+
+$color-palette: (
+  "blue":   $blues,
+  "indigo": $indigos,
+  "purple": $purples,
+  "pink":   $pinks,
+  "red":    $reds,
+  "orange": $oranges,
+  "yellow": $yellows,
+  "green":  $greens,
+  "teal":   $teals,
+  "cyan":   $cyans
+) !default;
+
+$color-palette-alt: (
+  "blue":   $blues-alt,
+  "indigo": $indigos-alt,
+  "purple": $purples-alt,
+  "pink":   $pinks-alt,
+  "red":    $reds-alt,
+  "orange": $oranges-alt,
+  "yellow": $yellows-alt,
+  "green":  $greens-alt,
+  "teal":   $teals-alt,
+  "cyan":   $cyans-alt
+) !default;
+
+:root {
+  @each $color, $array in $color-palette {
+    @each $name, $value in $array {
+      --#{$variable-prefix}#{$name}: #{$value};
+    }
+  }
+  @each $color, $array in $color-palette {
+    @each $name, $value in $array {
+      --#{$variable-prefix}#{$name}-rgb: #{to-rgb($value)};
+    }
+  }
+  @each $suffix, $value in $grays {
+    --#{$variable-prefix}gray-#{$suffix}-rgb: #{to-rgb($value)};
+  }
+}
+
+@include color-scheme-alt(alternative-color-scheme($default-color-scheme)) {
+  :root {
+    @each $color, $array in $color-palette-alt {
+      @each $name, $value in $array {
+        --#{$variable-prefix}#{$name}: #{$value};
+      }
+    }
+    @each $color, $array in $color-palette-alt {
+      @each $name, $value in $array {
+        --#{$variable-prefix}#{$name}-rgb: #{to-rgb($value)};
+      }
+    }
+    @each $suffix, $value in $grays-alt {
+      --#{$variable-prefix}gray-#{$suffix}-rgb: #{to-rgb($value)};
+    }
+  }
+}
+
+/* Text */
+
+@each $color, $array in $color-palette {
+  @each $name, $value in $array {
+    .text-#{$name} {
+      --#{$variable-prefix}text-opacity: 1;
+      // stylelint-disable-next-line declaration-no-important
+      color: rgba(var(--#{$variable-prefix}#{$name}-rgb), var(--#{$variable-prefix}text-opacity)) !important;
+    }
+  }
+}
+
+@each $suffix, $value in $grays {
+  .text-gray-#{$suffix} {
+    --#{$variable-prefix}text-opacity: 1;
+    // stylelint-disable-next-line declaration-no-important
+    color: rgba(var(--#{$variable-prefix}gray-#{$suffix}-rgb), var(--#{$variable-prefix}text-opacity)) !important;
+  }
+}
+
+/* Background */
+
+@each $color, $array in $color-palette {
+  @each $name, $value in $array {
+    .bg-#{$name} {
+      --#{$variable-prefix}bg-opacity: 1;
+      // stylelint-disable-next-line declaration-no-important
+      background-color: rgba(var(--#{$variable-prefix}#{$name}-rgb), var(--#{$variable-prefix}bg-opacity)) !important;
+    }
+  }
+}
+
+@each $suffix, $value in $grays {
+  .bg-gray-#{$suffix} {
+    --#{$variable-prefix}bg-opacity: 1;
+    // stylelint-disable-next-line declaration-no-important
+    background-color: rgba(var(--#{$variable-prefix}gray-#{$suffix}-rgb), var(--#{$variable-prefix}bg-opacity)) !important;
+  }
+}
