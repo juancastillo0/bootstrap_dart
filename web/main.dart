@@ -11,8 +11,6 @@ import 'package:deact_bootstrap/deact_bootstrap.dart';
 
 import 'package:bootstrap_dart/bootstrap/bootstrap_core.dart';
 import 'bootstrap_examples.dart';
-import 'package:bootstrap_dart/bootstrap/modal.dart';
-import 'store.dart';
 import 'package:bootstrap_dart/bootstrap/toast.dart';
 
 final logger = Logger('virtual_web');
@@ -32,65 +30,146 @@ void main() async {
   if (!kIsWeb) {
     final indexFile = io.File('./build/index.html');
 
-    final _htmlStr =
+    final htmlStr =
         serverRendered.renderInTemplate(await indexFile.readAsString());
-    await indexFile.writeAsString(_htmlStr);
+    await indexFile.writeAsString(htmlStr);
   }
 }
 
 DeactNode rootComponent() {
   return fragment([
-    globalRef(
-      name: 'RootValue',
-      initialValue: RootStore(),
+    div(
+      className: 'd-flex ',
+      style: 'overflow:hidden;height: 100%;',
       children: [
-        globalState<int>(
-          name: 'counter',
-          initialValue: 0,
-          children: [
-            div(
-              className: 'd-flex ',
-              style: 'overflow:hidden;height: 100%;',
-              children: [
-                examplesNavbar(),
-                fc((ctx) {
-                  final ref = ctx.hookRef<html.Element?>(() => null);
-                  final scrollSpy = useScrollSpy(
-                    ctx.bootstrapCtx,
-                    ref.bootstrapRef,
-                    target: '#navbar-example',
-                    offset: 10,
-                  );
-                  return col(
-                    ref: ref,
-                    style: 'overflow:auto;flex:1;',
-                    attributes: {
-                      ...scrollSpy.attributes,
-                    },
-                    children: [
-                      tabs(),
-                      incrementor(),
-                      display(),
-                      textInput(),
-                      div(children: [
-                        fc((ctx) {
-                          final tab = RootStore.fromCtx(ctx).tab.value;
-                          switch (tab) {
-                            case Tab.profile:
-                              return txt('Profile');
-                            case Tab.message:
-                              return messagesView();
-                          }
-                        }),
-                      ]),
-                      bootstrapExamples(),
-                    ],
-                  );
-                }),
-              ],
-            ),
-          ],
-        ),
+        examplesNavbar(),
+        fc((ctx) {
+          final ref = ctx.hookRef<html.Element?>(() => null);
+          final scrollSpy = useScrollSpy(
+            ctx.bootstrapCtx,
+            ref.bootstrapRef,
+            target: '#navbar-example',
+            offset: 10,
+          );
+          return el(
+            'div',
+            ref: ref,
+            attributes: {
+              'style': 'overflow:auto;flex:1;',
+              ...scrollSpy.attributes,
+            },
+            children: [
+              div(style: 'max-width:650px;margin:auto;', children: [
+                h1(
+                  className: 'mt-3',
+                  children: [txt('Bootstrap Dart')],
+                ),
+                p(children: [
+                  txt(
+                    'Bootstrap 5 components, assets (scss, js) and framework bindings for Dart on the web.'
+                    ' Support for theming with scss, Bootstrap Icons and dark mode with Bootstrap Dark. ',
+                  ),
+                  br(),
+                  txt('You can find more information in the '),
+                  a(
+                    href: 'https://github.com/juancastillo0/bootstrap_dart',
+                    children: [txt('Github Repo and README.')],
+                  ),
+                ]),
+                h3(
+                  className: 'mt-3',
+                  children: [txt('Examples Showcase')],
+                ),
+                p(children: [
+                  txt('Some examples of deployed pages using Bootstrap Dart.'),
+                ]),
+                div(
+                  className: 'd-flex flex-wrap justify-content-center',
+                  children: [
+                    card(
+                      title: txt('Cacho'),
+                      text: txt(
+                          'Multiplayer board game with probabilities and bluffing.'),
+                      footer: div(
+                        className: 'd-flex justify-content-between',
+                        children: [
+                          a(
+                            href:
+                                'http://github.com/juancatillo0/bootstrap_dart',
+                            target: '_black',
+                            children: [txt('Github Repository')],
+                          ),
+                          a(
+                            href:
+                                'https://juancastillo0.github.io/bootstrap_dart/cacho/cacho',
+                            target: '_black',
+                            children: [txt('Deployed Page')],
+                          ),
+                        ],
+                      ),
+                    ),
+                    card(
+                      title: txt('Todos'),
+                      text: txt(
+                          'Todo lists with tags, filtering, duration and priority.'),
+                      footer: div(
+                        className: 'd-flex justify-content-between',
+                        children: [
+                          a(
+                            href:
+                                'http://github.com/juancatillo0/bootstrap_dart',
+                            target: '_black',
+                            children: [txt('Github Repository')],
+                          ),
+                          a(
+                            href:
+                                'https://juancastillo0.github.io/bootstrap_dart/cacho/todos',
+                            target: '_black',
+                            children: [txt('Deployed Page')],
+                          ),
+                        ],
+                      ),
+                    ),
+                    card(
+                      title: txt('CIDart'),
+                      text: txt(
+                          'Continuous integration and deployment Leto GraphQL Dart server.'),
+                      footer: div(
+                        className: 'd-flex justify-content-between',
+                        children: [
+                          a(
+                            href: 'http://github.com/juancatillo0/cidart',
+                            target: '_black',
+                            children: [txt('Github Repository')],
+                          ),
+                          a(
+                            href: 'https://juancastillo0.github.io/cidart/',
+                            target: '_black',
+                            children: [txt('Deployed Page')],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ].map(
+                    (e) => div(
+                        style: 'width:300px;', className: 'm-2', children: [e]),
+                  ),
+                ),
+                h2(
+                  className: 'mt-3',
+                  children: [txt('Components Gallery')],
+                ),
+                p(children: [
+                  txt(
+                    'Most of the components and some utilities supported in this library are'
+                    ' presented in the following sections along with the necessary Dart code to represent them.',
+                  ),
+                ]),
+              ]),
+              bootstrapExamples(),
+            ],
+          );
+        }),
       ],
     ),
     toastsContainer(
@@ -106,235 +185,4 @@ DeactNode rootComponent() {
       ],
     ),
   ]);
-}
-
-DeactNode messagesView() {
-  return fc((ctx) {
-    // final counter = ctx.globalState<int>('counter');
-    final root = RootStore.fromCtx(ctx);
-    return col(
-      children: [
-        div(
-          style: 'flex:1;',
-          children: [
-            fc((ctx) {
-              final messages = root.messageStore.messages;
-              return fragment([...messages.map(messageView)]);
-            })
-          ],
-        ),
-        div(
-          style: 'display:flex;',
-          children: [
-            fc(
-              (ctx) => textInputWrap(
-                root.messageStore.message.value,
-                (value) => root.messageStore.message.value = value,
-              ),
-            ),
-            button(
-              onclick: (_) => root.messageStore.sendMessage(),
-              children: [
-                txt('Send'),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  });
-}
-
-DeactNode messageView(Message m) {
-  return div(
-    key: m.createdAt.toIso8601String(),
-    style: 'position:relative;',
-    children: [
-      fc((ctx) {
-        final show = ctx.state('show', false);
-        return fragment([
-          div(
-            style: show.value
-                ? 'position:absolute;top:0;right:0;'
-                : 'display:none;',
-            children: [
-              button(
-                onclick: (_) => MessageStore.fromCtx(ctx).messages.remove(m),
-                children: [txt('Delete')],
-              )
-            ],
-          ),
-          div(
-            className: 'message',
-            onclick: (_) {
-              show.value = !show.value;
-            },
-            children: [
-              span(children: [txt(m.content)]),
-              span(
-                style: 'font-size:10px;padding-left:10px;white-space: pre;',
-                children: [
-                  txt(
-                    m.createdAt.toIso8601String().replaceFirst('T', '\n'),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ]);
-      })
-    ],
-  );
-}
-
-DeactNode col({
-  Ref<html.Element?>? ref,
-  required Iterable<DeactNode> children,
-  String? style,
-  Map<String, Object> attributes = const {},
-}) {
-  return el(
-    'div',
-    ref: ref,
-    attributes: {
-      'style':
-          'display:flex;flex-direction: column;align-items: center;position:relative;'
-              '${style ?? ''}',
-      ...attributes,
-    },
-    children: children,
-  );
-}
-
-DeactNode divfc(
-  DeactNode Function(ComponentContext) builder, {
-  Object? key,
-  String? style,
-  String? className,
-}) {
-  return div(
-    key: key,
-    style: style,
-    className: className,
-    children: [fc(builder)],
-  );
-}
-
-DeactNode tabs() {
-  return divfc((ctx) {
-    final root = RootStore.fromCtx(ctx);
-    return fragment([
-      ...Tab.values.map((tab) {
-        final selected = root.tab.value == tab;
-        return button(
-          onclick: (_) => root.tab.value = tab,
-          disabled: selected ? '' : null,
-          children: [txt(tab.name)],
-        );
-      })
-    ]);
-  }, style: 'display:flex;');
-}
-
-DeactNode incrementor() {
-  return fc((ctx) {
-    // final counter = ctx.globalState<int>('counter');
-    final root = RootStore.fromCtx(ctx);
-    final showModal = ctx.state('modal', false);
-    return div(
-      children: [
-        button(
-          // onclick: (_) => counter.set((c) => c + 1),
-          onclick: (_) => root.increment(),
-          className: btn(size: BSize.sm),
-          children: [
-            txt('Click me to increment to counter'),
-          ],
-        ),
-        button(
-          onclick: (_) => showModal.value = !showModal.value,
-          className:
-              btn(size: BSize.sm, outlined: true, color: BColor.secondary),
-          children: [txt('Show Modal')],
-        ),
-        if (showModal.value)
-          modal(
-            id: 'modal-id',
-            dialog: modalDialog(
-              dialogClass: modalDialogClass(),
-              body: [txt('Body')],
-              header: [txt('Header')],
-              footer: [txt('Footer')],
-            ),
-          )
-      ],
-    );
-  });
-}
-
-DeactNode display() {
-  return divfc((ctx) {
-    print('ded');
-    final root = RootStore.fromCtx(ctx);
-    // final counter = ctx.globalState<int>('counter');
-    return txt('Counter: ${root.count}');
-  });
-}
-
-DeactNode counter() {
-  return fc((ctx) {
-    // as an alternative, it is possible to make a
-    // state of a component global to its children
-    // by setting the global parameter to true.
-    ctx.state<int>('counter', 0, global: true);
-    return fragment([
-      incrementor(),
-      display(),
-    ]);
-  });
-}
-
-DeactNode textInput() {
-  return div(
-    style: 'display:flex;',
-    children: [
-      txt('Title'),
-      span(style: 'width:10px;'),
-      fc((ctx) {
-        final value = ctx.state<String>('text', 'aa');
-        print('text "${value.value}"');
-
-        return input(
-          oninput: (e) => value.value = (e.target as html.InputElement).value!,
-          value: value.value,
-        );
-      })
-    ],
-  );
-}
-
-DeactNode textInputWrap(String text, void Function(String) onChange) {
-  return div(
-    style: 'display:flex;',
-    children: [
-      // txt('Title'),
-      // span(style: 'width:10px;'),
-      fc((ctx) {
-        final inputRef = ctx.hookRef<html.Element?>(() => null);
-        html.InputElement? elem() => inputRef.value as html.InputElement?;
-
-        ctx.hookEffect(() {
-          final _elem = elem();
-          if (_elem != null && _elem.value != text) {
-            _elem.value = text;
-          }
-        });
-        return input(
-          oninput: (e) => onChange(elem()!.value!),
-          value: text.isEmpty ? null : text,
-          ref: inputRef,
-        );
-      }),
-    ],
-  );
 }
