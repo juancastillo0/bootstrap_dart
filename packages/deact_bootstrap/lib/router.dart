@@ -344,14 +344,16 @@ class DRouter extends ComponentNode {
     );
     ctx.hookEffect(() {
       if (kIsWeb) {
+        final baseHref = getBaseHref(html.document);
         final subs = html.window.onPopState.listen((event) {
           final prev = stack.length > 1 ? stack[stack.length - 2] : null;
+          final href = html.window.location.href.replaceFirst(baseHref, '/');
           print(
             'd:${event.state} href: ${html.window.location.href} last:${stack.last.uri.toString()}'
             ' prev:${prev?.uri.toString() ?? 'N'}',
           );
           if (prev != null &&
-              html.window.location.href == prev.uri.toString() &&
+              href == prev.uri.toString() &&
               (event.state == null || event.state == prev.state)) {
             print('remove ${event.state} ${stack.length}');
             stack.removeLast();
