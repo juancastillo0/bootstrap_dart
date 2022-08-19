@@ -186,6 +186,13 @@ class RenderedRoute {
 }
 
 PropsMapper propMapper(DRouter router) {
+  String base = '/';
+  if (kIsWeb) {
+    final baseElement = html.document.querySelector('base');
+    if (baseElement != null && baseElement.attributes.containsKey('href')) {
+      base = baseElement.attributes['href']!;
+    }
+  }
   return (tag, props) {
     if (tag != 'a') return props;
     String? href;
@@ -215,7 +222,9 @@ PropsMapper propMapper(DRouter router) {
       'onclick',
       (html.Event event) {
         event.preventDefault();
-        router.navigator.pushNamed(href!);
+        router.navigator.pushNamed(
+          href!.startsWith('/') ? '$base${href.substring(1)}' : href,
+        );
       }
     ];
   };
