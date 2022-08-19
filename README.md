@@ -1,14 +1,28 @@
-# Bootstrap Dart <!-- omit in toc -->
+# Bootstrap Dart
 
 [Bootstrap](https://getbootstrap.com/) web components in Dart. For more information on the different components, check out Bootstrap's [documentation](https://getbootstrap.com/docs/5.1/getting-started/introduction/).
 
 You can view all the implemented components (and the Dart code) in the deployed page (https://juancastillo0.github.io/bootstrap_dart/). The code for the deployed page is in the [`web/bootstrap_examples.dart` file](web/bootstrap_examples.dart).
 
+## Versions
 
+We currently support the following versions:
+
+- Bootstrap 5.1.3 https://getbootstrap.com/docs/5.1/
+- Bootstrap Icons 1.9.1 https://icons.getbootstrap.com/
+- Bootstrap Dark 1.1.3 https://vinorodrigues.github.io/bootstrap-dark-5/
+
+## Table of Contents
+
+- [Bootstrap Dart](#bootstrap-dart)
+  - [Versions](#versions)
+  - [Table of Contents](#table-of-contents)
 - [Usage](#usage)
+    - [Custom scss and Dark Mode](#custom-scss-and-dark-mode)
 - [Examples](#examples)
   - [Components Gallery](#components-gallery)
   - [Cacho Game](#cacho-game)
+  - [CIDart](#cidart)
 - [Packages](#packages)
   - [bootstrap_dart](#bootstrap_dart)
   - [Supported Frameworks](#supported-frameworks)
@@ -65,7 +79,7 @@ Set up your `web/index.html`
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- App CSS -->
     <link rel="stylesheet" href="styles.css">
     <!-- Main App -->
@@ -85,6 +99,114 @@ Set up your `web/index.html`
 </html>
 ```
 
+### Custom scss and Dark Mode
+
+We provide the Bootstrap scss along with the [Bootstrap Dark](https://github.com/vinorodrigues/bootstrap-dark-5) dark mode scss. With them, and using [`package:sass_builder`](https://pub.dev/packages/sass_builder) to compile scss files, you can customize Bootstrap and only import the components you need.
+
+Add sass_builder to your dependencies
+
+```yaml
+dev_dependencies:
+  sass_builder: ^2.1.2
+```
+
+Create an scss file (`web/bootstrap.scss`) that customizes variables and imports the Bootstrap scss
+
+```scss
+// Include any default variable overrides here (though functions won't be available)
+
+$primary: #01388a; // was #0d6efd;
+
+// Import the bootstrap nightshade scss.
+// This includes the default Bootstrap and dark scss
+// https://github.com/vinorodrigues/bootstrap-dark-5/blob/main/docs/bootstrap-nightshade.md
+@import "package:bootstrap_dart/scss/bootstrap-nightshade";
+
+// You can import the `bootstrap-icons.scss` in here also
+@import "package:bootstrap_dart/icons/bootstrap-icons";
+
+// Then add additional custom code here
+
+:root {
+  // shade-color function is from bootstrap.
+  // Use in css with `background-color:var(--light-darker);`
+  --light-darker: #{shade-color($light, 5%)}; 
+  --dark-darker: #{shade-color($dark, 10%)};
+}
+```
+
+Edit your html file to import the compiled css and the `darkmode.js` file:
+
+```html
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+    <title>App Title</title>
+
+    <!-- The page supports both dark and light color schemes,
+    and the page author prefers / default is light. -->
+    <meta name="color-scheme" content="light dark">
+
+    <!-- Custom Bootstrap CSS created by package:sass_builder -->
+    <link rel="stylesheet" href="bootstrap.css">
+    <!-- Main App -->
+    <script defer src="main.dart.js"></script>
+</head>
+
+<body>
+  <!-- Main element, Dart will edit this -->
+  <div id="output"></div>
+  
+  <!-- Some Bootstrap components require JS: Popper.js and Bootstrap JS -->
+  <script src="./packages/bootstrap_dart/js/bootstrap.bundle.min.js"></script>
+  <!-- Supports dark mode toggle https://github.com/vinorodrigues/bootstrap-dark-5/blob/main/docs/darkmode.js.md -->
+  <script src="./packages/bootstrap_dart/dark_mode/darkmode.min.js"></script>
+</body>
+</html>
+```
+
+Because we imported the `bootstrap-icons.scss` in the `web/bootstrap.scss` file, the previous html already supports Bootstrap icons. However, you may also import the css directly:
+
+```html
+<link rel="stylesheet" href="./packages/bootstrap_dart/icons/bootstrap-icons.css">
+```
+
+Since the `web/bootstrap.scss` is importing `bootstrap-nightshade`, you can use the `html.dark` css class selector to change the styles of different elements when the dark mode is selected (CSS class `dark` over the `html` element):
+
+```css
+html.dark .code-section {
+  background-color: var(--bs-dark-alt);
+}
+```
+
+To toggle dark mode you may use the API in `package:bootstrap_dart/dark_mode/dark_mode.dart`. Which uses the underling [darkmode.js](https://github.com/vinorodrigues/bootstrap-dark-5/blob/main/docs/darkmode.js.md) file.
+
+```dart
+import 'package:bootstrap_dart/dark_mode/dark_mode.dart' show DarkMode;
+
+final darkMode = DarkMode();
+
+DeactNode darkModeSwitch() {
+  return check(
+    label: txt('Dark Mode'),
+    id: 'darkModeSwitch',
+    type: CheckType.switch_,
+    checked: darkMode.inDarkMode,
+    inline: true,
+    onChange: (_) {
+      darkMode.toggleDarkMode();
+    },
+  );
+}
+```
+
+You may use the `DarkMode.inDarkModeChanges` Stream to subscribe to changes or the `inDarkModeValue` constructor parameter to use a `package:mobx` observable in the `DarkMode.inDarkMode` getter.
+
 # Examples
 
 ## Components Gallery
@@ -96,6 +218,18 @@ You can view all the implemented components (and the Dart code) in the deployed 
 Work in progress.
 
 A multiplayer board game. The code for complete example is in the [`example/` directory](example/).
+
+## CIDart
+
+Work in progress.
+
+A service for compiling, executing and tracking the build process and deployment. With a git repository, one can set up a CLI pipeline for continuous integration and delivery. All the commands are tracked in realtime. This is a simple personal project for deploying in a VM. The service uses web sockets and the source code repository has three projects:
+
+1. A [Leto](https://github.com/juancastillo0/leto) Shelf GraphQL server. Everything is saved in memory
+2. A Dart client using [`package:graphql`](https://pub.dev/packages/graphql) and [`package:graphql_codegen`](https://pub.dev/packages/graphql_codegen)
+3. A Web Dart client using [`package:jaspr`](https://github.com/schultek/jaspr) and [jaspr_bootstrap](#jaspr_bootstrap-for-packagejaspr).
+
+You can view the code in the [Github repo](https://github.com/juancastillo0/cidart). The client UI and some links to the different GraphQL Schema UI explorer is deployed in [this page](https://juancastillo0.github.io/cidart/).
 
 # Packages
 
@@ -148,7 +282,7 @@ class BootstrapRenderer<N> {
   /// The [ref] should be populated when an effect using [BootstrapBuildContext.hookEffect] is run.
   N el(
     String tag, {
-    Map<String, Object?>? attributes,
+    Map<String, String>? attributes,
     Iterable<dynamic>? children,
     Object? key,
     Map<String, void Function(html.Event)>? listeners,
