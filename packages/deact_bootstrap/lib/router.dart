@@ -369,21 +369,39 @@ class DRouter extends ComponentNode {
         return () => subs.cancel();
       }
     }, const []);
+
+    int index = 0;
     return fragment([
       div(
-        className: 'd-flex flex-column',
+        className: 'd-flex flex-row',
         children: [
           ...stack.map(
-            (e) => span(
-              className: 'm-1',
-              children: [
-                txt(
-                  e.uri
-                      .toString()
-                      .replaceFirst('${e.uri.scheme}://${e.uri.authority}', ''),
-                ),
-              ],
-            ),
+            (e) {
+              final currentIndex = index++;
+              final path = e.uri
+                  .toString()
+                  .replaceFirst('${e.uri.scheme}://${e.uri.authority}', '');
+              return a(
+                className: 'm-1',
+                href: path,
+                onclick: (event) {
+                  event.preventDefault();
+                  if (currentIndex == stack.length - 1) return;
+                  for (int i = 0; i < stack.length - currentIndex; i++) {
+                    stack.removeLast();
+                  }
+                  html.window.history.replaceState(
+                    e.state,
+                    '',
+                    // TODO: use e.uri query params
+                    '${getBaseHref(html.document)}${e.uri.pathSegments.join('/')}',
+                  );
+
+                  updateCurrent();
+                },
+                children: [txt(path)],
+              );
+            },
           )
         ],
       ),
