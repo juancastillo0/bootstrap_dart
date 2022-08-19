@@ -185,14 +185,17 @@ class RenderedRoute {
             : null;
 }
 
-PropsMapper propMapper(DRouter router) {
-  String base = '/';
-  if (kIsWeb) {
-    final baseElement = html.document.querySelector('base');
-    if (baseElement != null && baseElement.attributes.containsKey('href')) {
-      base = baseElement.attributes['href']!;
-    }
+String getBaseHref(html.HtmlDocument document) {
+  final baseElement = document.querySelector('base');
+  if (baseElement != null && baseElement.attributes.containsKey('href')) {
+    return baseElement.attributes['href']!;
   }
+  return '/';
+}
+
+PropsMapper propMapper(DRouter router) {
+  final base = kIsWeb ? getBaseHref(html.document) : '/';
+
   return (tag, props) {
     if (tag != 'a') return props;
     String? href;
@@ -290,7 +293,11 @@ class DRouter extends ComponentNode {
     RouteReq? req, {
     void Function()? onLoad,
   }) {
-    final uri = req?.uri ?? Uri.parse(html.window.location.href);
+    final uri = req?.uri ??
+        Uri.parse(
+          html.window.location.href
+              .replaceFirst(getBaseHref(html.document), '/'),
+        );
 
     RenderedRoute? rendered;
     for (final route in routes) {
