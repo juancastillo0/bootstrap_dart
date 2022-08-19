@@ -30,6 +30,9 @@ jobs:
 
       - run: dart run ./web/main.dart
 
+      # Install dependencies in cacho example
+      - run: cd example && dart pub get
+
       - run: cd example && webdev build -- --delete-conflicting-outputs
 
       - run: dart run ./example/web/main.dart
