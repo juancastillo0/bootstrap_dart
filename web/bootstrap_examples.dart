@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:deact/deact.dart';
 import 'package:deact/deact_html52.dart';
 import 'package:deact_bootstrap/hooks.dart';
+import 'package:mobx/mobx.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:highlight/highlight_core.dart' show highlight;
 import 'package:highlight/languages/dart.dart';
@@ -145,6 +146,16 @@ DeactNode bootstrapExamples() {
   return fc((ctx) => _allExamples(ctx));
 }
 
+final darkMode = DarkMode(
+  inDarkModeValue: (inDarkMode) {
+    final obs = Observable(inDarkMode);
+    return SavedValue(
+      get: () => obs.value,
+      set: (newValue) => obs.value = newValue,
+    );
+  },
+);
+
 DeactNode examplesNavbar() {
   return fc(
     (ctx) {
@@ -162,7 +173,6 @@ DeactNode examplesNavbar() {
         children: [
           a(
             className: 'navbar-brand m-1 d-flex flex-column',
-            href: '#',
             children: [
               txt('Bootstrap Dart'),
               div(
@@ -178,10 +188,24 @@ DeactNode examplesNavbar() {
               ),
             ],
           ),
+          a(
+            className: 'd-flex justify-content-center',
+            href: 'https://github.com/juancastillo0/bootstrap_dart',
+            target: '_blank',
+            children: [
+              div(
+                style: flexCenter(),
+                children: [
+                  icon(BIcon.github, style: 'margin-right:5px;'),
+                  txt('Github Repo'),
+                ],
+              ),
+            ],
+          ),
           check(
             label: txt('Dark Mode'),
             id: 'darkModeSwitch',
-            divClass: 'mb-2 mx-auto',
+            divClass: 'my-2 mx-auto',
             type: CheckType.switch_,
             checked: inDarkMode,
             inline: true,
@@ -1838,9 +1862,14 @@ DeactNode bootstrapExample(
     className: 'm-4 w-100 d-flex flex-column',
     style: 'position:relative;',
     children: [
+      hr(),
       div(
         children: [
-          el('h3', children: [txt(title)]),
+          el(
+            'h3',
+            attributes: {'class': 'mt-1'},
+            children: [txt(title)],
+          ),
           a(
             href: url ??
                 'https://getbootstrap.com/docs/5.1/components/'
