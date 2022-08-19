@@ -30,6 +30,12 @@ jobs:
 
       - run: dart run ./web/main.dart
 
+      - run: cd example && webdev build -- --delete-conflicting-outputs
+
+      - run: dart run ./example/web/main.dart
+
+      - run: mv example/build build/cacho
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

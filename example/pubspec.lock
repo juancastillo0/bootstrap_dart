@@ -84,7 +84,7 @@ packages:
       name: build_config
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   build_daemon:
     dependency: transitive
     description:
@@ -112,7 +112,7 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.11"
+    version: "2.2.0"
   build_runner_core:
     dependency: transitive
     description:
@@ -126,7 +126,7 @@ packages:
       name: build_test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.5"
   build_web_compilers:
     dependency: "direct dev"
     description:
@@ -360,13 +360,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  highlight:
-    dependency: transitive
-    description:
-      name: highlight
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   hotreloader:
     dependency: transitive
     description:
@@ -461,30 +454,38 @@ packages:
   leto:
     dependency: "direct main"
     description:
-      path: "../../leto/leto"
-      relative: true
-    source: path
+      path: leto
+      ref: HEAD
+      resolved-ref: "90213d7e90ba0e72c910bc5d811bbcfea18b4723"
+      url: "https://github.com/juancastillo0/leto"
+    source: git
     version: "0.0.1"
   leto_generator:
     dependency: "direct dev"
     description:
-      path: "../../leto/leto_generator"
-      relative: true
-    source: path
+      path: leto_generator
+      ref: HEAD
+      resolved-ref: "90213d7e90ba0e72c910bc5d811bbcfea18b4723"
+      url: "https://github.com/juancastillo0/leto"
+    source: git
     version: "0.0.1"
   leto_schema:
     dependency: "direct main"
     description:
-      path: "../../leto/leto_schema"
-      relative: true
-    source: path
+      path: leto_schema
+      ref: HEAD
+      resolved-ref: "90213d7e90ba0e72c910bc5d811bbcfea18b4723"
+      url: "https://github.com/juancastillo0/leto"
+    source: git
     version: "0.0.1"
   leto_shelf:
     dependency: "direct main"
     description:
-      path: "../../leto/leto_shelf"
-      relative: true
-    source: path
+      path: leto_shelf
+      ref: HEAD
+      resolved-ref: "90213d7e90ba0e72c910bc5d811bbcfea18b4723"
+      url: "https://github.com/juancastillo0/leto"
+    source: git
     version: "0.0.1"
   lints:
     dependency: "direct dev"
@@ -492,7 +493,7 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   logging:
     dependency: transitive
     description:
@@ -563,13 +564,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.2"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.11.1"
   pool:
     dependency: transitive
     description:
@@ -797,9 +791,11 @@ packages:
   universal_html:
     dependency: "direct main"
     description:
-      path: "../../universal_html"
-      relative: true
-    source: path
+      path: "."
+      ref: "heads/sdk_exports"
+      resolved-ref: "5a079ea537a8e8891687debdb25ac4255573ba89"
+      url: "https://github.com/juancastillo0/universal_html.git"
+    source: git
     version: "2.0.8"
   universal_io:
     dependency: transitive
@@ -860,4 +856,4 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.17.6 <3.0.0"
+  dart: ">=2.17.0 <3.0.0"
