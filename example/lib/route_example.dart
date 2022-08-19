@@ -60,6 +60,12 @@ DeactNode routeList() {
       ]),
       li(children: [
         a(
+          href: '/cacho',
+          children: [txt('/cacho')],
+        )
+      ]),
+      li(children: [
+        a(
           href: '/about',
           children: [txt('/about')],
         )

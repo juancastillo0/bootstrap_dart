@@ -183,6 +183,9 @@ DeactNode examplesNavbar() {
                   img(
                     src: 'https://pub.dev/favicon.ico',
                     style: 'width:1.25rem;',
+                    width: '20px',
+                    height: '20px',
+                    alt: 'Dart Icon',
                   )
                 ],
               ),
@@ -284,6 +287,7 @@ DeactNode _allExamples(ComponentContext ctx) {
                     children: [
                       check(
                         label: txt('flush'),
+                        id: 'accordion-flush',
                         inline: true,
                         name: 'flush',
                         checked: flush.value,
@@ -292,6 +296,7 @@ DeactNode _allExamples(ComponentContext ctx) {
                       ),
                       check(
                         label: txt('multipleOpened'),
+                        id: 'accordion-multipleOpened',
                         inline: true,
                         name: 'multipleOpened',
                         checked: multipleOpened.value,

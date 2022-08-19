@@ -67,6 +67,7 @@ DeactNode navbar({
               attributes: {
                 'class': 'navbar-toggler',
                 'aria-expanded': 'false',
+                'aria-label': 'Toggle Navbar',
                 ...toggleButtonAttributes(
                   component: TogglableComponent.collapse,
                   targetId: collapseId,
