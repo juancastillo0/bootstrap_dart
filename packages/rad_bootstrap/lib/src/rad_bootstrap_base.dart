@@ -196,11 +196,8 @@ class MultiChildWidget extends rad.Widget {
   rad.DomTagType? get correspondingTag => null;
 
   @override
-  bool shouldUpdateWidget(covariant MultiChildWidget oldWidget) {
-    return oldWidget.children != children &&
-        (oldWidget.children.length != children.length ||
-            Iterable.generate(children.length)
-                .any((i) => children[i] != oldWidget.children[i]));
+  bool shouldUpdateWidget(oldWidget) {
+    return false;
   }
 }
 
