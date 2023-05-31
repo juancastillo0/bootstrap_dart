@@ -2,6 +2,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:rad/rad.dart' as rad;
 import 'package:rad/widgets_html.dart' as rad_html;
 import 'package:rad_hooks/rad_hooks.dart' as rad_hooks;
+import 'package:rad_bootstrap/src/rad_custom_hooks.dart' as rad_custom_hooks;
 import 'package:bootstrap_dart/bootstrap/bootstrap_renderer.dart';
 
 class RadBootstrapRenderer implements BootstrapRenderer<rad.Widget> {
@@ -89,11 +90,7 @@ class RadBootstrapContext extends BootstrapBuildContext {
     List<Object?>? keys,
     bool Function(Object? p1, Object? p2)? equals,
   ]) {
-    rad_hooks.useEffect(
-      effect,
-      keys,
-      // TODO: equals ?? rad_hooks.defaultKeysEquals,
-    );
+    rad_custom_hooks.useCustomEffect(effect, keys, equals);
   }
 
   @override
