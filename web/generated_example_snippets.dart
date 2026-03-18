@@ -17,7 +17,7 @@ final bootstrap_accordion_example = r'''
                         body: [txt('Body 3')],
                       ),
                     },
-                  ),'''; 
+                  ),''';
 
 final bootstrap_button_group_example = r'''
         content: fc(
@@ -60,7 +60,7 @@ final bootstrap_button_group_example = r'''
               ],
             );
           },
-        ),'''; 
+        ),''';
 
 final bootstrap_close_button_example = r'''
         content: div(
@@ -76,7 +76,7 @@ final bootstrap_close_button_example = r'''
             ),
             closeButton(disabled: true),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_dropdown_example = r'''
         content: div(
@@ -127,7 +127,7 @@ final bootstrap_dropdown_example = r'''
               );
             })
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_table_example = r'''
                   table(
@@ -195,7 +195,7 @@ final bootstrap_table_example = r'''
                           ],
                         ),
                     ],
-                  ),'''; 
+                  ),''';
 
 final bootstrap_tooltip_example = r'''
         content: div(
@@ -226,7 +226,7 @@ final bootstrap_tooltip_example = r'''
               ],
             ),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_popover_example = r'''
         content: div(
@@ -282,7 +282,7 @@ final bootstrap_popover_example = r'''
               ],
             ),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_spinners_example = r'''
         content: div(
@@ -305,7 +305,7 @@ final bootstrap_spinners_example = r'''
               ],
             ),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_toasts_example = r'''
         content: div(
@@ -370,7 +370,7 @@ final bootstrap_toasts_example = r'''
               );
             })
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_forms_example = r'''
         content: fc((ctx) {
@@ -582,7 +582,7 @@ final bootstrap_forms_example = r'''
               ),
             ],
           );
-        }),'''; 
+        }),''';
 
 final bootstrap_navs_tabs_example = r'''
         content: fc((ctx) {
@@ -642,7 +642,7 @@ final bootstrap_navs_tabs_example = r'''
               ),
             ],
           );
-        }),'''; 
+        }),''';
 
 final bootstrap_navbar_example = r'''
         content: div(
@@ -755,7 +755,7 @@ final bootstrap_navbar_example = r'''
               );
             }),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_modal_example = r'''
                   modal(
@@ -802,7 +802,7 @@ final bootstrap_modal_example = r'''
                         ),
                       ],
                     ),
-                  ),'''; 
+                  ),''';
 
 final bootstrap_offcanvas_example = r'''
         content: div(
@@ -869,7 +869,7 @@ final bootstrap_offcanvas_example = r'''
               ]);
             }),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_placeholder_example = r'''
         content: div(
@@ -922,7 +922,7 @@ final bootstrap_placeholder_example = r'''
               ]);
             }),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_scrollspy_example = r'''
         content: div(
@@ -1001,7 +1001,7 @@ final bootstrap_scrollspy_example = r'''
               ],
             ),
           ],
-        ),'''; 
+        ),''';
 
 final bootstrap_collapse_example = r'''
     content: div(
@@ -1063,4 +1063,4 @@ final bootstrap_collapse_example = r'''
           ],
         ),
       ],
-    ),'''; 
+    ),''';

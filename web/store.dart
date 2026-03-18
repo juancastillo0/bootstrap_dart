@@ -1,21 +1,19 @@
-import 'package:universal_html/html.dart' as html;
+import 'package:bootstrap_dart/bootstrap/bootstrap_renderer.dart';
+import './global_ref.dart';
+import 'package:universal_web/web.dart' as web;
 
-import 'package:deact/deact.dart';
 import 'package:mobx/mobx.dart';
 
-html.Storage get localStorage => html.window.localStorage;
+web.Storage get localStorage => web.window.localStorage;
 
-enum Tab {
-  message,
-  profile,
-}
+enum Tab { message, profile }
 
 extension TabName on Tab {
   String get name => toString().split('.').last;
 }
 
 Tab? _tabFromUrl() {
-  final qp = Uri.parse(html.window.location.href).queryParameters;
+  final qp = Uri.parse(web.window.location.href).queryParameters;
   final _index = Tab.values.indexWhere((v) => v.name == qp['tab']);
   if (_index != -1) {
     return Tab.values[_index];
@@ -29,22 +27,21 @@ class RootStore {
     if (saved != null) {
       runInAction(() => _count.value = saved);
     }
-    autorun(
-      (_) => localStorage[_key] = _count.value.toString(),
-      delay: 300,
-    );
+    autorun((_) => localStorage[_key] = _count.value.toString(), delay: 300);
     _syncTabWithUrl();
     autorun((_) {
       if (_tabFromUrl() == tab.value) return;
-      final _url = Uri.parse(html.window.location.href);
-      final newUrl = _url.replace(queryParameters: {
-        ..._url.queryParametersAll,
-        'tab': [tab.value.name],
-      });
-      html.window.history.pushState(null, '', newUrl.toString());
+      final _url = Uri.parse(web.window.location.href);
+      final newUrl = _url.replace(
+        queryParameters: {
+          ..._url.queryParametersAll,
+          'tab': [tab.value.name],
+        },
+      );
+      web.window.history.pushState(null, '', newUrl.toString());
     });
 
-    html.window.onPopState.listen((event) {
+    web.window.onPopState.listen((event) {
       _syncTabWithUrl();
     });
   }
@@ -71,8 +68,8 @@ class RootStore {
     runInAction(() => _count.value++);
   }
 
-  static RootStore fromCtx(ComponentContext ctx) =>
-      ctx.globalRef<RootStore>('RootValue').value;
+  static RootStore fromCtx(BootstrapBuildContext ctx) =>
+      ctx.globalRef<RootStore>();
 }
 
 class MessageStore {
@@ -91,7 +88,7 @@ class MessageStore {
 
   final message = Observable<String>('');
 
-  static MessageStore fromCtx(ComponentContext ctx) =>
+  static MessageStore fromCtx(BootstrapBuildContext ctx) =>
       RootStore.fromCtx(ctx).messageStore;
 }
 
@@ -99,8 +96,5 @@ class Message {
   final String content;
   final DateTime createdAt;
 
-  Message({
-    required this.content,
-    required this.createdAt,
-  });
+  Message({required this.content, required this.createdAt});
 }
