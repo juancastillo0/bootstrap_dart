@@ -5,10 +5,8 @@ abstract class UserSelection<T> {
   const UserSelection._();
 
   /// Represents that the user should select a single value.
-  const factory UserSelection.single(
-    T selected,
-    void Function(T) onChanged,
-  ) = _UserSelectionSingle;
+  const factory UserSelection.single(T selected, void Function(T) onChanged) =
+      _UserSelectionSingle;
 
   /// Represents that the user could select multiple values.
   const factory UserSelection.many(
@@ -44,9 +42,7 @@ abstract class UserSelection<T> {
         }
         v.onChanged(_selected);
       },
-      indeterminate: (v) => v.onChanged(
-        value == v.selected ? null : value,
-      ),
+      indeterminate: (v) => v.onChanged(value == v.selected ? null : value),
     );
   }
 

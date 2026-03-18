@@ -27,6 +27,6 @@ String tableClass({
     if (align != null) align.nameHtml,
     if (captionTop) 'caption-top',
     if (scrollHorizontal != null)
-      'table-responsive${scrollHorizontal == ResponsiveBreakPoint.always ? '' : '-${scrollHorizontal.name}'}'
+      'table-responsive${scrollHorizontal == ResponsiveBreakPoint.always ? '' : '-${scrollHorizontal.name}'}',
   ].join(' ');
 }

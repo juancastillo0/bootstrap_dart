@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_web/web.dart' as web;
 
 import '../src/prelude.dart';
 import 'bootstrap_core.dart';
@@ -7,18 +7,10 @@ import 'bootstrap_core.dart';
 /// Toasts https://getbootstrap.com/docs/5.1/components/toasts/
 
 /// https://getbootstrap.com/docs/5.2/components/toasts/#events
-enum ToastEventType {
-  show,
-  shown,
-  hide,
-  hidden,
-}
+enum ToastEventType { show, shown, hide, hidden }
 
 /// Event type emitted by [ToastsController]
-enum ToastsControllerEvent {
-  added,
-  deleted,
-}
+enum ToastsControllerEvent { added, deleted }
 
 /// A
 class ToastInfo {
@@ -26,11 +18,7 @@ class ToastInfo {
   final DeactNode node;
   final Duration duration;
 
-  ToastInfo({
-    required this.id,
-    required this.node,
-    required this.duration,
-  });
+  ToastInfo({required this.id, required this.node, required this.duration});
 }
 
 /// A controller to [add] nodes as toasts to
@@ -99,54 +87,32 @@ class ToastsController {
   /// that should be rendered given their duration and whether [allowMultiple]
   /// is true.
   DeactNode render() {
-    return fc(
-      (ctx) {
-        final dummy = ctx.hookState(() => false);
-        ctx.hookEffect(
-          () => stream.listen((event) {
-            dummy.value = !dummy.value;
-          }).cancel,
-          const [],
-        );
-        final toRender =
-            allowMultiple ? queue : [if (queue.isNotEmpty) queue.first];
+    return fc((ctx) {
+      final dummy = ctx.hookState(() => false);
+      ctx.hookEffect(
+        () => stream.listen((event) {
+          dummy.value = !dummy.value;
+        }).cancel,
+        const [],
+      );
+      final toRender = allowMultiple
+          ? queue
+          : [if (queue.isNotEmpty) queue.first];
 
-        return toastsContainer(
-          horizontalPosition: horizontalPosition,
-          verticalPosition: verticalPosition,
-          children: toRender.map(
-            (e) => toast(
-              key: e.id,
-              toastId: e.id.toString(),
-              autoHide: false,
-              content: e.node,
-            ),
+      return toastsContainer(
+        horizontalPosition: horizontalPosition,
+        verticalPosition: verticalPosition,
+        children: toRender.map(
+          (e) => toast(
+            key: e.id,
+            toastId: e.id.toString(),
+            autoHide: false,
+            content: e.node,
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
-}
-
-void showToast() {
-  final elem = html.Element.div()
-    ..className = 'toast'
-    ..setAttribute('role', 'alert')
-    ..setAttribute('aria-live', 'assertive')
-    ..setAttribute('aria-atomic', 'true')
-    ..append(
-      html.Element.div()
-        ..className = 'toast-header'
-        ..appendText('HEADER'),
-    )
-    ..append(
-      html.Element.div()
-        ..className = 'toast-body'
-        ..appendText('Toast message!'),
-    );
-
-  html.querySelector('#output')!.append(elem);
-  Toast(elem).show();
 }
 
 /// A container for [toast] components.
@@ -168,7 +134,8 @@ DeactNode toastsContainer({
     'div',
     attributes: {
       'class': 'toast-container position-absolute p-3',
-      'style': '${verticalPosition.verticalStyle()}'
+      'style':
+          '${verticalPosition.verticalStyle()}'
           '${horizontalPosition.horizontalStyle()}',
     },
     children: children,
@@ -239,7 +206,7 @@ DeactNode closeToastButton({
   return closeButton(
     attributes: {
       'data-bs-dismiss': 'toast',
-      if (targetId != null) 'data-bs-target': targetId
+      if (targetId != null) 'data-bs-target': targetId,
     },
     white: white,
     disabled: disabled,
@@ -254,20 +221,13 @@ DeactNode toastContent({
   bool showCloseButton = false,
   String headerClass = 'justify-content-between',
 }) {
-  return fragment([
+  return DeactNode.fragment([
     if (header != null)
-      div(
+      divEl(
         className: 'toast-header $headerClass',
-        children: [
-          ...header,
-          if (showCloseButton) closeToastButton(),
-        ],
+        children: [...header, if (showCloseButton) closeToastButton()],
       ),
-    if (body != null)
-      div(
-        className: 'toast-body',
-        children: body,
-      ),
+    if (body != null) divEl(className: 'toast-body', children: body),
   ]);
 }
 
@@ -277,7 +237,7 @@ DeactNode toastContent({
 /// https://getbootstrap.com/docs/5.1/components/modal/
 class Toast {
   final ToastJS _inner;
-  final html.Element element;
+  final web.Element element;
   Toast(this.element) : _inner = ToastJS(element);
 
   bool _isDisposed = false;

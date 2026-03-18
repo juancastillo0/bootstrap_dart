@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
-
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_web/web.dart' as web;
 
 import '../src/prelude.dart';
 import 'user_selection.dart';
@@ -30,14 +29,11 @@ extension BtnTypeExt on BColor {
   String get name => toString().split('.').last;
   String get textColor =>
       const [BColor.warning, BColor.info, BColor.light].contains(this)
-          ? ' text-dark'
-          : '';
+      ? ' text-dark'
+      : '';
 }
 
-enum BSize {
-  lg,
-  sm,
-}
+enum BSize { lg, sm }
 
 /// A sections that brings attention to the user.
 /// The alert css class with the background [color].
@@ -82,7 +78,8 @@ DeactNode buttonGroup<T>({
   return el(
     'div',
     attributes: {
-      'class': 'btn-group${vertical ? '-vertical' : ''}'
+      'class':
+          'btn-group${vertical ? '-vertical' : ''}'
           '${size == null ? '' : ' btn-group-${size.name}'}',
       'role': 'group',
       if (ariaLabel != null) 'aria-label': ariaLabel,
@@ -95,9 +92,7 @@ DeactNode buttonGroup<T>({
             'class': buttonClass + (selectedSet.contains(e) ? ' active' : ''),
             'type': 'button',
           },
-          listeners: {
-            'onclick': (_) => selection.onSelect(e),
-          },
+          listeners: {'onclick': (_) => selection.onSelect(e)},
           children: renderItem(e),
         );
       }),
@@ -105,12 +100,7 @@ DeactNode buttonGroup<T>({
   );
 }
 
-enum Placement {
-  top,
-  bottom,
-  start,
-  end,
-}
+enum Placement { top, bottom, start, end }
 
 enum AxisAlign {
   start,
@@ -135,11 +125,7 @@ String flexCenter({bool column = false}) {
   );
 }
 
-enum FlexWrap {
-  wrap,
-  wrap_reverse,
-  nowrap,
-}
+enum FlexWrap { wrap, wrap_reverse, nowrap }
 
 extension FlexWrapExt on FlexWrap {
   String get nameHtml => toString().split('.').last.replaceAll('_', '-');
@@ -155,7 +141,11 @@ String flexStyle({
   return 'display:flex;${column ? 'flex-direction:column;' : ''}'
       'justify-content:${main.nameHtml};align-items:${cross.nameHtml};'
       '${wrap == null ? '' : 'flex-wrap:${wrap.nameHtml};'}'
-      '${column ? 'width:100%;' : 'height:100%;'}${expand ? column ? 'height:100%;' : 'width:100%;' : ''}';
+      '${column ? 'width:100%;' : 'height:100%;'}${expand
+          ? column
+                ? 'height:100%;'
+                : 'width:100%;'
+          : ''}';
 }
 
 String colStyle({
@@ -179,7 +169,7 @@ String colStyle({
 /// Close Button https://getbootstrap.com/docs/5.1/components/close-button/
 DeactNode closeButton({
   Object? key,
-  void Function(html.Event)? onClick,
+  void Function(web.Event)? onClick,
   bool disabled = false,
   bool white = false,
   ElementAttributes? attributes,
@@ -244,19 +234,9 @@ DeactNode visuallyHidden(String text) {
   );
 }
 
-enum Direction {
-  up,
-  down,
-  start,
-  end,
-}
+enum Direction { up, down, start, end }
 
-enum AutoClose {
-  true_,
-  false_,
-  inside,
-  outside,
-}
+enum AutoClose { true_, false_, inside, outside }
 
 extension AutoCloseExt on AutoClose {
   String get nameHtml => toString().split('.').last.replaceAll('_', '');
@@ -284,7 +264,8 @@ DeactNode dropdown({
   return el(
     'div',
     attributes: {
-      'class': 'btn-group ${dropdownClass ?? ''}'
+      'class':
+          'btn-group ${dropdownClass ?? ''}'
           '${direction != Direction.down ? ' drop${direction.name}' : ''}',
     },
     children: [
@@ -305,7 +286,8 @@ DeactNode dropdown({
       el(
         'ul',
         attributes: {
-          'class': 'dropdown-menu${dark ? ' dropdown-menu-dark' : ''}'
+          'class':
+              'dropdown-menu${dark ? ' dropdown-menu-dark' : ''}'
               '${menuOnEnd ? ' dropdown-menu-end' : ''} ${menuClass ?? ''}',
           if (buttonId != null) 'aria-labelledby': buttonId,
         },
@@ -316,9 +298,12 @@ DeactNode dropdown({
 }
 
 /// A divider for buttons in a [dropdown]
-final DeactNode dropdownDivider = el('li', children: [
-  el('hr', attributes: {'class': 'dropdown-divider'})
-]);
+final DeactNode dropdownDivider = el(
+  'li',
+  children: [
+    el('hr', attributes: {'class': 'dropdown-divider'}),
+  ],
+);
 
 DeactNode dropdownItem({
   Object? key,
@@ -328,7 +313,7 @@ DeactNode dropdownItem({
   bool disabled = false,
   bool useButton = false,
   required Iterable<DeactNode>? children,
-  required void Function(html.Event)? onClick,
+  required void Function(web.Event)? onClick,
 }) {
   return el(
     'li',
@@ -337,15 +322,14 @@ DeactNode dropdownItem({
       el(
         useButton ? 'button' : 'a',
         attributes: {
-          'class': '${buttonClass ?? ''}'
+          'class':
+              '${buttonClass ?? ''}'
               ' dropdown-item${active ? ' active' : ''}${disabled ? ' disabled' : ''}',
           'type': 'button',
           if (buttonId != null) 'id': buttonId,
           if (active) 'aria-current': 'true',
         },
-        listeners: {
-          if (onClick != null) 'onclick': onClick,
-        },
+        listeners: {if (onClick != null) 'onclick': onClick},
         children: children,
       ),
     ],
@@ -361,14 +345,7 @@ DeactNode dropdownItem({
 // https://getbootstrap.com/docs/5.1/components/progress/
 //
 
-enum Space {
-  s0,
-  s1,
-  s2,
-  s3,
-  s4,
-  s5,
-}
+enum Space { s0, s1, s2, s3, s4, s5 }
 
 /// https://getbootstrap.com/docs/5.2/helpers/stacks
 String stackClass({required Space gap, required bool vert}) =>
@@ -379,23 +356,17 @@ String borderClass({
   BColor? color,
   Space? size,
   Set<Placement> sides = const {},
-}) =>
-    [
-      if (color != null) 'border-${color.name}',
-      if (sides.isEmpty)
-        'border${size == null ? '' : '-${size.index}'}'
-      else
-        ...sides.map(
-          (b) => 'border-${b.name}${size == null ? '' : '-${size.index}'}',
-        )
-    ].join(' ');
+}) => [
+  if (color != null) 'border-${color.name}',
+  if (sides.isEmpty)
+    'border${size == null ? '' : '-${size.index}'}'
+  else
+    ...sides.map(
+      (b) => 'border-${b.name}${size == null ? '' : '-${size.index}'}',
+    ),
+].join(' ');
 
-enum RoundedSize {
-  s0,
-  s1,
-  s2,
-  s3,
-}
+enum RoundedSize { s0, s1, s2, s3 }
 
 /// https://getbootstrap.com/docs/5.2/utilities/borders/#radius
 String roundedClass({
@@ -403,12 +374,15 @@ String roundedClass({
   bool pill = false,
   RoundedSize? size,
   Set<Placement> sides = const {},
-}) =>
-    sides.isEmpty
-        ? 'rounded${pill ? '-pill' : circle ? '-circle' : ''}'
-        : [if (size != null) 'rounded-${size.index}']
-            .followedBy(sides.map((e) => 'rounded-${e.name}'))
-            .join(' ');
+}) => sides.isEmpty
+    ? 'rounded${pill
+          ? '-pill'
+          : circle
+          ? '-circle'
+          : ''}'
+    : [
+        if (size != null) 'rounded-${size.index}',
+      ].followedBy(sides.map((e) => 'rounded-${e.name}')).join(' ');
 
 /// The state of a ScrollSpy created with [useScrollSpy].
 ///
@@ -428,7 +402,7 @@ class ScrollSpyHook {
 /// https://getbootstrap.com/docs/5.2/components/scrollspy/
 ScrollSpyHook useScrollSpy(
   BootstrapBuildContext ctx,
-  Ref<html.Element?> ref, {
+  Ref<web.Element?> ref, {
   required String target,
   int offset = 50,
   bool smoothScroll = false,
@@ -436,10 +410,7 @@ ScrollSpyHook useScrollSpy(
   final scrollSpy = ctx.hookRef<ScrollSpy?>(() => null);
 
   ctx.hookEffect(() {
-    final _scrollSpy = ScrollSpy(
-      ref.value!,
-      ScrollSpyConfig(target: target),
-    );
+    final _scrollSpy = ScrollSpy(ref.value!, ScrollSpyConfig(target: target));
     scrollSpy.value = _scrollSpy;
     return () {
       scrollSpy.value = null;
@@ -462,11 +433,7 @@ ScrollSpyHook useScrollSpy(
 
 /// A list of components that can be toggled.
 /// Used within [toggleButtonAttributes].
-enum TogglableComponent {
-  modal,
-  offcanvas,
-  collapse,
-}
+enum TogglableComponent { modal, offcanvas, collapse }
 
 /// The html attributes to use for a button that toggles
 /// an element with id [targetId] of type [component].
@@ -489,7 +456,7 @@ ElementAttributes toggleButtonAttributes({
 DeactNode card({
   Object? key,
   String? id,
-  void Function(html.MouseEvent)? onClick,
+  void Function(web.MouseEvent)? onClick,
   String? imageSrc,
   String? imageAlt,
   bool imageBottom = false,
@@ -501,7 +468,7 @@ DeactNode card({
   DeactNode? title,
   DeactNode? text,
 }) {
-  return div(
+  return divEl(
     key: key,
     id: id,
     className: 'card ${cardClasses ?? ''}',
@@ -509,11 +476,7 @@ DeactNode card({
     onclick: onClick,
     children: [
       if (header != null)
-        div(
-          key: 'header',
-          className: 'card-header',
-          children: [header],
-        ),
+        divEl(key: 'header', className: 'card-header', children: [header]),
       if (imageSrc != null && !imageBottom)
         el(
           'img',
@@ -524,7 +487,7 @@ DeactNode card({
             'src': imageSrc,
           },
         ),
-      div(
+      divEl(
         key: 'body',
         className: 'card-body',
         children: [
@@ -556,11 +519,7 @@ DeactNode card({
           },
         ),
       if (footer != null)
-        div(
-          key: 'footer',
-          className: 'card-footer',
-          children: [footer],
-        ),
+        divEl(key: 'footer', className: 'card-footer', children: [footer]),
     ],
   );
 }
@@ -581,8 +540,8 @@ DeactNode spinner({
   return el(
     useSpan ? 'span' : 'div',
     attributes: {
-      'class': spinnerClass(size: size, grow: grow, color: color) +
-          ' ${className ?? ''}',
+      'class':
+          '${spinnerClass(size: size, grow: grow, color: color)} ${className ?? ''}',
       'role': 'status',
       if (ariaHidden) 'aria-hidden': 'true',
     },
@@ -592,7 +551,7 @@ DeactNode spinner({
           'span',
           attributes: {'class': 'visually-hidden'},
           children: [txt('Loading...')],
-        )
+        ),
     ],
   );
 }
@@ -611,23 +570,9 @@ String spinnerClass({
       ' text-${color.name}';
 }
 
-enum ResponsiveBreakPoint {
-  sm,
-  md,
-  lg,
-  xl,
-  xxl,
-  always,
-}
+enum ResponsiveBreakPoint { sm, md, lg, xl, xxl, always }
 
-enum VerticalAlign {
-  baseline,
-  top,
-  middle,
-  bottom,
-  text_bottom,
-  text_top,
-}
+enum VerticalAlign { baseline, top, middle, bottom, text_bottom, text_top }
 
 extension VerticalAlignExt on VerticalAlign {
   String get nameHtml =>
@@ -661,11 +606,7 @@ extension AlignmentExt on Alignment {
 }
 
 /// The size for [placeholder]
-enum PlaceholderSize {
-  xs,
-  sm,
-  lg,
-}
+enum PlaceholderSize { xs, sm, lg }
 
 /// A loading placeholder for text or content.
 /// Returns the css class.
@@ -679,20 +620,24 @@ String placeholder({
   String? className,
 }) {
   assert(!glow || glow != wave);
-  return 'placeholder${glow ? '-glow' : wave ? '-wave' : ''}'
+  return 'placeholder${glow
+          ? '-glow'
+          : wave
+          ? '-wave'
+          : ''}'
       '${size != null ? ' placeholder-${size.name}' : ''}'
       '${color != null ? ' bg-${color.name}' : ''} ${className ?? ''}';
 }
 
 DeactNode placeholderButton(String btnClass) => el(
-      'a',
-      attributes: {
-        'class': 'placeholder disabled $btnClass',
-        'tabindex': '-1',
-        'href': '#',
-        'aria-hidden': 'true',
-      },
-    );
+  'a',
+  attributes: {
+    'class': 'placeholder disabled $btnClass',
+    'tabindex': '-1',
+    'href': '#',
+    'aria-hidden': 'true',
+  },
+);
 
 /// A list of items.
 /// Returns the css class.
@@ -727,11 +672,7 @@ String listGroupItem({
 }
 
 /// The type of tab the [tabs] component.
-enum TabType {
-  tab,
-  pill,
-  list,
-}
+enum TabType { tab, pill, list }
 
 /// Returns the component that renders [items] tabs and their
 /// contents in a separate element.
@@ -746,52 +687,54 @@ DeactNode tabs({
   String? tabListClass,
   String? tabContentClass,
 }) {
-  return fragment([
-    el('nav', children: [
-      el(
-        'div',
-        attributes: {
-          'role': 'tablist',
-          'class': const {
-                TabType.list: 'list-group',
-                TabType.pill: 'nav nav-pills',
-                TabType.tab: 'nav nav-tabs',
-              }[type]! +
-              ' ${tabListClass ?? ''}',
-        },
-        children: [
-          ...items.map(
-            (e) => el(
-              'button',
-              attributes: {
-                'class':
-                    '${type == TabType.list ? listGroupItem(action: true) : ''}'
-                        ' nav-link${selectedId == e.id ? ' active' : ''}${e.disabled ? ' disabled' : ''}',
-                'data-bs-toggle': type.name,
-                // 'href': '#${e.id}',
-                'role': 'tab',
-                'type': 'button',
-                'data-bs-target': '#${e.id}',
-                'aria-controls': e.id,
-                'id': '${e.id}-tab',
-                if (selectedId != null)
-                  'aria-selected': '${selectedId == e.id}',
-                if (e.disabled) 'disabled': '',
-              },
-              listeners: {
-                if (onSelected != null) 'onclick': (_) => onSelected(e),
-              },
-              children: [e.tab],
+  return DeactNode.fragment([
+    el(
+      'nav',
+      children: [
+        el(
+          'div',
+          attributes: {
+            'role': 'tablist',
+            'class':
+                const {
+                  TabType.list: 'list-group',
+                  TabType.pill: 'nav nav-pills',
+                  TabType.tab: 'nav nav-tabs',
+                }[type]! +
+                ' ${tabListClass ?? ''}',
+          },
+          children: [
+            ...items.map(
+              (e) => el(
+                'button',
+                attributes: {
+                  'class':
+                      '${type == TabType.list ? listGroupItem(action: true) : ''}'
+                      ' nav-link${selectedId == e.id ? ' active' : ''}${e.disabled ? ' disabled' : ''}',
+                  'data-bs-toggle': type.name,
+                  // 'href': '#${e.id}',
+                  'role': 'tab',
+                  'type': 'button',
+                  'data-bs-target': '#${e.id}',
+                  'aria-controls': e.id,
+                  'id': '${e.id}-tab',
+                  if (selectedId != null)
+                    'aria-selected': '${selectedId == e.id}',
+                  if (e.disabled) 'disabled': '',
+                },
+                listeners: {
+                  if (onSelected != null) 'onclick': (_) => onSelected(e),
+                },
+                children: [e.tab],
+              ),
             ),
-          ),
-        ],
-      ),
-    ]),
+          ],
+        ),
+      ],
+    ),
     el(
       'div',
-      attributes: {
-        'class': 'tab-content ${tabContentClass ?? ''}',
-      },
+      attributes: {'class': 'tab-content ${tabContentClass ?? ''}'},
       children: [
         ...items.map(
           (e) => el(

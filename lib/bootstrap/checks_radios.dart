@@ -1,13 +1,9 @@
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_web/web.dart' as web;
 import '../src/prelude.dart';
 import 'form.dart';
 
 /// The type of check selector that should be rendered in [check]
-enum CheckType {
-  checkbox,
-  radio,
-  switch_,
-}
+enum CheckType { checkbox, radio, switch_ }
 
 extension CheckTypeExt on CheckType {
   String get htmlName => this == CheckType.switch_ ? 'checkbox' : name;
@@ -22,7 +18,7 @@ DeactNode check({
   String? name,
   String? id,
   DeactNode? label,
-  required Function(bool) onChange,
+  required void Function(bool) onChange,
   bool disabled = false,
   CheckType type = CheckType.checkbox,
   bool inline = false,
@@ -31,18 +27,24 @@ DeactNode check({
   String? divClass,
   String? labelStyle,
 }) {
-  return div(
-    className: 'form-check${type == CheckType.switch_ ? ' form-switch' : ''}'
+  return divEl(
+    className:
+        'form-check${type == CheckType.switch_ ? ' form-switch' : ''}'
         '${inline ? ' form-check-inline' : ''}${disabled ? ' disabled' : ''}'
         ' ${divClass ?? ''} position-relative',
     children: [
       fc((ctx) {
-        return fragment([
+        return DeactNode.fragment([
           el(
             'input',
             attributes: {
-              'class': 'form-check-input'
-                  '${isValid == null ? '' : isValid ? ' is-valid' : ' is-invalid'}',
+              'class':
+                  'form-check-input'
+                  '${isValid == null
+                      ? ''
+                      : isValid
+                      ? ' is-valid'
+                      : ' is-invalid'}',
               'type': type.htmlName,
               if (type == CheckType.switch_) 'role': 'switch',
               if (name != null) 'name': name,
@@ -52,8 +54,10 @@ DeactNode check({
             },
             listeners: {
               'onchange': (e) {
-                final _checked = (e.target as html.InputElement).checked;
-                onChange(_checked == true);
+                final _checked = (e.target as web.Element).getAttribute(
+                  'checked',
+                );
+                onChange(_checked == 'true');
               },
             },
           ),
@@ -62,8 +66,8 @@ DeactNode check({
               'label',
               attributes: {
                 'class': 'form-check-label',
-                if (labelStyle != null) 'style': labelStyle,
-                if (id != null) 'for': id,
+                'style': ?labelStyle,
+                'for': ?id,
               },
               children: [label],
             ),
@@ -90,7 +94,7 @@ DeactNode RadiosInput({
   required String name,
   bool inline = false,
 }) {
-  return fragment([
+  return DeactNode.fragment([
     ...items.entries.map(
       (e) => check(
         id: e.key,

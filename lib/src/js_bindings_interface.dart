@@ -1,8 +1,8 @@
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_web/web.dart' as web;
 
 /// https://getbootstrap.com/docs/5.2/components/scrollspy/
 class ScrollSpy {
-  ScrollSpy(html.Element element, ScrollSpyConfig config);
+  ScrollSpy(web.Element element, ScrollSpyConfig config);
   void dispose() {}
   void refresh() {}
 }
@@ -17,7 +17,7 @@ class ScrollSpyConfig {
 
 /// https://getbootstrap.com/docs/5.2/components/modal/
 class ModalJS {
-  ModalJS(html.Element element);
+  ModalJS(web.Element element);
 
   void toggle() {}
   void handleUpdate() {}
@@ -28,7 +28,7 @@ class ModalJS {
 
 /// https://getbootstrap.com/docs/5.2/components/modal/
 class ToastJS {
-  ToastJS(html.Element element);
+  ToastJS(web.Element element);
 
   void show() {}
   void hide() {}
@@ -37,14 +37,14 @@ class ToastJS {
 
 /// https://getbootstrap.com/docs/5.2/components/tooltips/
 class TooltipJS {
-  TooltipJS(html.Element element);
+  TooltipJS(web.Element element);
 
   void dispose() {}
 }
 
 /// https://getbootstrap.com/docs/5.2/components/offcanvas/
 class Offcanvas {
-  Offcanvas(html.Element element);
+  Offcanvas(web.Element element);
   void toggle() {}
   void show() {}
   void hide() {}
@@ -52,7 +52,7 @@ class Offcanvas {
 
 /// https://getbootstrap.com/docs/5.2/components/popovers/
 class Popover {
-  Popover(html.Element element);
+  Popover(web.Element element);
   void show() {}
   void hide() {}
   void toggle() {}

@@ -1,4 +1,4 @@
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_web/web.dart' as web;
 import 'package:collection/collection.dart';
 
 import '../src/prelude.dart';
@@ -14,7 +14,7 @@ DeactNode popoverWrapper({
   Ref<Popover?>? popoverRef,
 }) {
   return fc((ctx) {
-    final ref = ctx.hookRef<html.Element?>(() => null);
+    final ref = ctx.hookRef<web.Element?>(() => null);
     ctx.hookEffect(
       () {
         final _popover = Popover(ref.value!);
@@ -112,7 +112,7 @@ DeactNode tooltipWrapper({
 /// Used in [tooltipWrapper].
 class Tooltip {
   final TooltipJS _inner;
-  final html.Element element;
+  final web.Element element;
   Tooltip(this.element) : _inner = TooltipJS(element);
 
   /// Removes the tooltip from the [element].
@@ -120,21 +120,10 @@ class Tooltip {
 }
 
 /// https://getbootstrap.com/docs/5.2/components/tooltips/#directions
-enum TooltipPlacement {
-  auto,
-  top,
-  bottom,
-  left,
-  right,
-}
+enum TooltipPlacement { auto, top, bottom, left, right }
 
 /// https://getbootstrap.com/docs/5.2/components/tooltips/#options
-enum TooltipTrigger {
-  click,
-  hover,
-  focus,
-  manual,
-}
+enum TooltipTrigger { click, hover, focus, manual }
 
 /// You need to enable the tooltip by instantiating a [Tooltip]
 /// similar to the usage in [tooltipWrapper].

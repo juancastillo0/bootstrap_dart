@@ -1,13 +1,13 @@
 import '../src/prelude.dart';
 
 /// https://getbootstrap.com/docs/5.2/forms/form-control/
-String formControlClass({
-  BSize? size,
-  bool color = false,
-  bool? isValid,
-}) =>
+String formControlClass({BSize? size, bool color = false, bool? isValid}) =>
     'form-control${size != null ? ' form-control-${size.name}' : ''}'
-    '${color ? ' form-control-color' : ''} ${isValid == null ? '' : isValid ? 'is-valid' : 'is-invalid'}';
+    '${color ? ' form-control-color' : ''} ${isValid == null
+        ? ''
+        : isValid
+        ? 'is-valid'
+        : 'is-invalid'}';
 
 /// https://getbootstrap.com/docs/5.2/forms/form-control/
 const String formControlPlainText = 'form-control-plaintext';
@@ -41,11 +41,7 @@ class InputFeedback {
   /// If [tooltip] is true, it will be shown as a tooltip.
   ///
   /// https://getbootstrap.com/docs/5.2/forms/validation/
-  InputFeedback({
-    this.tooltip = false,
-    this.invalid,
-    this.valid,
-  });
+  InputFeedback({this.tooltip = false, this.invalid, this.valid});
 
   /// The nodes to be used next to a label and input html elements
   /// to show the feedback to the user.
@@ -72,10 +68,7 @@ class ColInputClasses {
   final String label;
   final String input;
 
-  const ColInputClasses({
-    required this.label,
-    required this.input,
-  });
+  const ColInputClasses({required this.label, required this.input});
 }
 
 /// An input component with a label and some utilities for rendering.
@@ -109,11 +102,7 @@ DeactNode labeledInput({
     if (colClasses == null)
       input
     else
-      el(
-        'div',
-        attributes: {'class': colClasses.input},
-        children: [input],
-      )
+      el('div', attributes: {'class': colClasses.input}, children: [input]),
   ];
 
   final inner = el(
@@ -129,11 +118,7 @@ DeactNode labeledInput({
     ],
   );
   if (wrapperDivClass != null) {
-    return el(
-      'div',
-      attributes: {'class': wrapperDivClass},
-      children: [inner],
-    );
+    return el('div', attributes: {'class': wrapperDivClass}, children: [inner]);
   }
   return inner;
 }

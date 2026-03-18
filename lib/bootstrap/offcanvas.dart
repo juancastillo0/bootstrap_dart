@@ -1,4 +1,4 @@
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_web/web.dart' as web;
 
 import '../src/prelude.dart';
 import 'bootstrap_core.dart';
@@ -14,16 +14,15 @@ ElementAttributes offcanvasAttributes({
   bool scroll = false,
   bool backdrop = true,
   bool keyboard = true,
-}) =>
-    {
-      'class': '${className ?? ''} offcanvas offcanvas-${placement.name}',
-      'data-bs-scroll': scroll.toString(),
-      'data-bs-backdrop': '$backdrop',
-      'data-bs-keyboard': keyboard.toString(),
-      'tabindex': "-1",
-      if (labelledBy != null) 'aria-labelledby': labelledBy,
-      if (id != null) 'id': id,
-    };
+}) => {
+  'class': '${className ?? ''} offcanvas offcanvas-${placement.name}',
+  'data-bs-scroll': scroll.toString(),
+  'data-bs-backdrop': '$backdrop',
+  'data-bs-keyboard': keyboard.toString(),
+  'tabindex': "-1",
+  if (labelledBy != null) 'aria-labelledby': labelledBy,
+  if (id != null) 'id': id,
+};
 
 /// A modal-like section or sheet that is shown from a side of the
 /// page. The `placement` parameter in [offcanvasAttributes] specifies the side.
@@ -40,7 +39,7 @@ DeactNode offcanvas({
   Ref<Offcanvas?>? offcanvasRef,
 }) {
   return fc((ctx) {
-    final ref = ctx.hookRef<html.Element?>(() => null);
+    final ref = ctx.hookRef<web.Element?>(() => null);
     ctx.hookEffect(() {
       final _offcanvas = Offcanvas(ref.value!);
       if (offcanvasRef != null) offcanvasRef.value = _offcanvas;
@@ -52,7 +51,7 @@ DeactNode offcanvas({
       key: key,
       attributes: attributes,
       children: [
-        div(
+        divEl(
           className: 'offcanvas-header',
           children: [
             el(
@@ -67,10 +66,7 @@ DeactNode offcanvas({
               closeButton(attributes: {'data-bs-dismiss': 'offcanvas'}),
           ],
         ),
-        div(
-          className: 'offcanvas-body',
-          children: body,
-        ),
+        divEl(className: 'offcanvas-body', children: body),
       ],
     );
   });

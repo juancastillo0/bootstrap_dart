@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'package:universal_html/html.dart' as html;
+import 'dart:js_interop';
+import 'package:universal_web/web.dart' as web;
 import '../src/prelude.dart';
 
 /// The state created in [useModal]. Can be used to access the [Modal] class
 /// and edit the [show] state.
 class ModalHook {
-  final State<bool> show;
+  final Obs<bool> show;
   final Ref<Modal?> ref;
 
   ModalHook(this.show, this.ref);
@@ -53,17 +54,14 @@ DeactNode modal({
   Ref<Modal?>? modalRef,
 }) {
   return fc((ctx) {
-    final elemRef = ctx.hookRef<html.Element?>(() => null);
+    final elemRef = ctx.hookRef<web.Element?>(() => null);
 
-    ctx.hookEffect(
-      () {
-        if (modalRef == null) return null;
-        final _modal = Modal(elemRef.value!);
-        modalRef.value = _modal;
-        return _modal.dispose;
-      },
-      [modalRef, fade, backdrop, closeOnClick, closeOnEscKey, focus],
-    );
+    ctx.hookEffect(() {
+      if (modalRef == null) return null;
+      final _modal = Modal(elemRef.value!);
+      modalRef.value = _modal;
+      return _modal.dispose;
+    }, [modalRef, fade, backdrop, closeOnClick, closeOnEscKey, focus]);
 
     return el(
       'div',
@@ -101,43 +99,24 @@ DeactNode modalDialog({
 }) {
   return el(
     'div',
-    attributes: {
-      'class': dialogClass,
-      'role': 'document',
-    },
+    attributes: {'class': dialogClass, 'role': 'document'},
     children: [
-      div(
+      divEl(
         className: 'modal-content',
         children: [
           if (header != null)
-            div(
-              className: 'modal-header',
-              key: 'header',
-              children: header,
-            ),
+            divEl(className: 'modal-header', key: 'header', children: header),
           if (body != null)
-            div(
-              className: 'modal-body',
-              key: 'body',
-              children: body,
-            ),
+            divEl(className: 'modal-body', key: 'body', children: body),
           if (footer != null)
-            div(
-              className: 'modal-footer',
-              key: 'footer',
-              children: footer,
-            ),
+            divEl(className: 'modal-footer', key: 'footer', children: footer),
         ],
-      )
+      ),
     ],
   );
 }
 
-enum DialogSize {
-  sm,
-  lg,
-  xl,
-}
+enum DialogSize { sm, lg, xl }
 
 /// The css class for a modal dialog.
 ///
@@ -150,8 +129,8 @@ String modalDialogClass({
 }) {
   final _fullScreen = fullScreen != null
       ? fullScreen == ResponsiveBreakPoint.always
-          ? ' modal-fullscreen'
-          : ' modal-fullscreen-${fullScreen.name}-down'
+            ? ' modal-fullscreen'
+            : ' modal-fullscreen-${fullScreen.name}-down'
       : '';
 
   return 'modal-dialog${size != null ? ' modal-${size.name}' : ''}'
@@ -163,13 +142,7 @@ String modalDialogClass({
 /// The modal event types
 ///
 /// https://getbootstrap.com/docs/5.2/components/modal/#events
-enum ModalEventType {
-  show,
-  shown,
-  hide,
-  hidden,
-  hidePrevented,
-}
+enum ModalEventType { show, shown, hide, hidden, hidePrevented }
 
 /// An event emitted by a [Modal].
 ///
@@ -177,7 +150,7 @@ enum ModalEventType {
 class ModalEvent {
   final Modal modal;
   final ModalEventType type;
-  final html.Event event;
+  final web.Event event;
 
   ModalEvent(this.modal, this.type, this.event);
 }
@@ -188,7 +161,7 @@ class ModalEvent {
 /// https://getbootstrap.com/docs/5.1/components/modal/
 class Modal {
   final ModalJS _inner;
-  final html.Element element;
+  final web.Element element;
   final _controller = StreamController<ModalEvent>.broadcast();
   Stream<ModalEvent> get events => _controller.stream;
 
@@ -203,7 +176,7 @@ class Modal {
   Modal(this.element) : _inner = ModalJS(element) {
     ModalEventType.values.forEach((type) {
       final name = '${type.name}.bs.modal';
-      void _callback(html.Event event) {
+      void _callback(web.Event event) {
         switch (type) {
           case ModalEventType.shown:
             _shown = true;
@@ -216,10 +189,12 @@ class Modal {
         _controller.add(ModalEvent(this, type, event));
       }
 
+      final _callbackJS = _callback.toJS;
+
       _onDispose.add(() {
-        element.removeEventListener(name, _callback);
+        element.removeEventListener(name, _callbackJS);
       });
-      element.addEventListener(name, _callback);
+      element.addEventListener(name, _callbackJS);
     });
   }
 

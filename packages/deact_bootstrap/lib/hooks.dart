@@ -92,7 +92,6 @@ Result<T> useStream<T>(
   return result.value;
 }
 
-
 // getCacheSignal?: () => AbortSignal,
 // getCacheForType?: <T>(resourceType: () => T) => T,
 // readContext<T>(context: ReactContext<T>): T,

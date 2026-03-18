@@ -42,18 +42,15 @@ Future<void> main(List<String> args) async {
       }
     } else if (entity is File && entity.path.endsWith('.dart')) {
       List<String> lines = await entity.readAsLines();
-      final lineRanges = await findLineRanges(
-        lines,
-        startRegExp,
-        endRegExp,
-      );
+      final lineRanges = await findLineRanges(lines, startRegExp, endRegExp);
       for (final lineRange in lineRanges) {
         final match = startRegExp.firstMatch(lines[lineRange.startLine])!;
         final config = ExampleConfig.parse(match.group(1)!);
         final name = config.name;
 
-        final endName =
-            endRegExp.firstMatch(lines[lineRange.endLine!])!.group(1);
+        final endName = endRegExp
+            .firstMatch(lines[lineRange.endLine!])!
+            .group(1);
         if (examples.containsKey(name)) {
           errors.add(
             'Duplicate example definition "$name"'
@@ -78,9 +75,7 @@ Future<void> main(List<String> args) async {
     }
   }
 
-  print(
-    'Found ${examples.length} example${examples.length == 1 ? '' : 's'}',
-  );
+  print('Found ${examples.length} example${examples.length == 1 ? '' : 's'}');
   if (errors.isNotEmpty) {
     throw Exception(errors.join('\n\n'));
   }
@@ -90,13 +85,19 @@ Future<void> main(List<String> args) async {
     final docsDir = await Directory(mdsDirPath).create();
     for (final example in examples.values) {
       final file = File(
-        [docsDir.path, Platform.pathSeparator, '${example.config.name}.md']
-            .join(),
+        [
+          docsDir.path,
+          Platform.pathSeparator,
+          '${example.config.name}.md',
+        ].join(),
       );
 
       await file.writeAsString(
-        ['```${example.config.extension ?? 'dart'}', ...example.content, '```']
-            .join('\n'),
+        [
+          '```${example.config.extension ?? 'dart'}',
+          ...example.content,
+          '```',
+        ].join('\n'),
       );
     }
   }
@@ -104,12 +105,17 @@ Future<void> main(List<String> args) async {
   /// Generate Dart file with Strings for each example
   if (examplesFilePath != null) {
     final dartExamplesFile = await File(examplesFilePath).create();
-    await dartExamplesFile.writeAsString(examples.values.map((e) {
-      final _name = e.config.name.replaceAll(RegExp(r'[-\s]'), '_');
-      final _content =
-          e.content.map((e) => e.replaceAll("'''", '"""')).join('\n');
-      return "final $_name = r'''\n$_content'''; ";
-    }).join('\n\n'));
+    await dartExamplesFile.writeAsString(
+      examples.values
+          .map((e) {
+            final _name = e.config.name.replaceAll(RegExp(r'[-\s]'), '_');
+            final _content = e.content
+                .map((e) => e.replaceAll("'''", '"""'))
+                .join('\n');
+            return "final $_name = r'''\n$_content'''; ";
+          })
+          .join('\n\n'),
+    );
   }
 
   final List<String> checkErrors = [];
@@ -142,9 +148,7 @@ Future<void> main(List<String> args) async {
       final name = startRegExp.firstMatch(readmeLines[startLine])!.group(1)!;
       final example = examples[name];
       if (example == null) {
-        warnings.add(
-          'Example "$name" not found. README.md line ${startLine}',
-        );
+        warnings.add('Example "$name" not found. README.md line ${startLine}');
         continue;
       }
       if (endLine != null) {
@@ -165,7 +169,7 @@ Future<void> main(List<String> args) async {
         if (endLine != null)
           readmeLines[endLine]
         else
-          '<!-- include-end{$name} -->'
+          '<!-- include-end{$name} -->',
       ];
       newLines.addAll(_toAdd);
       delta += (endLine ?? startLine) - startLine;

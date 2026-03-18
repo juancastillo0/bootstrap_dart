@@ -17,7 +17,8 @@ DeactNode icon(
     'i',
     attributes: {
       'class': icon.nameHtml,
-      'style': '${fontSize == null ? '' : 'font-size: $fontSize;'}'
+      'style':
+          '${fontSize == null ? '' : 'font-size: $fontSize;'}'
           '${color == null ? '' : ' color: $color;'}${style ?? ''}',
       'role': "img",
       if (ariaLabel != null) 'aria-label': ariaLabel,

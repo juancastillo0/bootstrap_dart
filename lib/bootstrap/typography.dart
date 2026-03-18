@@ -46,8 +46,8 @@ class BText {
       b == ResponsiveBreakPoint.always ? 'text-start' : 'text-${b.name}-start';
   static String centerR(ResponsiveBreakPoint b) =>
       b == ResponsiveBreakPoint.always
-          ? 'text-center'
-          : 'text-${b.name}-center';
+      ? 'text-center'
+      : 'text-${b.name}-center';
   static String endR(ResponsiveBreakPoint b) =>
       b == ResponsiveBreakPoint.always ? 'text-end' : 'text-${b.name}-end';
 

@@ -5,9 +5,11 @@ void main() async {
   const version = '1.9.1';
 
   final client = HttpClient();
-  final req = await client.getUrl(Uri.parse(
-    'https://cdn.jsdelivr.net/npm/bootstrap-icons@$version/font/bootstrap-icons.css',
-  ));
+  final req = await client.getUrl(
+    Uri.parse(
+      'https://cdn.jsdelivr.net/npm/bootstrap-icons@$version/font/bootstrap-icons.css',
+    ),
+  );
   final res = await req.close();
   if (res.statusCode != 200) {
     throw Exception(res);
@@ -27,7 +29,8 @@ void main() async {
       .map((e) => e.replaceAll('-', '_'))
       .map((e) => e.startsWith(numRegExp) ? '\$$e' : e);
 
-  final iconsStr = '''
+  final iconsStr =
+      '''
 extension BIconExt on BIcon {
   /// The html name of the icon to be used as a css class
   String get nameHtml {

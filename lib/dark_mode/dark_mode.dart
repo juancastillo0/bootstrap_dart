@@ -8,9 +8,5 @@ class SavedValue<T> {
   final void Function(T newValue) set;
   final void Function()? dispose;
 
-  const SavedValue({
-    required this.get,
-    required this.set,
-    this.dispose,
-  });
+  const SavedValue({required this.get, required this.set, this.dispose});
 }
